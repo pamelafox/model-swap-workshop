@@ -32,8 +32,8 @@ USER_PROMPT = "Alice and Bob are going to a science fair on Friday."
 if api_type == "openai_responses":
     endpoint = os.environ["FOUNDRY_MODELS_ENDPOINT"] + "/openai/v1"
     api_key = os.environ["FOUNDRY_API_KEY"]
-    # Verified for strict structured output via responses.parse: DeepSeek-V4-Flash, DeepSeek-V4-Pro, gpt-5.5.
-    # Kimi-K2.6 and Mistral-Large-3 don't enforce text_format, so use function calling instead.
+    # gpt-* models support strict structured output via responses.parse.
+    # Other models don't enforce text_format, so use function calling instead.
     deployment_name = os.environ["FOUNDRY_OPENAI_DEPLOYMENT"]
 
     client = OpenAI(
@@ -41,7 +41,21 @@ if api_type == "openai_responses":
         api_key=api_key,
     )
 
-    if deployment_name in ("Kimi-K2.6", "Mistral-Large-3"):
+    if deployment_name.startswith("gpt-"):
+        response = client.responses.parse(
+            model=deployment_name,
+            input=[
+                {"role": "system", "content": SYSTEM_PROMPT},
+                {"role": "user", "content": USER_PROMPT},
+            ],
+            text_format=CalendarEvent,
+            store=False,
+        )
+        if response.output_parsed:
+            rich.print(response.output_parsed)
+        else:
+            rich.print(response.output[0].content[0].refusal)
+    else:
         tools = [
             {
                 "type": "function",
@@ -63,20 +77,6 @@ if api_type == "openai_responses":
         tool_call = next(item for item in response.output if item.type == "function_call")
         result = CalendarEvent.model_validate_json(tool_call.arguments)
         rich.print(result)
-    else:
-        response = client.responses.parse(
-            model=deployment_name,
-            input=[
-                {"role": "system", "content": SYSTEM_PROMPT},
-                {"role": "user", "content": USER_PROMPT},
-            ],
-            text_format=CalendarEvent,
-            store=False,
-        )
-        if response.output_parsed:
-            rich.print(response.output_parsed)
-        else:
-            rich.print(response.output[0].content[0].refusal)
 
 elif api_type == "anthropic_messages":
     endpoint = os.environ["FOUNDRY_ANTHROPIC_MODELS_ENDPOINT"] + "/anthropic"

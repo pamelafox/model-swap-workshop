@@ -50,8 +50,23 @@ if api_type == "openai_responses":
         api_key=api_key,
     )
 
-    # DeepSeek, Kimi, and Mistral don't enforce text_format for complex schemas, so use function calling instead.
-    if deployment_name in ("DeepSeek-V4-Flash", "DeepSeek-V4-Pro", "Kimi-K2.6", "Mistral-Large-3"):
+    # gpt-* models support strict structured output via responses.parse.
+    # Other models don't enforce text_format, so use function calling instead.
+    if deployment_name.startswith("gpt-"):
+        response = client.responses.parse(
+            model=deployment_name,
+            input=[
+                {"role": "system", "content": SYSTEM_PROMPT},
+                {"role": "user", "content": user_content},
+            ],
+            text_format=BlogPost,
+            store=False,
+        )
+        if response.output_parsed:
+            rich.print(response.output_parsed)
+        else:
+            rich.print(response.output[0].content[0].refusal)
+    else:
         tools = [
             {
                 "type": "function",
@@ -73,20 +88,6 @@ if api_type == "openai_responses":
         tool_call = next(item for item in response.output if item.type == "function_call")
         result = BlogPost.model_validate_json(tool_call.arguments)
         rich.print(result)
-    else:
-        response = client.responses.parse(
-            model=deployment_name,
-            input=[
-                {"role": "system", "content": SYSTEM_PROMPT},
-                {"role": "user", "content": user_content},
-            ],
-            text_format=BlogPost,
-            store=False,
-        )
-        if response.output_parsed:
-            rich.print(response.output_parsed)
-        else:
-            rich.print(response.output[0].content[0].refusal)
 
 elif api_type == "anthropic_messages":
     endpoint = os.environ["FOUNDRY_ANTHROPIC_MODELS_ENDPOINT"] + "/anthropic"
