@@ -25,6 +25,7 @@ dependencies = [
     "langchain-anthropic",
     "langchain-azure-ai",
     "langgraph",
+    "lunr>=0.8.0",
 ]
 
 [tool.uv]

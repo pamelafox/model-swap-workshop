@@ -1,8 +1,20 @@
 # Instructions for coding agents
 
-This repository contains samples showing different Python stacks (OpenAI SDK, Anthropic SDK, LiteLLM, PydanticAI, LangChain, Microsoft Agent Framework) for building on top of multiple Microsoft Foundry models (OpenAI, Claude, etc).
+This repo is for the following workshop:
 
-All examples authenticate to Foundry using `AzureDeveloperCliCredential` and reference environment variables from a `.env` file (produced by `azd provision`).
+## Model Swap Workshop
+
+Frontier labs are releasing new models constantly, and it is hard to know when "better" is better enough to justify touching a working system. On top of that, "just swap the model" often turns into real work because providers expose different APIs and different expectations around tools and structured outputs.
+
+The model swap workshop is a hands-on bake-off across frontier LLMs. We run the same scenarios using multiple models (OpenAI, Anthropic, Kimi, and more) and compare results side by side for agentic tool use, structured outputs, and multimodal tasks.
+
+Swapping models is not just changing a model name. In this workshop, you actually do the swaps, including moving between OpenAI-style Responses APIs and Anthropic-style Messages APIs, then see what breaks and what needs to change in prompts, tool definitions, and JSON strategies.
+
+The workshop finishes by running a small eval suite so you can quantify tradeoffs instead of relying on vibes. We provide the Microsoft Foundry environment for access to models, no account needed.
+
+## Samples in this repo
+
+All examples authenticate to Foundry using an API key and reference environment variables from a `.env` file.
 
 Key SDKs/frameworks used:
 - **OpenAI Python SDK** (`openai`): For calling Foundry-hosted OpenAI models via the Responses API.
@@ -26,6 +38,19 @@ MAF documentation: https://learn.microsoft.com/agent-framework/
     This affects whether Claude via Foundry can be handled through `langchain-azure-ai` instead of mixing `langchain-anthropic` with Foundry-specific configuration.
 - MAF Anthropic workflow assistant-message compatibility fix: https://github.com/microsoft/agent-framework/pull/6207
     This affects multi-agent workflow chaining with Anthropic, where assistant-role messages may need re-roling to user until the upstream fix is available in a released version.
+- OpenAI SDK `DEFER_PYDANTIC_BUILD` / `MockValSer` crash: https://github.com/openai/openai-python/issues/1306
+    The SDK defers pydantic model builds by default to speed up imports. When it then uses `model_construct()` to build response objects (bypassing validation), calling `model_dump()` on those objects crashes with `TypeError: 'MockValSer' object is not an instance of 'SchemaSerializer'`. Workaround: set `DEFER_PYDANTIC_BUILD=0` before importing openai. Examples that use `responses.parse()` do this via `os.environ.setdefault("DEFER_PYDANTIC_BUILD", "0")` at the top of the file.
+- OpenAI SDK `responses.parse()` `PydanticSerializationUnexpectedValue` warnings: https://github.com/openai/openai-python/issues/2872
+    When calling `responses.parse()`, pydantic emits a flood of `PydanticSerializationUnexpectedValue` warnings because the SDK's `output` field is a large union and pydantic tries every variant when serializing. The warnings are non-fatal and the parsed result is correct. A fix PR (#2885) using `SerializeAsAny` has been open since February but not yet merged. Workaround: suppress with `warnings.filterwarnings("ignore", message="Pydantic serializer warnings", category=UserWarning)`.
+
+## Interesting model differences
+
+- **Kimi**: Always starts response content with a reasoning item (e.g. `{'type': 'reasoning', ...}`) before the text item. Code that assumes `content[0]` is the text block will break.
+- **gpt-5.5**: Does not support `temperature` parameter (returns 400 error). Use `reasoning.effort` instead.
+
+## TODOs
+
+- [x] Check for temperature support across the models
 
 ## Package management
 

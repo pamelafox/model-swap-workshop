@@ -1,7 +1,7 @@
 <!--
 ---
-name: Python Stack for Foundry Models
-description: Samples showing different Python stacks for building on multiple Foundry models (OpenAI, Claude, etc).
+name: Model Swap Workshop
+description: Hands-on workshop for comparing frontier models across provider APIs, tools, and structured outputs.
 languages:
 - python
 products:
@@ -9,15 +9,23 @@ products:
 - azure
 - ai-services
 page_type: sample
-urlFragment: python-stack-foundry-models
+urlFragment: model-swap-workshop
 ---
 -->
-# Python Stack for Foundry Models
+# Model Swap Workshop
 
-[![Open in GitHub Codespaces](https://img.shields.io/static/v1?style=for-the-badge&label=GitHub+Codespaces&message=Open&color=brightgreen&logo=github)](https://codespaces.new/pamelafox/python-stack-foundry-models)
-[![Open in Dev Containers](https://img.shields.io/static/v1?style=for-the-badge&label=Dev%20Containers&message=Open&color=blue&logo=visualstudiocode)](https://vscode.dev/redirect?url=vscode://ms-vscode-remote.remote-containers/cloneInVolume?url=https://github.com/pamelafox/python-stack-foundry-models)
+[![Open in GitHub Codespaces](https://img.shields.io/static/v1?style=for-the-badge&label=GitHub+Codespaces&message=Open&color=brightgreen&logo=github)](https://codespaces.new/pamelafox/model-swap-workshop)
+[![Open in Dev Containers](https://img.shields.io/static/v1?style=for-the-badge&label=Dev%20Containers&message=Open&color=blue&logo=visualstudiocode)](https://vscode.dev/redirect?url=vscode://ms-vscode-remote.remote-containers/cloneInVolume?url=https://github.com/pamelafox/model-swap-workshop)
 
-This repository contains samples showing different Python stacks for building on top of multiple [Microsoft Foundry](https://learn.microsoft.com/azure/ai-foundry/) models (OpenAI, Claude, etc). Each example demonstrates the same task — calling a Foundry-hosted model — using a different Python SDK or framework.
+Frontier labs are releasing new models constantly, and it is hard to know when "better" is better enough to justify touching a working system. On top of that, "just swap the model" often turns into real work because providers expose different APIs and different expectations around tools and structured outputs.
+
+This workshop is a hands-on bake-off across frontier LLMs. We run the same scenarios using multiple models (OpenAI, Anthropic, Kimi, and more) and compare results side by side for agentic tool use, structured outputs, and multimodal tasks.
+
+Swapping models is not just changing a model name. In this workshop, you actually do the swaps, including moving between OpenAI-style Responses APIs and Anthropic-style Messages APIs, then see what breaks and what needs to change in prompts, tool definitions, and JSON strategies.
+
+The workshop finishes by running a small eval suite so you can quantify tradeoffs instead of relying on vibes. We provide the Microsoft Foundry environment for access to models, no account needed.
+
+This repository contains samples showing different Python stacks for building on top of multiple [Microsoft Foundry](https://learn.microsoft.com/azure/ai-foundry/) models.
 
 * [Getting started](#getting-started)
   * [GitHub Codespaces](#github-codespaces)
@@ -66,8 +74,8 @@ A related option is VS Code Dev Containers, which will open the project in your 
 2. Clone the repository:
 
     ```shell
-    git clone https://github.com/pamelafox/python-stack-foundry-models
-    cd python-stack-foundry-models
+    git clone https://github.com/pamelafox/model-swap-workshop
+    cd model-swap-workshop
     ```
 
 3. Install the dependencies:
@@ -122,6 +130,7 @@ You can run the examples in this repository by executing the scripts in the `exa
 | Example | Description |
 | ------- | ----------- |
 | [openai_responses.py](examples/openai_responses.py) | Calling a Foundry-hosted OpenAI model using the OpenAI Python SDK (Responses API). |
+| [entity_extraction.py](examples/entity_extraction.py) | Extracting structured event entities with Pydantic using the OpenAI Python SDK, with optional multi-model runs. |
 | [anthropic_messages.py](examples/anthropic_messages.py) | Calling a Foundry-hosted Claude model using the Anthropic Python SDK (Messages API). |
 | [litellm_swap.py](examples/litellm_swap.py) | Calling either OpenAI or Claude models via LiteLLM, a unified interface that abstracts provider differences. |
 | [pydanticai_agent.py](examples/pydanticai_agent.py) | Building an agent with tools using PydanticAI, configured for either OpenAI or Claude on Foundry. |
@@ -132,6 +141,12 @@ Run any example with:
 
 ```shell
 uv run examples/<example_name>.py
+```
+
+To run the full workshop bake-off matrix across example stacks and multiple model deployments, run:
+
+```shell
+./manual_test.sh
 ```
 
 ## Resources

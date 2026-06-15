@@ -4,44 +4,22 @@ import random
 from datetime import datetime
 from typing import Annotated
 
-from anthropic import AsyncAnthropic
-from anthropic.lib.credentials import AccessToken
-from azure.identity import AzureDeveloperCliCredential
-from dotenv import load_dotenv
-from agent_framework_openai import OpenAIChatClient
-from agent_framework.anthropic import AnthropicClient
 from agent_framework import Agent, tool
+from agent_framework_openai import OpenAIChatClient
+from dotenv import load_dotenv
 from pydantic import Field
 
-load_dotenv(override=True)
+load_dotenv()
 
-azure_credential = AzureDeveloperCliCredential(tenant_id=os.environ["AZURE_TENANT_ID"])
 
-provider = os.environ.get("MODEL_CHOICE", "claude")
-
-if provider == "openai":
-
-    client = OpenAIChatClient(
-        model=os.environ["FOUNDRY_OPENAI_DEPLOYMENT"],
-        azure_endpoint=os.environ["FOUNDRY_MODELS_ENDPOINT"],
-        credential=azure_credential,
-    )
-
-elif provider == "claude":
-
-    def _entra_credentials_provider(scope: str = "https://ai.azure.com/.default"):
-        def _provider(*, force_refresh: bool = False) -> AccessToken:
-            token = azure_credential.get_token(scope)
-            return AccessToken(token=token.token, expires_at=token.expires_on)
-        return _provider
-
-    client = AnthropicClient(
-        model=os.environ["FOUNDRY_CLAUDE_DEPLOYMENT"],
-        anthropic_client=AsyncAnthropic(
-            credentials=_entra_credentials_provider(),
-            base_url=os.environ["FOUNDRY_MODELS_ENDPOINT"] + "/anthropic",
-        ),
-    )
+endpoint = os.environ["FOUNDRY_MODELS_ENDPOINT"]
+api_key = os.environ["FOUNDRY_API_KEY"]
+deployment_name = os.environ["FOUNDRY_OPENAI_DEPLOYMENT"]
+client = OpenAIChatClient(
+    model=deployment_name,
+    azure_endpoint=endpoint,
+    api_key=api_key,
+)
 
 @tool
 def get_weather(

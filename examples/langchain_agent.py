@@ -2,36 +2,23 @@ import os
 import random
 from datetime import datetime
 
-from azure.identity import AzureDeveloperCliCredential, get_bearer_token_provider
 from dotenv import load_dotenv
 from langchain.agents import create_agent
-from langchain_anthropic import ChatAnthropic
 from langchain_azure_ai.chat_models import AzureAIOpenAIApiChatModel
 from langchain_core.tools import tool
 
-load_dotenv(override=True)
+load_dotenv()
 
-azure_credential = AzureDeveloperCliCredential(tenant_id=os.environ["AZURE_TENANT_ID"])
+endpoint = os.environ["FOUNDRY_MODELS_ENDPOINT"]
+api_key = os.environ["FOUNDRY_API_KEY"]
+deployment_name = os.environ["FOUNDRY_OPENAI_DEPLOYMENT"]
 
-provider = os.environ.get("MODEL_CHOICE", "openai")
-if provider == "openai":
-    model = AzureAIOpenAIApiChatModel(
-        endpoint=os.environ["FOUNDRY_MODELS_ENDPOINT"] + "/openai/v1",
-        credential=azure_credential,
-        model=os.environ["FOUNDRY_OPENAI_DEPLOYMENT"],
-        use_responses_api=True,
-    )
-elif provider == "claude":
-    token_provider = get_bearer_token_provider(azure_credential, "https://ai.azure.com/.default")
-    # Warning: token_provider() returns a token valid for ~1 hour.
-    # For long-running services, call token_provider() again before each agent run.
-    # Azure Foundry expects Authorization: Bearer header, not x-api-key.
-    model = ChatAnthropic(
-        model=os.environ["FOUNDRY_CLAUDE_DEPLOYMENT"],
-        base_url=os.environ["FOUNDRY_MODELS_ENDPOINT"] + "/anthropic",
-        api_key="placeholder",
-        default_headers={"Authorization": f"Bearer {token_provider()}"},
-    )
+model = AzureAIOpenAIApiChatModel(
+    endpoint=endpoint + "/openai/v1",
+    api_key=api_key,
+    model=deployment_name,
+    use_responses_api=True,
+)
 
 
 @tool
@@ -74,7 +61,7 @@ def main():
         {"messages": [{"role": "user", "content": "what can I do this weekend in San Francisco?"}]}
     )
     latest_message = response["messages"][-1]
-    print(latest_message.content)
+    print(latest_message.text)
 
 
 if __name__ == "__main__":
