@@ -13,6 +13,7 @@ MODELS=(
     "DeepSeek-V4-Flash"
     "DeepSeek-V4-Pro"
     "Kimi-K2.6"
+    "Mistral-Large-3"
     "gpt-5.5"
 )
 

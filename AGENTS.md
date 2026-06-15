@@ -47,10 +47,14 @@ MAF documentation: https://learn.microsoft.com/agent-framework/
 
 - **Kimi**: Always starts response content with a reasoning item (e.g. `{'type': 'reasoning', ...}`) before the text item. Code that assumes `content[0]` is the text block will break.
 - **gpt-5.5**: Does not support `temperature` parameter (returns 400 error). Use `reasoning.effort` instead.
+- **DeepSeek-V4-Flash / DeepSeek-V4-Pro**: Do not enforce strict structured outputs. When using `responses.parse()` with `text_format`, the model may return prose instead of JSON, or return JSON with invented field names that don't match the schema (e.g. `issue_type` instead of `type`). Simple schemas (like `CalendarEvent`) may work by luck, but complex schemas with enums or non-obvious field names fail. These models also do not support image/vision inputs (returns 400 error via Responses API). Via Chat Completions API, they silently accept image payloads but do not actually process the image pixels — DeepSeek-V4-Flash admits it cannot see images, while DeepSeek-V4-Pro confidently hallucinate descriptions based on the text prompt alone.
+- **Kimi-K2.6**: Supports image/vision inputs via Chat Completions API, but only with inline base64-encoded data URIs. Remote image URLs return a 400 error. Via Responses API, all image inputs are rejected.
+- **Anthropic on Foundry**: URL-based image sources (`"type": "url"`) in the Messages API return "Unable to download the file" error. Use base64-encoded images instead. This appears to be a Foundry-specific limitation — the same URL sources work against the Anthropic API directly.
 
 ## TODOs
 
 - [x] Check for temperature support across the models
+- [x] Try chat completions with image input for other models
 
 ## Package management
 

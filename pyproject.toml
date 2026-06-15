@@ -26,6 +26,9 @@ dependencies = [
     "langchain-azure-ai",
     "langgraph",
     "lunr>=0.8.0",
+    "pymupdf4llm>=1.27.2.3",
+    "beautifulsoup4>=4.15.0",
+    "requests>=2.32.5",
 ]
 
 [tool.uv]
