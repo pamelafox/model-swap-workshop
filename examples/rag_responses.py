@@ -8,9 +8,9 @@ from openai import OpenAI
 load_dotenv()
 
 MODEL = "gpt-5.5"
-MODEL = "Mistral-Large-3"
 # MODEL = "Kimi-K2.6"
 # MODEL = "DeepSeek-V4-Flash"
+# MODEL = "Mistral-Large-3"
 deployment_name = os.environ.get("FOUNDRY_OPENAI_DEPLOYMENT", MODEL)
 
 endpoint = os.environ["FOUNDRY_MODELS_ENDPOINT"] + "/openai/v1"
@@ -54,7 +54,11 @@ response = client.responses.create(
         {"role": "user", "content": f"{user_question}\nSources: {context}"},
     ],
     store=False,
-    temperature=0.0
+    # -- Experiment with these parameters to affect the output:
+    # -- temperature is not supported on gpt-5 models, but works on others
+    # temperature=0.3,
+    # -- reasoning is only supported on gpt-5 models, but not others
+    # reasoning={"effort": "medium", "summary": "detailed"},
 )
 
 print(f"\nResponse from {deployment_name}: \n")

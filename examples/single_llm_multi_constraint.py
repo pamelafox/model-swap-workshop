@@ -24,9 +24,9 @@ load_dotenv()
 
 # === Choose a model (comment/uncomment) ===
 MODEL = "gpt-5.5"
-# MODEL = "Mistral-Large-3"
 # MODEL = "Kimi-K2.6"
 # MODEL = "DeepSeek-V4-Flash"
+# MODEL = "Mistral-Large-3"
 
 # Env var override for batch testing (manual_test.sh sets this)
 deployment_name = os.environ.get("FOUNDRY_OPENAI_DEPLOYMENT", MODEL)

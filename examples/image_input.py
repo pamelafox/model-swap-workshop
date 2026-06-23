@@ -60,7 +60,10 @@ if api_type == "openai_chat_completions":
 elif api_type == "anthropic_messages":
     endpoint = os.environ["FOUNDRY_ANTHROPIC_MODELS_ENDPOINT"] + "/anthropic"
     api_key = os.environ["FOUNDRY_ANTHROPIC_API_KEY"]
-    deployment_name = "claude-sonnet-4-5"
+    # === Choose a model (comment/uncomment) ===
+    deployment_name = os.environ.get("FOUNDRY_ANTHROPIC_DEPLOYMENT", "claude-sonnet-4-5")
+    # deployment_name = "claude-opus-4-5"
+    # deployment_name = "claude-haiku-4-5"
 
     client = Anthropic(
         api_key=api_key,

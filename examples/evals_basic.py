@@ -125,12 +125,11 @@ def eval_structured_output(model: str) -> dict:
         trip_type: TripType
         cabin_class: CabinClass
 
-    system = "Extract the flight booking details from the user's message. Today is Sunday, June 15, 2026."
+    system = "Extract the flight booking details from the user's message. Today is Monday, June 29, 2026."
     user = (
         "My college roommates and I (4 of us total) are planning a reunion trip! "
         "We want to splurge on business class from San Francisco to Tokyo. "
-        "Thinking of leaving next Tuesday and staying through the weekend — "
-        "flying back that Monday."
+        "Thinking of leaving this Saturday and coming back the following Friday."
     )
 
     parsed = None
@@ -175,7 +174,7 @@ def eval_structured_output(model: str) -> dict:
     if not parsed:
         return {
             "test": "structured_output",
-            "expected": "SFO/NRT/2026-06-17/2026-06-23/4",
+            "expected": "SFO/NRT/2026-07-04/2026-07-10/4",
             "actual": "PARSE_FAILED",
             "pass": False,
         }
@@ -183,8 +182,8 @@ def eval_structured_output(model: str) -> dict:
     checks = {
         "origin_is_SFO": parsed.origin_airport == "SFO",
         "dest_is_IATA": len(parsed.destination_airport) == 3 and parsed.destination_airport.isupper(),
-        "departure_2026-06-17": parsed.departure_date == "2026-06-17",
-        "return_2026-06-23": parsed.return_date == "2026-06-23",
+        "departure_2026-07-04": parsed.departure_date == "2026-07-04",
+        "return_2026-07-10": parsed.return_date == "2026-07-10",
         "passengers_4": parsed.num_passengers == 4,
         "cabin_business": parsed.cabin_class == CabinClass.business,
     }
@@ -192,7 +191,7 @@ def eval_structured_output(model: str) -> dict:
     actual = f"{parsed.origin_airport}/{parsed.destination_airport}/{parsed.departure_date}/{parsed.return_date}/{parsed.num_passengers}"
     return {
         "test": "structured_output",
-        "expected": "SFO/<IATA>/2026-06-17/2026-06-23/4",
+        "expected": "SFO/<IATA>/2026-07-04/2026-07-10/4",
         "actual": actual,
         "pass": all_pass,
         "checks": checks,
@@ -223,8 +222,8 @@ def eval_tool_calling(model: str) -> dict:
     response = client.responses.create(
         model=model,
         input=[
-            {"role": "system", "content": "You are a travel booking assistant. Use the available tools to help the user. Today is Sunday, June 15, 2026."},
-            {"role": "user", "content": "Book a round-trip flight for 3 people from Los Angeles to Tokyo, departing next Tuesday and returning the following Monday."},
+            {"role": "system", "content": "You are a travel booking assistant. Use the available tools to help the user. Today is Monday, June 29, 2026."},
+            {"role": "user", "content": "Book a round-trip flight for 3 people from Los Angeles to Tokyo, departing this Saturday and returning the following Friday."},
         ],
         tools=tools,
         store=False,
@@ -233,17 +232,17 @@ def eval_tool_calling(model: str) -> dict:
     if not tool_call:
         return {
             "test": "tool_calling",
-            "expected": "departure=2026-06-17, return=2026-06-23",
+            "expected": "departure=2026-07-04, return=2026-07-10",
             "actual": "NO_TOOL_CALL",
             "pass": False,
         }
 
     args = json.loads(tool_call.arguments)
-    dep_correct = args.get("departure_date") == "2026-06-17"
-    ret_correct = args.get("return_date") == "2026-06-23"
+    dep_correct = args.get("departure_date") == "2026-07-04"
+    ret_correct = args.get("return_date") == "2026-07-10"
     return {
         "test": "tool_calling",
-        "expected": "departure=2026-06-17, return=2026-06-23",
+        "expected": "departure=2026-07-04, return=2026-07-10",
         "actual": f"departure={args.get('departure_date')}, return={args.get('return_date')}",
         "pass": dep_correct and ret_correct,
     }

@@ -25,9 +25,9 @@ load_dotenv()
 warnings.filterwarnings("ignore", message="Pydantic serializer warnings", category=UserWarning)
 
 MODEL = "gpt-5.5"
-# MODEL = "Mistral-Large-3"
 # MODEL = "Kimi-K2.6"
 # MODEL = "DeepSeek-V4-Flash"
+# MODEL = "Mistral-Large-3"
 deployment_name = os.environ.get("FOUNDRY_OPENAI_DEPLOYMENT", MODEL)
 
 endpoint = os.environ["FOUNDRY_MODELS_ENDPOINT"] + "/openai/v1"
@@ -61,13 +61,12 @@ class FlightBooking(BaseModel):
     cabin_class: CabinClass
 
 
-SYSTEM_PROMPT = "Extract the flight booking details from the user's message. Today is Sunday, June 15, 2026."
+SYSTEM_PROMPT = "Extract the flight booking details from the user's message. Today is Monday, June 29, 2026."
 
 USER_PROMPT = """\
 My college roommates and I (4 of us total) are planning a reunion trip! \
 We want to splurge on business class from San Francisco to Tokyo. \
-Thinking of leaving next Tuesday and staying through the weekend — \
-flying back that Monday."""
+Thinking of leaving this Saturday and coming back the following Friday."""
 
 
 if deployment_name.startswith("gpt-"):
@@ -103,6 +102,11 @@ else:
         ],
         tools=tools,
         tool_choice="required",
+        # -- Experiment with these parameters to affect the output:
+        # -- temperature is not supported on gpt-5 models, but works on others
+        # temperature=0.3,
+        # -- reasoning is only supported on gpt-5 models, but not others
+        # reasoning={"effort": "medium", "summary": "detailed"},
         store=False,
     )
     tool_call = next((item for item in response.output if item.type == "function_call"), None)

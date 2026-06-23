@@ -6,9 +6,9 @@ from openai import OpenAI
 load_dotenv()
 
 MODEL = "gpt-5.5"
-# MODEL = "Mistral-Large-3"
 # MODEL = "Kimi-K2.6"
 # MODEL = "DeepSeek-V4-Flash"
+# MODEL = "Mistral-Large-3"
 deployment_name = os.environ.get("FOUNDRY_OPENAI_DEPLOYMENT", MODEL)
 
 endpoint = os.environ["FOUNDRY_MODELS_ENDPOINT"] + "/openai/v1"
@@ -56,16 +56,21 @@ tools = [
 
 USER_MESSAGE = (
     "Book a round-trip flight for 3 people from Los Angeles to Tokyo, "
-    "departing next Tuesday and returning the following Monday."
+    "departing this Saturday and returning the following Friday."
 )
 
 response = client.responses.create(
     model=deployment_name,
     input=[
-        {"role": "system", "content": "You are a travel booking assistant. Use the available tools to help the user. Today is Sunday, June 15, 2026."},
+        {"role": "system", "content": "You are a travel booking assistant. Use the available tools to help the user. Today is Monday, June 29, 2026."},
         {"role": "user", "content": USER_MESSAGE},
     ],
     tools=tools,
+    # -- Experiment with these parameters to affect the output:
+    # -- temperature is not supported on gpt-5 models, but works on others
+    # temperature=0.3,
+    # -- reasoning is only supported on gpt-5 models, but not others
+    # reasoning={"effort": "medium", "summary": "detailed"},
     store=False,
 )
 

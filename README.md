@@ -82,23 +82,23 @@ These examples test raw LLM capabilities with a single prompt — no tools, no c
 
 ### Exercise: Improve the output
 
-Open [examples/single_llm_letter_counting.py](examples/single_llm_letter_counting.py) and find the `PROMPT` variable. Can you modify it so that **Mistral** or **DeepSeek** gets the correct answer (13)?
+Open [examples/single_llm_letter_counting.py](examples/single_llm_letter_counting.py) and find the `PROMPT` variable. Can you modify it so that **Mistral** or **DeepSeek** gets the correct answer?
 
 Ideas to try:
 - Ask the model to list each occurrence of "e" before counting
 - Break the sentence into individual words and ask it to count per-word
 - Add "Think step by step" or chain-of-thought instructions
 - Tell it to double-check its answer
-- Tweak parameters like `temperature` or `reasoning.effort`
+- Tweak `temperature` (supported on Mistral, DeepSeek, Kimi — but NOT gpt-5.5)
 
 
 ### Try other examples
 
 We've included other examples of single LLM calls where the output varies based on the model used. 
 
-    * [examples/single_llm_spatial_reasoning.py](examples/single_llm_spatial_reasoning.py): We check the LLM's spatial reasoning ability by describing a series of turns, and then asking "Which direction am I facing after these turns?". 
-    * [examples/single_llm_multi_constraint.py](examples/single_llm_multi_constraint.py): We ask the LLM to write a poem that satisfies multiple rules about start letters and number of words.
-    * [examples/single_llm_self_calibration.py](examples/single_llm_self_calibration.py): We ask the LLM a question that should not be directly answerable from the weights, and then ask it, "How confident are you in your answer?". Generally, the best models report low confidence.
+* [examples/single_llm_spatial_reasoning.py](examples/single_llm_spatial_reasoning.py): We check the LLM's spatial reasoning ability by describing a series of turns, and then asking "Which direction am I facing after these turns?". 
+* [examples/single_llm_multi_constraint.py](examples/single_llm_multi_constraint.py): We ask the LLM to write a poem that satisfies multiple rules about start letters and number of words.
+* [examples/single_llm_self_calibration.py](examples/single_llm_self_calibration.py): We ask the LLM a question that should not be directly answerable from the weights, and then ask it, "How confident are you in your answer?". Generally, the best models report low confidence.
 
 When you find an example that fails for a particular model, try rewriting the prompt or tweaking parameters to improve the output.
 
@@ -106,22 +106,22 @@ When you find an example that fails for a particular model, try rewriting the pr
 
 ## Part 2: RAG
 
-### Run it
+### Run the RAG example
 
 1. Open [examples/rag_responses.py](examples/rag_responses.py)
-2. Set `MODEL = "gpt-5.5"` and run: `uv run examples/rag_responses.py`
-3. Change to `MODEL = "Mistral-Large-3"` and run again
+2. Run the file:
 
-The question asks about honey bees AND carpenter bees, but the sources only contain carpenter bee info. Watch which models hallucinate honey bee facts.
+    ```bash
+    uv run examples/rag_responses.py
+    ```
 
-### What to observe
+3. Change model to one of the other models by un-commenting a `MODEL =` line at the top, and re-run the file. The question asks about honey bees AND carpenter bees, but the sources only contain carpenter bee info. Observe which models still respond with information about honey bees, despite the prompt insisting that answers be grounded in sources.
 
-- **gpt-5.5, Kimi, DeepSeek**: Correctly say "honey bee info not in sources"
-- **Mistral**: Hallucinates honey bee details (wax combs, hexagonal cells)
+#### Exercise: Improve the grounding
 
-### Exercise: Fix the hallucination
+Set your `MODEL` to a deployment that responded with an ungrounded answer.
 
-Open [examples/rag_responses.py](examples/rag_responses.py) and find the `SYSTEM_MESSAGE`. Can you strengthen the grounding instructions so that Mistral stops hallucinating?
+Open [examples/rag_responses.py](examples/rag_responses.py) and find the `SYSTEM_MESSAGE`. Can you strengthen the grounding instructions so that the model sticks to the sources?
 
 Ideas to try:
 - Add explicit instructions like "If information is not in the sources, say so clearly"
@@ -129,9 +129,17 @@ Ideas to try:
 - Use a structured format: "For each claim, cite the source ID or state 'not in sources'"
 - Add a negative example: "Do NOT mention facts about honey bees unless they appear in the sources"
 
-### Bonus: Anthropic citations
+### Run the RAG example with Anthropic models
 
-Run [examples/rag_messages.py](examples/rag_messages.py) to see how Claude's built-in citations feature works differently from prompt-based citations. Notice how the API response includes structured citation objects rather than relying on the model to format them.
+When working with the Anthropic models, we must use the Anthropic messages API, not the Responses API. That also gives us access to Claude's built-in citations feature, which outputs structured citation objects rather than relying on the model to format them.
+
+1. Open [examples/rag_messages.py](examples/rag_messages.py)
+2. Run the file:
+
+    ```bash
+    uv run examples/rag_messages.py
+    ```
+3. Change model to one of the other models by un-commenting a `MODEL =` line at the top, and re-run the file. Opus is the largest in the family, then Sonnet, then Haiku. Observe any differences in the output quality across the models. In our experiments, all three generated fully grounded answers. If you see otherwise, try modifying the prompt or other parameters to improve the output.
 
 ---
 
@@ -140,27 +148,29 @@ Run [examples/rag_messages.py](examples/rag_messages.py) to see how Claude's bui
 ### Run it
 
 1. Open [examples/function_calling.py](examples/function_calling.py)
-2. Set `MODEL = "gpt-5.5"` and run: `uv run examples/function_calling.py`
-3. Swap through `"Kimi-K2.6"`, `"Mistral-Large-3"`, and `"DeepSeek-V4-Flash"`
+2. Run the file:
 
-The model must resolve "next Tuesday" and "the following Monday" relative to "today is Sunday, June 15, 2026."
+    ```bash
+    uv run examples/function_calling.py
+    ```
+
+3. Change model to one of the other models by un-commenting a `MODEL =` line at the top, and re-run the file. The model must resolve "this Saturday" and "the following Friday" relative to "today is Monday, June 29, 2026." Watch which models make the tool call vs. ask clarifying questions.
 
 ### What to observe
 
-- **Kimi**: Correct dates (June 17, June 23)
-- **Mistral**: Interprets "next Tuesday" as the following week (June 24)
-- **DeepSeek**: Gets departure right but return is off by one day
-- **gpt-5.5**: May ask clarifying questions instead of booking
+- **gpt-5.5**: May ask which Tokyo airport you prefer (HND vs NRT) instead of booking — but correctly identifies the dates (July 4, July 10)
+- **Kimi, DeepSeek, Mistral**: All make the tool call with correct dates and pick NRT
+- Some models occasionally ask clarifying questions instead of acting — run it twice if you get a question
 
 ### Exercise: Make date resolution reliable
 
-Open [examples/function_calling.py](examples/function_calling.py). Can you get ALL models to produce the correct dates?
+Open [examples/function_calling.py](examples/function_calling.py). Change the user message to use a more ambiguous date like "next Tuesday" — watch how models disagree. Then try to get them all to agree:
 
 Ideas to try:
-- Change the system prompt to include the explicit calendar: "Today is Sunday June 15. This week: Mon 16, Tue 17, Wed 18... Next week: Mon 23..."
-- Add date examples in the tool parameter descriptions: `"Departure date in YYYY-MM-DD format, e.g. 2026-06-17 for Tuesday June 17"`
+- Change the system prompt to include the explicit calendar: "Today is Monday June 29. This week: Tue 30, Wed Jul 1... Next week: Mon 6, Tue 7..."
+- Add date examples in the tool parameter descriptions: `"Departure date in YYYY-MM-DD format, e.g. 2026-07-04 for Saturday July 4"`
 - Rephrase the user message to use absolute dates instead of relative ones
-- Add `"Today's date: 2026-06-15 (Sunday)"` directly in the user message
+- Add `"Today's date: 2026-06-29 (Monday)"` directly in the user message
 
 Which approach works across the most models?
 
@@ -171,22 +181,27 @@ Which approach works across the most models?
 ### Run it
 
 1. Open [examples/structured_outputs.py](examples/structured_outputs.py)
-2. Set `MODEL = "gpt-5.5"` and run: `uv run examples/structured_outputs.py`
-3. Swap through `"Kimi-K2.6"` and `"DeepSeek-V4-Flash"`
+2. Run the file:
+
+    ```bash
+    uv run examples/structured_outputs.py
+    ```
+
+3. Change model to one of the other models by un-commenting a `MODEL =` line at the top, and re-run the file. Watch whether models return IATA airport codes (like SFO, NRT) or city names/codes (like "San Francisco" or "Tokyo").
 
 ### What to observe
 
-- **gpt-5.5**: Uses `responses.parse()` with strict schema enforcement — but still writes "Tokyo" instead of an IATA code
-- **Kimi**: All fields correct via tool-calling fallback
-- **DeepSeek**: Returns city names instead of IATA codes, wrong dates
+- **gpt-5.5**: Uses `responses.parse()` with strict schema enforcement — but writes "Tokyo" (city name) instead of an IATA airport code like NRT
+- **Kimi, Mistral**: All fields correct including proper IATA codes (NRT)
+- **DeepSeek**: Sometimes returns city names ("San Francisco", "Tokyo") or city codes ("TYO") instead of airport IATA codes
 
 ### Exercise: Improve schema adherence
 
-Open [examples/structured_outputs.py](examples/structured_outputs.py). Can you get DeepSeek to return proper IATA codes?
+Open [examples/structured_outputs.py](examples/structured_outputs.py). gpt-5.5 returns "Tokyo" and DeepSeek may return city names — can you get all models to return proper IATA airport codes like NRT or HND?
 
 Ideas to try:
-- Make the field descriptions more explicit: `"3-letter IATA airport code (e.g. SFO, NRT, HND). Must be exactly 3 uppercase letters."`
-- Add examples in the system prompt: "Example: San Francisco → SFO, Tokyo Narita → NRT"
+- Make the field descriptions more explicit: `"3-letter IATA airport code (e.g. SFO, NRT, HND). Must be an actual airport code, not a city code."`
+- Add examples in the system prompt: "Example: San Francisco → SFO, Tokyo Narita → NRT, Tokyo Haneda → HND"
 - Add a `pattern` constraint to the JSON schema: `"pattern": "^[A-Z]{3}$"`
 - For non-GPT models, try adding `"enum"` with common airport codes
 
@@ -197,8 +212,13 @@ Ideas to try:
 ### Run it
 
 1. Open [examples/function_calling_code.py](examples/function_calling_code.py)
-2. Set `MODEL = "gpt-5.5"` and run: `uv run examples/function_calling_code.py`
-3. Change to `MODEL = "DeepSeek-V4-Flash"` and run again
+2. Run the file:
+
+    ```bash
+    uv run examples/function_calling_code.py
+    ```
+
+3. Change model to one of the other models by un-commenting a `MODEL =` line at the top, and re-run the file. All models get the correct answer (13) with a code tool, but watch how many tool calls each model needs to get there.
 
 ### What to observe
 

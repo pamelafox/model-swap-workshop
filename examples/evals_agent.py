@@ -81,8 +81,8 @@ TOOL_DEFINITIONS = [
     },
 ]
 
-SYSTEM_PROMPT = "You are a travel booking assistant. Use the available tools to help the user. Today is Sunday, June 15, 2026."
-USER_QUERY = "Book a round-trip flight for 3 people from Los Angeles to Tokyo, departing next Tuesday and returning the following Monday."
+SYSTEM_PROMPT = "You are a travel booking assistant. Use the available tools to help the user. Today is Monday, June 29, 2026."
+USER_QUERY = "Book a round-trip flight for 3 people from Los Angeles to Tokyo, departing this Saturday and returning the following Friday."
 
 # OpenAI Responses API tool format
 TOOLS_FOR_API = [
@@ -198,7 +198,7 @@ def main():
         print(f"  {r['model']:<20} {score_str:<10} {result_str:<8} {args_str}")
 
     print("\n  Scoring: 5=perfect tool call, 3=threshold, 1-2=wrong tool/args")
-    print("  Expected: dep=2026-06-17, ret=2026-06-23, pax=3")
+    print("  Expected: dep=2026-07-04, ret=2026-07-10, pax=3")
 
 
 if __name__ == "__main__":

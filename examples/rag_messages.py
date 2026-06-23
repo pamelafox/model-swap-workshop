@@ -9,7 +9,14 @@ load_dotenv()
 
 endpoint = os.environ["FOUNDRY_ANTHROPIC_MODELS_ENDPOINT"] + "/anthropic"
 api_key = os.environ["FOUNDRY_ANTHROPIC_API_KEY"]
-deployment_name = "claude-sonnet-4-5"
+
+# === Choose a model (comment/uncomment) ===
+# MODEL = "claude-opus-4-5"
+MODEL = "claude-sonnet-4-5"
+# MODEL = "claude-haiku-4-5"
+
+# Env var override for batch testing (manual_test.sh sets this)
+deployment_name = os.environ.get("FOUNDRY_ANTHROPIC_DEPLOYMENT", MODEL)
 
 client = Anthropic(
     api_key=api_key,
