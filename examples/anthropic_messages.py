@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 endpoint = os.environ["FOUNDRY_ANTHROPIC_MODELS_ENDPOINT"] + "/anthropic"
-deployment_name = os.environ["FOUNDRY_ANTHROPIC_CLAUDE_DEPLOYMENT"]
+deployment_name = "claude-sonnet-4-5"
 
 client = Anthropic(
     api_key=os.environ["FOUNDRY_ANTHROPIC_API_KEY"],

@@ -12,6 +12,102 @@ Swapping models is not just changing a model name. In this workshop, you actuall
 
 The workshop finishes by running a small eval suite so you can quantify tradeoffs instead of relying on vibes. We provide the Microsoft Foundry environment for access to models, no account needed.
 
+### Outline
+
+* Introducing our models - comparison table - Kimi, DeepSeek, Mistral, GPT-5.5, Sonnet
+* Single LLM calls (with optional parameters like temperature, reasoning effort)
+  * [`single_llm_letter_counting.py`](examples/single_llm_letter_counting.py) — character-level counting
+  * [`single_llm_spatial_reasoning.py`](examples/single_llm_spatial_reasoning.py) — multi-step rotation tracking
+  * [`single_llm_self_calibration.py`](examples/single_llm_self_calibration.py) — confidence estimation
+  * [`single_llm_multi_constraint.py`](examples/single_llm_multi_constraint.py) — acrostic + word count + format
+* What are the knobs we can change? Prompt, parameters
+* RAG: LLM call with answer grounded in citations
+    * How do we get good citations?
+    * Most models: Ask for them in a certain format
+      * [`rag_responses.py`](examples/rag_responses.py) — OpenAI Responses API with prompt-based citations
+    * Anthropic: Use citations feature
+      * [`rag_messages.py`](examples/rag_messages.py) — Anthropic Messages API with built-in citations feature
+* Tool calling: Can the LLMs call tools... with the right arguments?
+  * [`function_calling.py`](examples/function_calling.py) — single tool, relative date resolution
+  * [`function_calling_code.py`](examples/function_calling_code.py) — code execution tool (Monty sandbox)
+* Tool call selection from multiple tools
+  * [`function_calling_loop.py`](examples/function_calling_loop.py) — weather + movies tools, multi-turn loop
+* Structured outputs: Adhere to the schema
+  * [`structured_outputs.py`](examples/structured_outputs.py) — FlightBooking schema extraction
+  * Only some models support strict structured outputs, fallback to tool calling otherwise
+* Image/multimodal input
+  * [`image_input.py`](examples/image_input.py) — vision capabilities across models
+* Agent loops: How do models handle repeated tool calls over time?
+  * [`function_calling_loop.py`](examples/function_calling_loop.py) — multi-turn agent conversation
+  * [`pydanticai_agent.py`](examples/pydanticai_agent.py) — PydanticAI agent with typed tools
+  * [`langchain_agent.py`](examples/langchain_agent.py) — LangChain agent with OpenAI/Anthropic
+  * [`agentframework_agent.py`](examples/agentframework_agent.py) — Microsoft Agent Framework
+* Evaluations: Quantify tradeoffs instead of vibes
+  * [`evals_basic.py`](examples/evals_basic.py) — programmatic checks (exact match, schema validation)
+  * [`evals_foundry_judge.py`](examples/evals_foundry_judge.py) — LLM judge with azure-ai-evaluation (GroundednessEvaluator)
+  * [`evals_agent.py`](examples/evals_agent.py) — agent eval with ToolCallAccuracyEvaluator
+  * [`evals_foundry_project.py`](examples/evals_foundry_project.py) — openai.evals.create via Foundry project (optional, requires project)
+
+## Single LLM call results across models
+
+Each example uses the OpenAI Responses API via Foundry. Results below are representative (non-deterministic models may vary between runs).
+
+| Example | gpt-5.5 | Kimi-K2.6 | Mistral-Large-3 | DeepSeek-V4-Flash |
+|---------|---------|-----------|-----------------|-------------------|
+| **Letter counting** (`single_llm_letter_counting.py`) — count "e" in a sentence (correct: 13) | 13 ✅ | 13 ✅ | 8–10 ❌ | 6 ❌ |
+| **Spatial reasoning** (`single_llm_spatial_reasoning.py`) — multi-step rotation (correct: Southeast) | Southeast ✅ | Southeast ✅ | Northeast ❌ | West ❌ |
+| **Self-calibration** (`single_llm_self_calibration.py`) — confidence rating (lower = more honest) | 65 | 55 | 85 | 85 |
+| **Multi-constraint** (`single_llm_multi_constraint.py`) — acrostic + word count + format | ✅ all constraints | ✅ all constraints | ❌ fails word count | ✅ all constraints |
+
+## RAG results across models
+
+The RAG example (`rag_responses.py`) asks "what are the key differences between how honey bees and carpenter bees build their nests?" but the retrieved sources only contain carpenter bee nesting info — honey bee nest construction is NOT in the sources. This tests whether models stay grounded or hallucinate.
+
+| Model | Grounding behavior |
+|-------|-------------------|
+| **gpt-5.5** | ✅ Correctly states honey bee nest-building is "not described in the provided material" |
+| **Kimi-K2.6** | ✅ Correctly states "sources do not include further details on how honey bees construct their hives" |
+| **DeepSeek-V4-Flash** | ✅ Correctly states "key differences… are not available" from sources |
+| **Mistral-Large-3** | ❌ Hallucinates honey bee details (wax combs, hexagonal cells, secreted beeswax) not present in sources |
+| **claude-sonnet-4-5** | ✅ Correctly states "documents do not contain information about how honey bees construct their nests" |
+
+The Anthropic version (`rag_messages.py`) uses Claude's built-in citations feature instead of prompt-based citation instructions.
+
+## Tool calling results across models
+
+The tool calling example (`function_calling.py`) provides a single `book_flight` tool and asks the model to book a flight using relative dates: "departing next Tuesday and returning the following Monday" (with today = Sunday June 15, 2026 given in the system prompt). The correct dates are June 17 (Tuesday) and June 23 (Monday). This tests whether models can resolve relative dates to correct calendar dates.
+
+| Model | Departure date | Return date | Analysis |
+|-------|---------------|-------------|----------|
+| **gpt-5.5** | — | — | Asks which Tokyo airport (HND or NRT) instead of making assumptions |
+| **Kimi-K2.6** | 2026-06-17 (Tue) ✅ | 2026-06-23 (Mon) ✅ | Correct relative date resolution |
+| **Mistral-Large-3** | 2026-06-24 (Tue) | 2026-06-30 (Mon) | Interprets "next Tuesday" as next week's Tuesday — debatable but internally consistent |
+| **DeepSeek-V4-Flash** | 2026-06-17 (Tue) ✅ | 2026-06-22 (Sun) ❌ | Wrong return day of the week (off by one day) |
+
+## Structured outputs results across models
+
+The structured outputs example (`structured_outputs.py`) asks models to extract a `FlightBooking` schema (with enums for trip type and cabin class) from a casual message with relative dates. Same date challenge as tool calling — "next Tuesday" / "that Monday" — plus schema adherence (should return IATA airport codes, not city names).
+
+| Model | origin_airport | destination_airport | departure | return | Schema adherence |
+|-------|---------------|--------------------:|-----------|--------|-----------------|
+| **gpt-5.5** | SFO ✅ | "Tokyo" ❌ | 2026-06-17 ✅ | 2026-06-23 ✅ | City name instead of IATA code for destination |
+| **Kimi-K2.6** | SFO ✅ | NRT ✅ | 2026-06-17 ✅ | 2026-06-23 ✅ | All fields correct |
+| **Mistral-Large-3** | SFO ✅ | NRT ✅ | 2026-06-23 | 2026-06-29 | Same "next week" date interpretation as tool calling |
+| **DeepSeek-V4-Flash** | "San Francisco" ❌ | "Tokyo" ❌ | 2026-06-16 ❌ | 2026-06-22 ❌ | City names instead of codes, wrong dates |
+
+GPT models use `responses.parse()` with strict `text_format` (enforced schema). Other models fall back to function calling with `tool_choice="required"` since they don't enforce structured output schemas.
+
+## Code execution results across models
+
+The code execution example (`function_calling_code.py`) gives models an `execute_python` tool (using the Monty sandbox) and asks them to count the letter "e" in a sentence (correct answer: 13). This is the same task that models struggled with in the single LLM examples — Mistral got 8–10, DeepSeek got 6. With a code tool, all models get 13 ✅, but efficiency varies wildly.
+
+| Model | Tool calls | Behavior |
+|-------|-----------|----------|
+| **gpt-5.5** | 1 | Clean single-shot solution |
+| **Mistral-Large-3** | 1 | Clean single-shot solution |
+| **Kimi-K2.6** | 2 | Verbose code with word-by-word breakdown, retries because `print()` returns `None` |
+| **DeepSeek-V4-Flash** | 8 | Keeps retrying because `print()` returns `None` — can't figure out to return an expression |
+
 ## Samples in this repo
 
 All examples authenticate to Foundry using an API key and reference environment variables from a `.env` file.
@@ -54,7 +150,12 @@ MAF documentation: https://learn.microsoft.com/agent-framework/
 ## TODOs
 
 - [x] Check for temperature support across the models
-- [x] Try chat completions with image input for other models
+- [x] Try chat completions with image input for other models 
+- [x] Try multilingual scenarios since models differ in their language support
+    Tested translation, cross-lingual instruction following (Chinese→Spanish), and idiomatic translation.
+    All four models handle multilingual well — no meaningful correctness variance found.
+- [x] Try code execution (with monty, maybe with tool calling)
+- [x] Add evals
 
 ## Package management
 

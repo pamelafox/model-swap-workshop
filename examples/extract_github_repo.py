@@ -116,7 +116,7 @@ if api_type == "openai_responses":
 elif api_type == "anthropic_messages":
     endpoint = os.environ["FOUNDRY_ANTHROPIC_MODELS_ENDPOINT"] + "/anthropic"
     api_key = os.environ["FOUNDRY_ANTHROPIC_API_KEY"]
-    deployment_name = os.environ["FOUNDRY_ANTHROPIC_CLAUDE_DEPLOYMENT"]
+    deployment_name = "claude-sonnet-4-5"
 
     client = Anthropic(
         api_key=api_key,

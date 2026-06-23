@@ -155,3 +155,5 @@ static/
 # Red team scan results (may contain sensitive/graphic content)
 redteam_results.json/
 .scan_*/
+examples/evals_groundedness_results.jsonl
+examples/eval_output/

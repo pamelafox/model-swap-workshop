@@ -18,14 +18,16 @@ MODELS=(
 )
 
 EXAMPLES=(
-    "openai_responses"
+    "single_llm_letter_counting"
+    "single_llm_spatial_reasoning"
+    "single_llm_self_calibration"
+    "single_llm_multi_constraint"
+    "rag_responses"
+    "rag_messages"
     "entity_extraction"
     "anthropic_messages"
     "agentframework_agent"
-    "agentframework_workflow"
-    "langgraph_workflow"
     "langchain_agent"
-    "litellm_swap"
     "pydanticai_agent"
 )
 
@@ -107,9 +109,28 @@ run_for_model() {
     echo "Testing model: $model_name"
     echo "########################################"
 
-    run_example_case "openai_responses" "$model_name :: openai_responses" \
+    run_example_case "single_llm_letter_counting" "$model_name :: single_llm_letter_counting" \
         env FOUNDRY_OPENAI_DEPLOYMENT="$model_name" \
-        uv run examples/openai_responses.py
+        uv run examples/single_llm_letter_counting.py
+
+    run_example_case "single_llm_spatial_reasoning" "$model_name :: single_llm_spatial_reasoning" \
+        env FOUNDRY_OPENAI_DEPLOYMENT="$model_name" \
+        uv run examples/single_llm_spatial_reasoning.py
+
+    run_example_case "single_llm_self_calibration" "$model_name :: single_llm_self_calibration" \
+        env FOUNDRY_OPENAI_DEPLOYMENT="$model_name" \
+        uv run examples/single_llm_self_calibration.py
+
+    run_example_case "single_llm_multi_constraint" "$model_name :: single_llm_multi_constraint" \
+        env FOUNDRY_OPENAI_DEPLOYMENT="$model_name" \
+        uv run examples/single_llm_multi_constraint.py
+
+    run_example_case "rag_responses" "$model_name :: rag_responses" \
+        env FOUNDRY_OPENAI_DEPLOYMENT="$model_name" \
+        uv run examples/rag_responses.py
+
+    run_example_case "rag_messages" "$model_name :: rag_messages" \
+        uv run examples/rag_messages.py
 
     run_example_case "entity_extraction" "$model_name :: entity_extraction" \
         env FOUNDRY_OPENAI_DEPLOYMENT="$model_name" \
@@ -127,22 +148,6 @@ run_for_model() {
         env FOUNDRY_CLAUDE_DEPLOYMENT="$model_name" \
         uv run examples/agentframework_agent.py
 
-    run_example_case "agentframework_workflow" "$model_name :: agentframework_workflow (openai)" \
-        env FOUNDRY_OPENAI_DEPLOYMENT="$model_name" \
-        uv run examples/agentframework_workflow.py
-
-    run_example_case "agentframework_workflow" "$model_name :: agentframework_workflow (claude)" \
-        env FOUNDRY_CLAUDE_DEPLOYMENT="$model_name" \
-        uv run examples/agentframework_workflow.py
-
-    run_example_case "langgraph_workflow" "$model_name :: langgraph_workflow (openai)" \
-        env FOUNDRY_OPENAI_DEPLOYMENT="$model_name" \
-        uv run examples/langgraph_workflow.py
-
-    run_example_case "langgraph_workflow" "$model_name :: langgraph_workflow (claude)" \
-        env FOUNDRY_CLAUDE_DEPLOYMENT="$model_name" \
-        uv run examples/langgraph_workflow.py
-
     run_example_case "langchain_agent" "$model_name :: langchain_agent (openai)" \
         env FOUNDRY_OPENAI_DEPLOYMENT="$model_name" \
         uv run examples/langchain_agent.py
@@ -150,14 +155,6 @@ run_for_model() {
     run_example_case "langchain_agent" "$model_name :: langchain_agent (claude)" \
         env FOUNDRY_CLAUDE_DEPLOYMENT="$model_name" \
         uv run examples/langchain_agent.py
-
-    run_example_case "litellm_swap" "$model_name :: litellm_swap (openai)" \
-        env FOUNDRY_OPENAI_DEPLOYMENT="$model_name" \
-        uv run examples/litellm_swap.py
-
-    run_example_case "litellm_swap" "$model_name :: litellm_swap (claude)" \
-        env FOUNDRY_CLAUDE_DEPLOYMENT="$model_name" \
-        uv run examples/litellm_swap.py
 
     run_example_case "pydanticai_agent" "$model_name :: pydanticai_agent (openai)" \
         env FOUNDRY_OPENAI_DEPLOYMENT="$model_name" \
