@@ -1,7 +1,7 @@
 """
 Agent evaluation: Use azure-ai-evaluation to assess tool calling quality.
 
-Runs our flight-booking tool calling scenario across models, then uses
+Runs our calendar-event tool calling scenario across models, then uses
 ToolCallAccuracyEvaluator and TaskAdherenceEvaluator to score whether
 models made the right tool calls with correct arguments.
 
@@ -49,40 +49,49 @@ MODELS = [
 # ---------------------------------------------------------------------------
 TOOL_DEFINITIONS = [
     {
-        "name": "book_flight",
-        "description": "Book a flight between two cities.",
+        "name": "create_calendar_event",
+        "description": "Create a calendar event.",
         "parameters": {
             "type": "object",
             "properties": {
-                "origin_airport": {
+                "title": {
                     "type": "string",
-                    "description": "IATA airport code for departure (e.g. SFO, JFK)",
+                    "description": "Event title in Title Case (e.g. 'Weekly Standup', 'Q3 Planning')",
                 },
-                "destination_airport": {
+                "start_time": {
                     "type": "string",
-                    "description": "IATA airport code for arrival (e.g. LHR, NRT)",
+                    "description": "Start time in ISO 8601 format with timezone offset (e.g. 2026-07-01T14:00:00-07:00)",
                 },
-                "departure_date": {
+                "end_time": {
                     "type": "string",
-                    "description": "Departure date in YYYY-MM-DD format",
+                    "description": "End time in ISO 8601 format with timezone offset (e.g. 2026-07-01T15:00:00-07:00)",
                 },
-                "return_date": {
+                "timezone": {
                     "type": "string",
-                    "description": "Return date in YYYY-MM-DD format, or empty for one-way",
+                    "description": "IANA timezone identifier (e.g. 'America/Los_Angeles', 'America/New_York')",
                 },
-                "num_passengers": {
+                "attendees": {
+                    "type": "array",
+                    "items": {"type": "string"},
+                    "description": "List of attendee names only",
+                },
+                "location": {
+                    "type": "string",
+                    "description": "Room name, or 'Virtual' for online meetings",
+                },
+                "duration_minutes": {
                     "type": "integer",
-                    "description": "Number of passengers",
+                    "description": "Duration of the meeting in minutes",
                 },
             },
-            "required": ["origin_airport", "destination_airport", "departure_date", "num_passengers"],
+            "required": ["title", "start_time", "end_time", "timezone"],
             "additionalProperties": False,
         },
     },
 ]
 
-SYSTEM_PROMPT = "You are a travel booking assistant. Use the available tools to help the user. Today is Monday, June 29, 2026."
-USER_QUERY = "Book a round-trip flight for 3 people from Los Angeles to Tokyo, departing this Saturday and returning the following Friday."
+SYSTEM_PROMPT = "You are a helpful calendar assistant. Today is Monday, June 29, 2026. Use the available tools to process the user's request."
+USER_QUERY = "Can you throw something on my calendar? Platform team sync — me, Sarah from eng, Marcus, and that new PM Priya. Tomorrow at 1:30 PT for a half hour. It's virtual, on Microsoft Teams."
 
 # OpenAI Responses API tool format
 TOOLS_FOR_API = [
@@ -184,9 +193,11 @@ def main():
 
         if r["tool_calls"]:
             args = r["tool_calls"][0]["arguments"]
+            attendees = args.get("attendees", [])
+            location = args.get("location", "")
             args_str = (
-                f"dep={args.get('departure_date')}, ret={args.get('return_date')}, "
-                f"pax={args.get('num_passengers')}"
+                f"attendees={attendees}, "
+                f"location={location}"
             )
             result_str = r.get("tool_call_accuracy_result", "N/A")
             score_str = f"{tca_score}/5" if tca_score is not None else "N/A"
@@ -198,7 +209,7 @@ def main():
         print(f"  {r['model']:<20} {score_str:<10} {result_str:<8} {args_str}")
 
     print("\n  Scoring: 5=perfect tool call, 3=threshold, 1-2=wrong tool/args")
-    print("  Expected: dep=2026-07-04, ret=2026-07-10, pax=3")
+    print("  Expected: attendees=['Sarah','Marcus','Priya'], location='Virtual'")
 
 
 if __name__ == "__main__":

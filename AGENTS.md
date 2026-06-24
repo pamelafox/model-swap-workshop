@@ -28,7 +28,7 @@ The workshop finishes by running a small eval suite so you can quantify tradeoff
     * Anthropic: Use citations feature
       * [`rag_messages.py`](examples/rag_messages.py) — Anthropic Messages API with built-in citations feature
 * Tool calling: Can the LLMs call tools... with the right arguments?
-  * [`function_calling.py`](examples/function_calling.py) — single tool, relative date resolution
+  * [`function_calling.py`](examples/function_calling.py) — single tool, calendar event with format normalization
   * [`function_calling_code.py`](examples/function_calling_code.py) — code execution tool (Monty sandbox)
 * Tool call selection from multiple tools
   * [`function_calling_loop.py`](examples/function_calling_loop.py) — weather + movies tools, multi-turn loop

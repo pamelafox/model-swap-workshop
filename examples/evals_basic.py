@@ -5,7 +5,7 @@ Tests cases with deterministic ground-truth answers:
 - Letter counting (correct: 13)
 - Spatial reasoning (correct: Southeast)
 - Structured outputs (correct dates, IATA codes)
-- Tool calling (correct date arguments)
+- Tool calling (correct attendee normalization, location format)
 
 No eval framework needed — just programmatic checks.
 
@@ -199,22 +199,24 @@ def eval_structured_output(model: str) -> dict:
 
 
 def eval_tool_calling(model: str) -> dict:
-    """Book a flight with correct relative date resolution."""
+    """Create a calendar event with correct argument normalization."""
     tools = [
         {
             "type": "function",
-            "name": "book_flight",
-            "description": "Book a flight between two cities.",
+            "name": "create_calendar_event",
+            "description": "Create a calendar event.",
             "parameters": {
                 "type": "object",
                 "properties": {
-                    "origin_airport": {"type": "string", "description": "IATA airport code for departure"},
-                    "destination_airport": {"type": "string", "description": "IATA airport code for arrival"},
-                    "departure_date": {"type": "string", "description": "Departure date in YYYY-MM-DD format"},
-                    "return_date": {"type": "string", "description": "Return date in YYYY-MM-DD format, or empty for one-way"},
-                    "num_passengers": {"type": "integer", "description": "Number of passengers"},
+                    "title": {"type": "string", "description": "Event title in Title Case (e.g. 'Weekly Standup', 'Q3 Planning')"},
+                    "start_time": {"type": "string", "description": "Start time in ISO 8601 format with timezone offset (e.g. 2026-07-01T14:00:00-07:00)"},
+                    "end_time": {"type": "string", "description": "End time in ISO 8601 format with timezone offset (e.g. 2026-07-01T15:00:00-07:00)"},
+                    "timezone": {"type": "string", "description": "IANA timezone identifier (e.g. 'America/Los_Angeles', 'America/New_York')"},
+                    "attendees": {"type": "array", "items": {"type": "string"}, "description": "List of attendee names only"},
+                    "location": {"type": "string", "description": "Room name, or 'Virtual' for online meetings"},
+                    "duration_minutes": {"type": "integer", "description": "Duration of the meeting in minutes"},
                 },
-                "required": ["origin_airport", "destination_airport", "departure_date", "num_passengers"],
+                "required": ["title", "start_time", "end_time", "timezone"],
                 "additionalProperties": False,
             },
         },
@@ -222,8 +224,8 @@ def eval_tool_calling(model: str) -> dict:
     response = client.responses.create(
         model=model,
         input=[
-            {"role": "system", "content": "You are a travel booking assistant. Use the available tools to help the user. Today is Monday, June 29, 2026."},
-            {"role": "user", "content": "Book a round-trip flight for 3 people from Los Angeles to Tokyo, departing this Saturday and returning the following Friday."},
+            {"role": "system", "content": "You are a helpful calendar assistant. Today is Monday, June 29, 2026. Use the available tools to process the user's request."},
+            {"role": "user", "content": "Can you throw something on my calendar? Platform team sync — me, Sarah from eng, Marcus, and that new PM Priya. Tomorrow at 1:30 PT for a half hour. It's virtual, on Microsoft Teams."},
         ],
         tools=tools,
         store=False,
@@ -232,19 +234,23 @@ def eval_tool_calling(model: str) -> dict:
     if not tool_call:
         return {
             "test": "tool_calling",
-            "expected": "departure=2026-07-04, return=2026-07-10",
+            "expected": "attendees=[Sarah,Marcus,Priya], location=Virtual",
             "actual": "NO_TOOL_CALL",
             "pass": False,
         }
 
     args = json.loads(tool_call.arguments)
-    dep_correct = args.get("departure_date") == "2026-07-04"
-    ret_correct = args.get("return_date") == "2026-07-10"
+    attendees = args.get("attendees", [])
+    location = args.get("location", "")
+    # Check: "me" should not be in attendees, location should be exactly "Virtual"
+    no_me = not any(a.lower() in ("me", "you") for a in attendees)
+    location_correct = location == "Virtual"
+    start_correct = args.get("start_time", "").startswith("2026-06-30T13:30")
     return {
         "test": "tool_calling",
-        "expected": "departure=2026-07-04, return=2026-07-10",
-        "actual": f"departure={args.get('departure_date')}, return={args.get('return_date')}",
-        "pass": dep_correct and ret_correct,
+        "expected": "attendees=[Sarah,Marcus,Priya], location=Virtual",
+        "actual": f"attendees={attendees}, location={location}",
+        "pass": no_me and location_correct and start_correct,
     }
 
 

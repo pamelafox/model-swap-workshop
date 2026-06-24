@@ -154,25 +154,20 @@ When working with the Anthropic models, we must use the Anthropic messages API, 
     uv run examples/function_calling.py
     ```
 
-3. Change model to one of the other models by un-commenting a `MODEL =` line at the top, and re-run the file. The model must resolve "this Saturday" and "the following Friday" relative to "today is Monday, June 29, 2026." Watch which models make the tool call vs. ask clarifying questions.
+3. Observe how the model normalizes the user's message into structured tool arguments. The display at the bottom compares the expected tool call output to the model's actual output.
 
-### What to observe
+3. Change model to one of the other models by un-commenting a `MODEL =` line at the top, and re-run the file. Observe whether the output matches the expected tool call arguments.
 
-- **gpt-5.5**: May ask which Tokyo airport you prefer (HND vs NRT) instead of booking — but correctly identifies the dates (July 4, July 10)
-- **Kimi, DeepSeek, Mistral**: All make the tool call with correct dates and pick NRT
-- Some models occasionally ask clarifying questions instead of acting — run it twice if you get a question
+### Exercise: Improve tool argument quality
 
-### Exercise: Make date resolution reliable
-
-Open [examples/function_calling.py](examples/function_calling.py). Change the user message to use a more ambiguous date like "next Tuesday" — watch how models disagree. Then try to get them all to agree:
+In our experiments, several models added "me" or "you" to attendees list, or appended "Teams" to the location. Can you get ALL models to match the expected output?
 
 Ideas to try:
-- Change the system prompt to include the explicit calendar: "Today is Monday June 29. This week: Tue 30, Wed Jul 1... Next week: Mon 6, Tue 7..."
-- Add date examples in the tool parameter descriptions: `"Departure date in YYYY-MM-DD format, e.g. 2026-07-04 for Saturday July 4"`
-- Rephrase the user message to use absolute dates instead of relative ones
-- Add `"Today's date: 2026-06-29 (Monday)"` directly in the user message
+- Tighten the attendees description: `"List of attendee names only (first name or full name). Do not include the organizer."`
+- Make the location description more explicit: `"Room name, or exactly 'Virtual' for online meetings. Do not include the platform name."`
+- Add an example in the tool description: `"e.g. ['Sarah', 'Marcus', 'Priya']"`
 
-Which approach works across the most models?
+Which description changes fix which models?
 
 ---
 
@@ -302,8 +297,8 @@ Uses `openai.evals.create` to run evals server-side via a Foundry project. Resul
 |----------------|-----------|--------------------------|
 | Raw reasoning (counting, spatial) | gpt-5.5, Kimi | Chain-of-thought prompts, code tools |
 | Grounding / hallucination | gpt-5.5, Kimi, DeepSeek | Stronger system prompt instructions |
-| Date resolution in tools | Kimi | Explicit calendar in prompt, absolute dates |
-| Schema adherence | Kimi (via tool calling) | Better field descriptions, examples |
+| Tool arg normalization | gpt-5.5, Kimi | Tighter parameter descriptions, examples |
+| Schema adherence | Kimi, Mistral | Better field descriptions, examples |
 | Code tool efficiency | gpt-5.5, Mistral | Clearer tool description about return values |
 
 **Key takeaway**: "Just swap the model" is never just swapping the model. Prompts, tool definitions, and output strategies all need tuning per model. Evals let you quantify instead of guessing.

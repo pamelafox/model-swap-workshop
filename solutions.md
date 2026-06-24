@@ -121,16 +121,23 @@ The sources are in the format: <id>: <text>.
 
 ### Expected results
 
-The model must resolve "this Saturday" and "the following Friday" relative to "today is Monday, June 29, 2026." Correct dates: July 4 (Saturday) and July 10 (Friday).
+The model must parse a casual meeting request into structured tool arguments. The user says "me, Sarah from eng, Marcus, and that new PM Priya" — the schema says "List of attendee names only." The user says "It's virtual, on Microsoft Teams" — the schema says `'Virtual' for online meetings`.
 
-All models get the dates right — "this Saturday" is unambiguous. The interesting difference is whether models make the tool call or ask clarifying questions first.
+| Model | attendees | location | title | timezone | duration |
+|-------|-----------|----------|-------|----------|----------|
+| **gpt-5.5** | `["Sarah","Marcus","Priya"]` ✅ | `"Virtual"` ✅ | Platform Team Sync | America/Los_Angeles ✅ | 30 ✅ |
+| **Kimi-K2.6** | `["Sarah","Marcus","Priya"]` ✅ | `"Virtual"` ✅ | Platform Team Sync | America/Los_Angeles ✅ | 30 ✅ |
+| **DeepSeek-V4-Flash** | `["me","Sarah","Marcus","Priya"]` ❌ | `"Virtual"` ✅ | Platform Team Sync | America/Los_Angeles ✅ | 30 ✅ |
+| **Mistral-Large-3** | `["You","Sarah","Marcus","Priya"]` ❌ | `"Virtual (Microsoft Teams)"` ❌ | Platform Team Sync | America/Los_Angeles ✅ | 30 ✅ |
 
-| Model | Departure date | Return date | Analysis |
-|-------|---------------|-------------|----------|
-| **gpt-5.5** | 2026-07-04 (Sat) ✅ | 2026-07-10 (Fri) ✅ | Sometimes asks which Tokyo airport (HND vs NRT) instead of calling the tool |
-| **Kimi-K2.6** | 2026-07-04 (Sat) ✅ | 2026-07-10 (Fri) ✅ | Correct dates, picks NRT. May occasionally ask questions instead. |
-| **Mistral-Large-3** | 2026-07-04 (Sat) ✅ | 2026-07-10 (Fri) ✅ | Correct dates, picks NRT |
-| **DeepSeek-V4-Flash** | 2026-07-04 (Sat) ✅ | 2026-07-10 (Fri) ✅ | Correct dates, picks NRT |
+Key differences:
+- **gpt-5.5, Kimi**: Correctly infer "me" is the organizer (not an attendee) and follow the schema's location format exactly
+- **DeepSeek**: Passes "me" literally as an attendee name — doesn't interpret the schema instruction
+- **Mistral**: Re-interprets "me" as "You" (!) and appends "(Microsoft Teams)" to location despite the schema specifying just `'Virtual'`
+
+### Exercise: Improve tool argument quality
+
+Tightening the attendees description to `"List of attendee names only (first name or full name). Do not include the organizer."` fixes DeepSeek. Adding `"Do not include the platform name"` to the location description fixes Mistral. With both changes, all models produce identical correct output.
 
 ---
 
