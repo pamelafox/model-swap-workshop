@@ -141,32 +141,61 @@ Tightening the attendees description to `"List of attendee names only (first nam
 
 ---
 
-## Part 4: Structured outputs
+## Part 4: Tool calling in a loop
 
 ### Expected results
 
-Same date resolution, plus schema adherence — should return IATA airport codes (NRT, HND), not city names ("Tokyo") or city codes ("TYO").
+Multi-step math word problem with a `calculate` tool. All models get $92.28 ✅, but decomposition granularity varies.
 
-| Model | origin_airport | destination_airport | departure | return | Schema adherence |
-|-------|---------------|---------------------|-----------|--------|-----------------|
-| **gpt-5.5** | SFO ✅ | "Tokyo" ❌ | 2026-07-04 ✅ | 2026-07-10 ✅ | City name instead of airport IATA code for destination |
-| **Kimi-K2.6** | SFO ✅ | NRT ✅ | 2026-07-04 ✅ | 2026-07-10 ✅ | All fields correct |
-| **Mistral-Large-3** | SFO ✅ | NRT ✅ | 2026-07-04 ✅ | 2026-07-10 ✅ | All fields correct |
-| **DeepSeek-V4-Flash** | SFO or "San Francisco" | "Tokyo" or "TYO" | 2026-07-04 ✅ | 2026-07-10 ✅ | Dates correct but often returns city names instead of IATA airport codes |
+| Model | Tool calls | Decomposition strategy |
+|-------|-----------|------------------------|
+| **gpt-5.5** | 4 | Combines discount steps: `45 * (1 - 0.30)`, then loyalty, then multiply, then tax |
+| **DeepSeek-V4-Flash** | 4 | Same as gpt-5.5: `45 * 0.70`, `31.50 * 0.90`, `28.35 * 3`, `85.05 * 1.085` |
+| **Kimi-K2.6** | 4–5 | Sometimes includes a redundant tax-amount step before the final total |
+| **Mistral-Large-3** | 7 | Decomposes every sub-operation: `45 * 0.30`, `45 - 13.5`, `31.5 * 0.10`, `31.5 - 3.15`, `3 * 28.35`, `85.05 * 0.085`, `85.05 + 7.23` |
 
-GPT models use `responses.parse()` with strict `text_format` (enforced schema). Other models fall back to function calling with `tool_choice="required"` since they don't enforce structured output schemas.
+**Key insight**: Mistral breaks every operation into its smallest components (compute discount amount, then subtract it) rather than combining them (`price * 0.70`). This costs more in API calls and latency but produces the same correct answer.
+
+### Exercise: Reduce tool calls
+
+Results may vary across runs, but adding guidance about compound expressions generally helps. For example, changing the system prompt to:
+
+```
+You are a helpful assistant. Use the calculate tool for computations.
+Combine operations where possible — e.g. use '45 * 0.70' instead of
+separate '45 * 0.30' and '45 - 13.5' calls.
+```
+
+Or adding to the tool's `expression` description:
+
+```
+"A single arithmetic expression, e.g. '(45 * 0.70) * 0.90'. Combine steps where possible to minimize calls."
+```
 
 ---
 
-## Part 5: Code execution
+## Part 5: Agent loops (trip planner)
 
 ### Expected results
 
-Same letter-counting task but with an `execute_python` tool. All models get 13 ✅, but efficiency varies.
+Trip planning agent with budget constraint ($600 for flight + 3 nights hotel, SF→NYC) plus activity suggestion with remaining budget. The middleware logs tool calls grouped by turn, showing parallel vs serial patterns.
 
-| Model | Tool calls | Behavior |
-|-------|-----------|----------|
-| **gpt-5.5** | 1 | Clean single-shot solution |
-| **Mistral-Large-3** | 1 | Clean single-shot solution |
-| **Kimi-K2.6** | 2 | Verbose code with word-by-word breakdown, retries because `print()` returns `None` |
-| **DeepSeek-V4-Flash** | 8 | Keeps retrying because `print()` returns `None` — can't figure out to return an expression |
+| Model | Turns | Pattern |
+|-------|-------|---------|
+| **gpt-5.5** | 3 | Turn 1 (parallel): search_flights + search_hotels → Turn 2: check_budget → Turn 3: search_activities(max_price=35) |
+| **DeepSeek-V4-Flash** | 3 | Same as gpt-5.5 — correct dependency ordering, waits for remaining budget |
+| **Mistral-Large-3** | 2–4 | Turn 1 (parallel): searches → Turn 2 (parallel): multiple check_budget calls → sometimes Turn 3: search_activities, sometimes skips it |
+| **Kimi-K2.6** | 3–4 | Turn 1 (parallel): searches → Turn 2: check_budget → Turn 3: search_activities → sometimes Turn 4: extra check_budget |
+
+**Key insights**:
+
+1. **Parallel vs serial**: gpt-5.5/DeepSeek consistently batch independent calls (search_flights + search_hotels) in one parallel turn. Kimi/Mistral sometimes go fully sequential via MAF/LangChain.
+2. **Dependency awareness**: `search_activities` needs the remaining budget from `check_budget`. GPT-5.5/DeepSeek correctly wait for the result. Kimi occasionally batches them in parallel (guessing max_price=35 before knowing it).
+3. **Thoroughness**: Mistral/Kimi explore multiple budget combinations; GPT-5.5/DeepSeek verify only the best option.
+4. **Instruction following**: Mistral sometimes forgets to call search_activities entirely, getting lost in budget exploration.
+
+### Exercise solution
+
+- **"Present only the single best option"** with Mistral: Reduces check_budget calls from 3→2 and fixes the issue of forgetting to call search_activities. Doesn't fully eliminate exploration but makes it more focused.
+- **"Always check at least 3 flight+hotel combinations"** with gpt-5.5: Increases check_budget calls from 1→4 (all in parallel). The model now explores the full space before recommending.
+- **Tightening budget to $400**: No combo fits (cheapest is Delta + Pod = $480), so all models must explore multiple options then acknowledge failure. GPT-5.5 goes from 1→2 budget checks; Mistral checks 3 combos. With $500, models can still find the Delta + Pod combo but must reject the direct-flight option first.

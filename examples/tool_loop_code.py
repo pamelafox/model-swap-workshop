@@ -8,9 +8,9 @@ from openai import OpenAI
 load_dotenv()
 
 MODEL = "gpt-5.5"
-# MODEL = "Kimi-K2.6"
-# MODEL = "DeepSeek-V4-Flash"
-# MODEL = "Mistral-Large-3"
+MODEL = "Kimi-K2.6"
+#MODEL = "DeepSeek-V4-Flash"
+#MODEL = "Mistral-Large-3"
 deployment_name = os.environ.get("FOUNDRY_OPENAI_DEPLOYMENT", MODEL)
 
 endpoint = os.environ["FOUNDRY_MODELS_ENDPOINT"] + "/openai/v1"
@@ -65,6 +65,7 @@ messages = [
 ]
 
 # Agent loop: keep calling the model until we get a final text response
+total_tool_calls = 0
 while True:
     response = client.responses.create(
         model=deployment_name,
@@ -82,7 +83,10 @@ while True:
 
     if not tool_calls:
         print(f"Assistant: {response.output_text}")
+        print(f"\n(Total tool calls: {total_tool_calls})")
         break
+
+    total_tool_calls += len(tool_calls)
 
     # Process tool calls and feed results back
     for item in response.output:
@@ -93,7 +97,7 @@ while True:
     for tool_call in tool_calls:
         args = json.loads(tool_call.arguments)
         code = args["code"]
-        print(f"[Tool call] execute_python:")
+        print("[Tool call] execute_python:")
         print(f"  {code}")
         result = execute_code(code)
         print(f"[Result] {result}\n")

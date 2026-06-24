@@ -8,9 +8,9 @@ Welcome! In this workshop you'll run the same scenarios across multiple frontier
 2. [Setup the environment](#setup-the-environment)
 3. [Part 1: Single LLM calls](#part-1-single-llm-calls)
 4. [Part 2: RAG](#part-2-rag)
-5. [Part 3: Tool calling](#part-3-tool-calling)
-6. [Part 4: Structured outputs](#part-4-structured-outputs)
-7. [Part 5: Code execution](#part-5-code-execution)
+5. [Part 3: Image/multimodal input](#part-3-imagemultimodal-input)
+6. [Part 4: Tool calling](#part-4-tool-calling)
+7. [Part 5: Tool calling in a loop](#part-5-tool-calling-in-a-loop)
 8. [Part 6: Agent loops](#part-6-agent-loops)
 9. [Part 7: Evaluations](#part-7-evaluations)
 10. [Recap](#recap)
@@ -143,7 +143,39 @@ When working with the Anthropic models, we must use the Anthropic messages API, 
 
 ---
 
-## Part 3: Tool calling
+## Part 3: Image/multimodal input
+
+### Run it
+
+1. Open [examples/image_input.py](examples/image_input.py)
+2. Run the file:
+
+    ```bash
+    uv run examples/image_input.py
+    ```
+
+3. The script sends 3 different images (aurochs painting, crocodile photo, plant price list) with questions that require visual understanding. Observe the accuracy and detail of each response.
+
+4. Change model to one of the other models by un-commenting a `MODEL =` line at the top, and re-run.
+
+### What to observe
+
+- **Species identification**: Does the model correctly identify the aurochs (not a unicorn) and the crocodiles (not alligators)?
+- **Data extraction**: Does the model find the actual cheapest plant in the table, or pick the wrong one?
+- **Detail level**: Does the model give a one-word answer or explain its reasoning? How confident vs. hedging is it?
+
+### Exercise: Know your model's limits
+
+Unlike prompt or tool description issues, vision failures are fundamental capability gaps — you can't prompt your way to better eyesight. Try adding your own images to the `EXAMPLES` list and see which models handle them:
+- A diagram or chart with small text
+- An image with handwritten content
+- A screenshot of code
+
+Which models would you trust for a production vision task? Which would you rule out?
+
+---
+
+## Part 4: Tool calling
 
 ### Run it
 
@@ -171,60 +203,40 @@ Which description changes fix which models?
 
 ---
 
-## Part 4: Structured outputs
+## Part 5: Tool calling in a loop
+
+In this example, we give the model a `calculate` tool and ask a multi-step word problem. The model must decompose the problem into sequential tool calls. Models differ in how granularly they decompose — some use 4 calls, others use 7+.
 
 ### Run it
 
-1. Open [examples/structured_outputs.py](examples/structured_outputs.py)
+1. Open [examples/tool_loop_calculator.py](examples/tool_loop_calculator.py)
 2. Run the file:
 
     ```bash
-    uv run examples/structured_outputs.py
+    uv run examples/tool_loop_calculator.py
     ```
 
-3. Change model to one of the other models by un-commenting a `MODEL =` line at the top, and re-run the file. Watch whether models return IATA airport codes (like SFO, NRT) or city names/codes (like "San Francisco" or "Tokyo").
+3. Observe how many tool calls the model makes to solve the problem (expected answer: $92.28). Some models combine steps efficiently, while others decompose every sub-operation into a separate call.
+
+4. Change model to one of the other models by un-commenting a `MODEL =` line at the top, and re-run the file. Compare the number of tool calls and the decomposition strategy.
 
 ### What to observe
 
-- **gpt-5.5**: Uses `responses.parse()` with strict schema enforcement — but writes "Tokyo" (city name) instead of an IATA airport code like NRT
-- **Kimi, Mistral**: All fields correct including proper IATA codes (NRT)
-- **DeepSeek**: Sometimes returns city names ("San Francisco", "Tokyo") or city codes ("TYO") instead of airport IATA codes
+- **gpt-5.5, DeepSeek, Kimi**: 4–5 calls — combine discount + subtraction into one step (e.g. `45 * 0.70`)
+- **Mistral**: 7 calls — decomposes every operation separately (e.g. `45 * 0.30` then `45 - 13.5`)
 
-### Exercise: Improve schema adherence
+### Exercise: Reduce tool calls
 
-Open [examples/structured_outputs.py](examples/structured_outputs.py). gpt-5.5 returns "Tokyo" and DeepSeek may return city names — can you get all models to return proper IATA airport codes like NRT or HND?
+Choose the model that used the highest number of tool calls. Can you get it to use fewer?
 
 Ideas to try:
-- Make the field descriptions more explicit: `"3-letter IATA airport code (e.g. SFO, NRT, HND). Must be an actual airport code, not a city code."`
-- Add examples in the system prompt: "Example: San Francisco → SFO, Tokyo Narita → NRT, Tokyo Haneda → HND"
-- Add a `pattern` constraint to the JSON schema: `"pattern": "^[A-Z]{3}$"`
-- For non-GPT models, try adding `"enum"` with common airport codes
-
----
-
-## Part 5: Code execution
-
-### Run it
-
-1. Open [examples/function_calling_code.py](examples/function_calling_code.py)
-2. Run the file:
-
-    ```bash
-    uv run examples/function_calling_code.py
-    ```
-
-3. Change model to one of the other models by un-commenting a `MODEL =` line at the top, and re-run the file. All models get the correct answer (13) with a code tool, but watch how many tool calls each model needs to get there.
-
-### What to observe
-
-This gives models an `execute_python` tool for the same letter-counting task. All models now get 13 ✅ — but some take 8 retries because `print()` returns `None` and they can't figure out to use a bare expression.
-
-- **gpt-5.5, Mistral**: 1 call, clean solution
-- **DeepSeek**: Up to 8 retries
+- Change the system prompt to say "Combine operations where possible"
+- Make the tool description say "You can use compound expressions like `(45 * 0.70) * 0.90`"
+- Add an example expression in the `code` parameter description
 
 ### Discussion
 
-When should you give a model a code tool vs. engineering the prompt? What are the cost/latency tradeoffs of multiple tool calls?
+Is fewer tool calls always better? What are the cost/latency tradeoffs of more granular decomposition? When would you want the model to show more work vs. be concise?
 
 ---
 
@@ -232,18 +244,42 @@ When should you give a model a code tool vs. engineering the prompt? What are th
 
 ### Run it
 
-Try one or more agent frameworks — open the file, set your model, and run:
+1. Pick your framework and open the corresponding file:
 
-- [examples/pydanticai_agent.py](examples/pydanticai_agent.py): `uv run examples/pydanticai_agent.py`
-- [examples/langchain_agent.py](examples/langchain_agent.py): `uv run examples/langchain_agent.py`
-- [examples/agentframework_agent.py](examples/agentframework_agent.py): `uv run examples/agentframework_agent.py`
+    | Framework | File |
+    |-----------|------|
+    | PydanticAI | [examples/agent_trip_planner_pydanticai.py](examples/agent_trip_planner_pydanticai.py) |
+    | LangChain | [examples/agent_trip_planner_langchain.py](examples/agent_trip_planner_langchain.py) |
+    | Microsoft Agent Framework | [examples/agent_trip_planner_maf.py](examples/agent_trip_planner_maf.py) |
 
-These run multi-turn conversations with tool use. The [examples/function_calling_loop.py](examples/function_calling_loop.py) example shows the raw loop without a framework.
+2. Run the file:
+
+    ```bash
+    uv run examples/agent_trip_planner_pydanticai.py
+    # or
+    uv run examples/agent_trip_planner_langchain.py
+    # or
+    uv run examples/agent_trip_planner_maf.py
+    ```
+
+3. The agent must search flights, search hotels, verify the budget, and suggest an activity with the remaining budget. Observe the **Turn** labels — which calls are parallel vs single, and how many turns the model takes.
+
+4. Change model to one of the other models by un-commenting a `MODEL =` line at the top, and re-run the file.
 
 ### What to observe
 
-- How does each framework abstract the tool call → result → next message loop?
-- What happens when you swap the model inside a framework — does it just work or do you need to change configuration?
+- **Parallel vs serial**: gpt-5.5 batches `search_flights` + `search_hotels` in one parallel turn; other models may call them one at a time
+- **Budget checks**: gpt-5.5/DeepSeek verify once; Kimi/Mistral explore multiple flight+hotel combos
+- **Dependency awareness**: `search_activities` needs the remaining budget from `check_budget`. Does the model wait for the result, or guess the value and call them in parallel?
+
+### Exercise: Control agent thoroughness
+
+Can you get the "thorough" models to be more concise, or the "concise" models to explore more options?
+
+Ideas to try:
+- Add "Present only the single best option" to the system prompt
+- Add "Always check at least 3 combinations before recommending" to the system prompt
+- Change the budget to $400 (tighter constraint) — does behavior change?
 
 ---
 
@@ -257,7 +293,7 @@ Now quantify what you observed.
 uv run examples/evals_basic.py
 ```
 
-This runs all four test cases (letter counting, spatial reasoning, structured outputs, tool calling) across all models and checks against ground truth. No LLM judge needed — just exact match and schema validation.
+This runs test cases (letter counting, spatial reasoning, tool calling) across all models and checks against ground truth. No LLM judge needed — just exact match and schema validation.
 
 ### 7b: LLM judge (GroundednessEvaluator)
 
@@ -298,7 +334,6 @@ Uses `openai.evals.create` to run evals server-side via a Foundry project. Resul
 | Raw reasoning (counting, spatial) | gpt-5.5, Kimi | Chain-of-thought prompts, code tools |
 | Grounding / hallucination | gpt-5.5, Kimi, DeepSeek | Stronger system prompt instructions |
 | Tool arg normalization | gpt-5.5, Kimi | Tighter parameter descriptions, examples |
-| Schema adherence | Kimi, Mistral | Better field descriptions, examples |
-| Code tool efficiency | gpt-5.5, Mistral | Clearer tool description about return values |
+| Tool loop efficiency | gpt-5.5, DeepSeek | Fewer calls = lower cost/latency |
 
 **Key takeaway**: "Just swap the model" is never just swapping the model. Prompts, tool definitions, and output strategies all need tuning per model. Evals let you quantify instead of guessing.

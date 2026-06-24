@@ -260,7 +260,6 @@ def eval_tool_calling(model: str) -> dict:
 EVAL_FUNCTIONS = [
     eval_letter_counting,
     eval_spatial_reasoning,
-    eval_structured_output,
     eval_tool_calling,
 ]
 

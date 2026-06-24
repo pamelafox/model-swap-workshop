@@ -29,15 +29,13 @@ The workshop finishes by running a small eval suite so you can quantify tradeoff
       * [`rag_messages.py`](examples/rag_messages.py) — Anthropic Messages API with built-in citations feature
 * Tool calling: Can the LLMs call tools... with the right arguments?
   * [`function_calling.py`](examples/function_calling.py) — single tool, calendar event with format normalization
-  * [`function_calling_code.py`](examples/function_calling_code.py) — code execution tool (Monty sandbox)
+  * [`tool_loop_code.py`](examples/tool_loop_code.py) — code execution tool (Monty sandbox)
 * Tool call selection from multiple tools
   * [`function_calling_loop.py`](examples/function_calling_loop.py) — weather + movies tools, multi-turn loop
-* Structured outputs: Adhere to the schema
-  * [`structured_outputs.py`](examples/structured_outputs.py) — FlightBooking schema extraction
-  * Only some models support strict structured outputs, fallback to tool calling otherwise
 * Image/multimodal input
   * [`image_input.py`](examples/image_input.py) — vision capabilities across models
 * Agent loops: How do models handle repeated tool calls over time?
+  * [`agent_trip_planner_pydanticai.py`](examples/agent_trip_planner_pydanticai.py) — PydanticAI trip planner with budget constraints
   * [`function_calling_loop.py`](examples/function_calling_loop.py) — multi-turn agent conversation
   * [`pydanticai_agent.py`](examples/pydanticai_agent.py) — PydanticAI agent with typed tools
   * [`langchain_agent.py`](examples/langchain_agent.py) — LangChain agent with OpenAI/Anthropic
@@ -51,6 +49,11 @@ The workshop finishes by running a small eval suite so you can quantify tradeoff
 ## Samples in this repo
 
 All examples authenticate to Foundry using an API key and reference environment variables from a `.env` file.
+
+**Note:** `structured_outputs.py` is kept for reference but removed from the workshop flow. Rationale:
+1. Structured outputs require 3 different approaches across models (responses.parse for GPT, tool-calling fallback for others, Messages API for Anthropic), making it awkward to present as a single example.
+2. Tool calling already demonstrates structured output extraction — models must produce valid JSON matching a schema.
+3. Removing it gives a better flow from tool calling straight into agentic patterns.
 
 Key SDKs/frameworks used:
 - **OpenAI Python SDK** (`openai`): For calling Foundry-hosted OpenAI models via the Responses API.
