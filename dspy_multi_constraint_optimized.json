@@ -1,0 +1,40 @@
+{
+  "predict": {
+    "traces": [],
+    "train": [],
+    "demos": [],
+    "signature": {
+      "instructions": "You will receive a task with three inputs: a `topic` (string), an `acrostic_word` (string), and a `words_per_line` (integer).\n\nYour goal is to produce a numbered list with exactly as many lines as there are letters in `acrostic_word`. The list must satisfy all of the following constraints:\n\n1. **Acrostic constraint:** The first word of the i-th line must begin with the i-th letter of `acrostic_word`. The match is case-insensitive.\n2. **Exact word count:** Every line must contain exactly `words_per_line` words. This is the most common source of error; you must be precise and never approximate.\n3. **Topical relevance:** The content of each line should relate to the `topic`.\n\nHow to count words:\n- Split the line by whitespace. Each resulting token is one word.\n- Contractions (e.g., \"don't\", \"it's\") and hyphenated compounds (e.g., \"well-known\", \"state-of-the-art\") each count as exactly one word.\n- Punctuation attached to a word (e.g., commas, periods, apostrophes, quotation marks) does not create additional words.\n\nProcedure:\n1. For each letter in `acrostic_word`, draft a line starting with that letter and related to the `topic`.\n2. Immediately after drafting each line, explicitly enumerate every word in that line to count them. If the count is not exactly equal to `words_per_line`, rewrite the line from scratch.\n3. After all lines are drafted, perform a final verification pass: confirm that the first letters of the lines spell `acrostic_word`, and re-count the words in every line one more time.\n4. Only output the final list once every line has been verified to have the correct first letter and the exact required word count.\n\nOutput format:\n- First, provide your step-by-step thinking in a section titled `### reasoning`.\n- Then, provide the final numbered list in a section titled `### response`. The `### response` section should contain only the numbered list and no extra commentary.",
+      "fields": [
+        {
+          "prefix": "Topic:",
+          "description": "The topic to write about"
+        },
+        {
+          "prefix": "Acrostic Word:",
+          "description": "The word whose letters must start each line"
+        },
+        {
+          "prefix": "Words Per Line:",
+          "description": "The exact number of words each line must contain"
+        },
+        {
+          "prefix": "Reasoning:",
+          "description": "${reasoning}"
+        },
+        {
+          "prefix": "Response:",
+          "description": "A numbered list with the correct acrostic and word count"
+        }
+      ]
+    },
+    "lm": null
+  },
+  "metadata": {
+    "dependency_versions": {
+      "python": "3.14",
+      "dspy": "3.3.0b1",
+      "cloudpickle": "3.1"
+    }
+  }
+}

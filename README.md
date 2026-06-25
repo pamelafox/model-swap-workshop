@@ -13,7 +13,8 @@ Welcome! In this workshop you'll run the same scenarios across multiple frontier
 7. [Part 5: Tool calling in a loop](#part-5-tool-calling-in-a-loop)
 8. [Part 6: Agent loops](#part-6-agent-loops)
 9. [Part 7: Evaluations](#part-7-evaluations)
-10. [Recap](#recap)
+10. [Part 8: Automated prompt optimization with DSPy (optional)](#part-8-automated-prompt-optimization-with-dspy-optional)
+11. [Recap](#recap)
 
 ## Install the prerequisites
 
@@ -311,19 +312,40 @@ uv run examples/evals_agent.py
 
 Uses `ToolCallAccuracyEvaluator` to score whether models made correct tool calls with correct arguments, given the system prompt context.
 
-### 7d: Foundry project evals (optional)
 
-```bash
-uv run examples/evals_foundry_project.py
-```
 
-Uses `openai.evals.create` to run evals server-side via a Foundry project. Results are viewable in the Foundry portal. **Requires `FOUNDRY_PROJECT_ENDPOINT` env var.**
+---
+
+## Part 8: Automated prompt optimization with DSPy (optional)
+
+You've been manually tweaking prompts all workshop. [DSPy](https://dspy.ai/) automates that loop: you define a metric, and its GEPA optimizer generates prompt variations, evaluates them, and keeps the best.
+
+### Run it
+
+1. Open [examples/dspy_optimize.py](examples/dspy_optimize.py)
+2. Run the file:
+
+    ```bash
+    uv run examples/dspy_optimize.py
+    ```
+
+    This takes ~6 minutes — GEPA evaluates dozens of prompt candidates against training examples. Watch the terminal as it runs.
+
+3. Watch the terminal output as GEPA proposes prompts. It discovers strategies like explicit word-counting procedures, verify-then-rewrite loops, and final verification passes — the same techniques a prompt engineer would find manually, but discovered automatically.
+
+4. After optimization, the script prints the winning instructions and saves the optimized program to `dspy_multi_constraint_optimized.json`.
+
+### What to observe
+
+- **Real improvement**: Mistral baseline scores 0% on the multi-constraint task (wrong word count). After optimization, it scores 100%. GEPA found instructions that teach the model to count words explicitly before outputting.
+- **GEPA's generated prompts**: The optimizer discovers a structured procedure — draft each line, enumerate words to verify count, rewrite if wrong, do a final pass. This is exactly what a human prompt engineer would discover through trial and error.
+- **Try a different student model**: Change `STUDENT_MODEL` to `Kimi-K2.6` and re-run. The optimizer will generate different instructions tuned to that model's quirks.
 
 ### Discussion
 
-- Where do the basic evals and LLM judge disagree? Why?
-- The LLM judge can be non-deterministic — run `evals_agent.py` twice and compare scores
-- When would you use each approach in production?
+- How does automated prompt optimization compare to manual tweaking?
+- When would you use DSPy in production vs. hand-tuning?
+- What tasks benefit most from prompt optimization vs. needing a better model?
 
 ---
 
