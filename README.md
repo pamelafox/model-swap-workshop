@@ -13,7 +13,7 @@ Welcome! In this workshop you'll run the same scenarios across multiple frontier
 7. [Part 5: Tool calling in a loop](#part-5-tool-calling-in-a-loop)
 8. [Part 6: Agent loops](#part-6-agent-loops)
 9. [Part 7: Evaluations](#part-7-evaluations)
-10. [Part 8: Automated prompt optimization with DSPy (optional)](#part-8-automated-prompt-optimization-with-dspy-optional)
+10. [Part 8: Prompt optimization](#part-8-prompt-optimization)
 11. [Recap](#recap)
 
 ## Install the prerequisites
@@ -316,7 +316,7 @@ Uses `ToolCallAccuracyEvaluator` to score whether models made correct tool calls
 
 ---
 
-## Part 8: Automated prompt optimization with DSPy (optional)
+## Part 8: Prompt optimization
 
 You've been manually tweaking prompts all workshop. [DSPy](https://dspy.ai/) automates that loop: you define a metric, and its GEPA optimizer generates prompt variations, evaluates them, and keeps the best.
 
