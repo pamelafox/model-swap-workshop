@@ -40,10 +40,15 @@ Point the pipeline at your Foundry account (placeholders — never commit real k
 
 ```bash
 export AZURE_API_BASE="$FOUNDRY_MODELS_ENDPOINT"   # e.g. https://YOUR-ACCOUNT.services.ai.azure.com
-export AZURE_API_KEY="$FOUNDRY_API_KEY"
+export AZURE_AI_API_KEY="$FOUNDRY_API_KEY"         # bearer for azure_ai/* (Foundry) routes
+export AZURE_API_KEY="$FOUNDRY_API_KEY"            # fallback
 ```
 
-If `azure/gpt-5.4` isn't a deployment you have, change the `name:` values in `travel_planner_eval.yaml` to a deployment you do (e.g. `azure/gpt-5.5`). The pipeline model stays **fixed** while you swap the target — you don't want to change your judge mid-comparison.
+The pipeline models use the `azure_ai/*` LiteLLM route (Azure AI Foundry), e.g. `azure_ai/gpt-5.5`. If `gpt-5.5` isn't a deployment you have, change the `name:` values in `travel_planner_eval.yaml` to one you do. The pipeline model stays **fixed** while you swap the target — you don't want to change your judge mid-comparison.
+
+> **Two config gotchas (learned the hard way, both already handled in the bundled config):**
+> 1. **Dimensions use explicit `levels`, not `description`.** Stratification's web-search path isn't available on Foundry `azure_ai/*` models, so generated-mode dimensions fail. Explicit `levels` skip that call.
+> 2. **`systematize.model.max_tokens` is 16000.** A lower cap truncates the structured taxonomy and yields zero behavior categories.
 
 > **Note:** `temperature` is omitted in the config on purpose — the gpt-5 family only accepts `temperature=1.0` (the provider default when none is sent), so omitting it keeps the config working across model families.
 
@@ -109,3 +114,18 @@ Keep your GEPA finale, but swap the objective: instead of the toy `constraint_me
 - The tools use synthetic data — keep it that way for the workshop (no real bookings).
 - Use placeholder env-var names in all materials; never commit real credentials.
 - Trace capture is the recommended path (the judge can cite tool calls and routing). The wrapper degrades to a plain callable if Phoenix isn't installed — still scenario-grounded, just less trace evidence.
+
+## Validation run (what this actually produced)
+
+A live run on a shared, fixed 5-case suite — only the **target** model swapped (pipeline + judge held at `azure_ai/gpt-5.5`) — gave a genuinely *discriminating* per-dimension comparison:
+
+| Dimension | gpt-5.5 | Claude-opus-4-5 | Mistral-Large-3 |
+|---|---|---|---|
+| **budget_adherence** | **0/5 fail (best)** | 1/5 fail | **3/5 fail (worst)** |
+| **constraint_satisfaction** | 3/5 fail | **1/5 fail (best)** | 3/5 fail |
+| tool_routing_correctness¹ | 5/5 | 5/5 | 5/5 |
+| grounded_recommendations¹ | 5/5 | 5/5 | 5/5 |
+
+This is the thesis in one table: on *this* scenario, **gpt-5.5 is strongest on budget math, Mistral is weakest, and Claude best respects constraints** — divergence a generic benchmark would never show.
+
+> **¹ Run with trace capture for a complete picture.** Without traces the judge can't see tool calls, so `tool_routing_correctness` and `grounded_recommendations` flag uniformly (its own justification: *"no tool calls appear in the transcript"*). They're degraded *equally* across models, so they don't bias the budget/constraint comparison — but enable `WORKSHOP_TRACE=1` with a working Phoenix collector (`uv add arize-phoenix` in a clean env, then `phoenix serve`) to make all five dimensions valid.

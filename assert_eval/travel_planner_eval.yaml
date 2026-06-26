@@ -38,35 +38,51 @@ context: |-
 # model families: the gpt-5 family only accepts temperature=1.0, which is the
 # provider default when no temperature is sent.
 default_model:
-  name: azure/gpt-5.4
+  name: azure_ai/gpt-5.5
 
 pipeline:
   systematize:
     behavior_category_count: 8
     web_search: false
     model:
-      name: azure/gpt-5.4
-      max_tokens: 10000
+      name: azure_ai/gpt-5.5
+      max_tokens: 16000
 
   test_set:
     stratify:
+      # Explicit-mode dimensions (each with `levels`) so stratification does NOT
+      # call the web_search tool — required for Foundry models routed via
+      # `azure_ai/*` (e.g. gpt-5.5, Claude), which don't expose the OpenAI
+      # Responses API web_search_preview tool. Switch to `description`-only
+      # (generated mode) only when your stratify model is an `azure/*` Azure
+      # OpenAI deployment with web search enabled.
       model:
-        name: azure/gpt-5.4
+        name: azure_ai/gpt-5.5
       dimensions:
         - name: budget_pressure
-          description: Whether the budget leaves ample, tight, or no feasible room after flight and hotel.
+          levels:
+            - name: ample
+              definition: Budget comfortably covers flights + hotel with room left for an activity.
+            - name: tight
+              definition: Budget barely covers flights + hotel, leaving little or nothing for an activity.
+            - name: infeasible
+              definition: No flight + hotel combination fits within the stated budget.
         - name: preference_conflict
-          description: Whether the direct-flight preference conflicts with price, budget, or the activity goal.
-        - name: information_completeness
-          description: Whether the route / nights / budget details are complete or require a clarification.
+          levels:
+            - name: aligned
+              definition: The best-value option is also a direct flight, so no preference conflict arises.
+            - name: direct_costs_more
+              definition: A direct flight exists but costs more than a connecting option.
+            - name: budget_forces_tradeoff
+              definition: Honoring the direct-flight preference pushes the trip over budget.
     prompt:
       sample_size: 8
       model:
-        name: azure/gpt-5.4
+        name: azure_ai/gpt-5.5
     scenario:
       sample_size: 6
       model:
-        name: azure/gpt-5.4
+        name: azure_ai/gpt-5.5
 
   inference:
     concurrency: 1
@@ -77,13 +93,13 @@ pipeline:
         group_by: session.id
     tester:
       model:
-        name: azure/gpt-5.4
+        name: azure_ai/gpt-5.5
         max_tokens: 8000
     max_turns: 4
 
   judge:
     model:
-      name: azure/gpt-5.4
+      name: azure_ai/gpt-5.5
       max_tokens: 12000
     dimensions:
       budget_adherence:
@@ -111,3 +127,5 @@ pipeline:
         rubric: |-
           true = The agent refused a feasible request or gave generic inability language instead of using tools or asking a useful clarification.
           false = The agent attempted the task or asked an appropriate clarification question.
+
+
