@@ -244,11 +244,6 @@ In this example, we give the model a `calculate` tool and ask a multi-step word 
 
 4. Change model to one of the other models by un-commenting a `MODEL =` line at the top, and re-run the file. Compare the number of tool calls and the decomposition strategy.
 
-### What to observe
-
-* **gpt-5.5, DeepSeek, Kimi**: 4–5 calls — combine discount + subtraction into one step (e.g. `45 * 0.70`)
-* **Mistral**: 7 calls — decomposes every operation separately (e.g. `45 * 0.30` then `45 - 13.5`)
-
 ### Exercise: Reduce tool calls
 
 Choose the model that used the highest number of tool calls. Can you get it to use fewer?
@@ -293,8 +288,8 @@ Is fewer tool calls always better? What are the cost/latency tradeoffs of more g
 
 ### What to observe
 
-* **Parallel vs serial**: gpt-5.5 batches `search_flights` + `search_hotels` in one parallel turn; other models may call them one at a time
-* **Budget checks**: gpt-5.5/DeepSeek verify once; Kimi/Mistral explore multiple flight+hotel combos
+* **Parallel vs serial**: Some models call `search_flights` + `search_hotels` in one parallel turn; other models may call them one at a time
+* **Budget checks**: Some models verify only the best combo; other models check the budget for multiple flight+hotel combos
 * **Dependency awareness**: `search_activities` needs the remaining budget from `check_budget`. Does the model wait for the result, or guess the value and call them in parallel?
 
 ### Exercise: Control agent thoroughness
@@ -374,14 +369,14 @@ You've been manually tweaking prompts all workshop. [DSPy](https://dspy.ai/) aut
 
 ## Recap
 
-| What we tested | Winner(s) | What helps weaker models |
-| -------------- | --------- | ------------------------ |
-| Raw reasoning (counting, spatial) | gpt-5.5, Kimi | Chain-of-thought prompts, code tools |
-| Grounding / hallucination | gpt-5.5, Kimi, DeepSeek | Stronger system prompt instructions |
-| Tool arg normalization | gpt-5.5, Kimi | Tighter parameter descriptions, examples |
-| Tool loop efficiency | gpt-5.5, DeepSeek | Fewer calls = lower cost/latency |
+| What we tested | What helps weaker models |
+| -------------- | ------------------------ |
+| Raw reasoning (counting, spatial) | Chain-of-thought prompts, code tools |
+| Grounding / hallucination | Stronger system prompt instructions |
+| Tool arg normalization | Tighter parameter descriptions, examples |
+| Tool loop efficiency | Fewer calls = lower cost/latency |
 
-**Key takeaway**: "Just swap the model" is never just swapping the model. Prompts, tool definitions, and output strategies all need tuning per model. Evals let you quantify instead of guessing.
+**Key takeaway**: "Just swap the model" is never just swapping the model. Prompts, tool definitions, and output strategies all need tuning per model. Evals let you quantify instead of guessing. For a more rigorous approach, prompt optimization (like DSPy's GEPA) can automate the search for better prompts instead of relying on manual trial and error.
 
 ---
 

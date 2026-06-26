@@ -1,6 +1,9 @@
 {
     "name": "model-swap-workshop",
     "image": "mcr.microsoft.com/devcontainers/python:3-3.13-bookworm",
+    "features": {
+        "ghcr.io/va-h/devcontainers-features/uv:1": {}
+    },
     "customizations": {
         "vscode": {
             "settings": {
