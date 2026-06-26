@@ -8,7 +8,7 @@ from openai import OpenAI
 load_dotenv()
 
 MODEL = "gpt-5.5"
-MODEL = "Kimi-K2.6"
+# MODEL = "Kimi-K2.6"
 #MODEL = "DeepSeek-V4-Flash"
 #MODEL = "Mistral-Large-3"
 deployment_name = os.environ.get("FOUNDRY_OPENAI_DEPLOYMENT", MODEL)
