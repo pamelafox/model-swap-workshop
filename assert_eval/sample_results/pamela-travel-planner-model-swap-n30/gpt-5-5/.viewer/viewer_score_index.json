@@ -1,0 +1,220 @@
+{
+  "items": {
+    "prompt:test_case_000001": {
+      "type": "prompt",
+      "test_case_id": "test_case_000001",
+      "offset": 0,
+      "length": 6541
+    },
+    "prompt:test_case_000004": {
+      "type": "prompt",
+      "test_case_id": "test_case_000004",
+      "offset": 6541,
+      "length": 8364
+    },
+    "prompt:test_case_000005": {
+      "type": "prompt",
+      "test_case_id": "test_case_000005",
+      "offset": 14905,
+      "length": 7580
+    },
+    "prompt:test_case_000003": {
+      "type": "prompt",
+      "test_case_id": "test_case_000003",
+      "offset": 22485,
+      "length": 7530
+    },
+    "prompt:test_case_000002": {
+      "type": "prompt",
+      "test_case_id": "test_case_000002",
+      "offset": 30015,
+      "length": 7227
+    },
+    "prompt:test_case_000006": {
+      "type": "prompt",
+      "test_case_id": "test_case_000006",
+      "offset": 37242,
+      "length": 7060
+    },
+    "scenario:test_case_000008": {
+      "type": "scenario",
+      "test_case_id": "test_case_000008",
+      "offset": 44302,
+      "length": 7074
+    },
+    "scenario:test_case_000012": {
+      "type": "scenario",
+      "test_case_id": "test_case_000012",
+      "offset": 51376,
+      "length": 8605
+    },
+    "scenario:test_case_000014": {
+      "type": "scenario",
+      "test_case_id": "test_case_000014",
+      "offset": 59981,
+      "length": 10942
+    },
+    "scenario:test_case_000007": {
+      "type": "scenario",
+      "test_case_id": "test_case_000007",
+      "offset": 70923,
+      "length": 8441
+    },
+    "scenario:test_case_000013": {
+      "type": "scenario",
+      "test_case_id": "test_case_000013",
+      "offset": 79364,
+      "length": 8941
+    },
+    "scenario:test_case_000015": {
+      "type": "scenario",
+      "test_case_id": "test_case_000015",
+      "offset": 88305,
+      "length": 7848
+    },
+    "scenario:test_case_000016": {
+      "type": "scenario",
+      "test_case_id": "test_case_000016",
+      "offset": 96153,
+      "length": 8004
+    },
+    "scenario:test_case_000017": {
+      "type": "scenario",
+      "test_case_id": "test_case_000017",
+      "offset": 104157,
+      "length": 8516
+    },
+    "scenario:test_case_000018": {
+      "type": "scenario",
+      "test_case_id": "test_case_000018",
+      "offset": 112673,
+      "length": 7570
+    },
+    "scenario:test_case_000009": {
+      "type": "scenario",
+      "test_case_id": "test_case_000009",
+      "offset": 120243,
+      "length": 8862
+    },
+    "scenario:test_case_000020": {
+      "type": "scenario",
+      "test_case_id": "test_case_000020",
+      "offset": 129105,
+      "length": 9250
+    },
+    "scenario:test_case_000011": {
+      "type": "scenario",
+      "test_case_id": "test_case_000011",
+      "offset": 138355,
+      "length": 8111
+    },
+    "scenario:test_case_000019": {
+      "type": "scenario",
+      "test_case_id": "test_case_000019",
+      "offset": 146466,
+      "length": 9170
+    },
+    "scenario:test_case_000022": {
+      "type": "scenario",
+      "test_case_id": "test_case_000022",
+      "offset": 155636,
+      "length": 10143
+    },
+    "scenario:test_case_000023": {
+      "type": "scenario",
+      "test_case_id": "test_case_000023",
+      "offset": 165779,
+      "length": 7656
+    },
+    "scenario:test_case_000024": {
+      "type": "scenario",
+      "test_case_id": "test_case_000024",
+      "offset": 173435,
+      "length": 8771
+    },
+    "scenario:test_case_000026": {
+      "type": "scenario",
+      "test_case_id": "test_case_000026",
+      "offset": 182206,
+      "length": 7723
+    },
+    "scenario:test_case_000025": {
+      "type": "scenario",
+      "test_case_id": "test_case_000025",
+      "offset": 189929,
+      "length": 12069
+    },
+    "scenario:test_case_000027": {
+      "type": "scenario",
+      "test_case_id": "test_case_000027",
+      "offset": 201998,
+      "length": 7290
+    },
+    "scenario:test_case_000028": {
+      "type": "scenario",
+      "test_case_id": "test_case_000028",
+      "offset": 209288,
+      "length": 7298
+    },
+    "scenario:test_case_000030": {
+      "type": "scenario",
+      "test_case_id": "test_case_000030",
+      "offset": 216586,
+      "length": 8061
+    },
+    "scenario:test_case_000029": {
+      "type": "scenario",
+      "test_case_id": "test_case_000029",
+      "offset": 224647,
+      "length": 7368
+    },
+    "scenario:test_case_000032": {
+      "type": "scenario",
+      "test_case_id": "test_case_000032",
+      "offset": 232015,
+      "length": 7127
+    },
+    "scenario:test_case_000033": {
+      "type": "scenario",
+      "test_case_id": "test_case_000033",
+      "offset": 239142,
+      "length": 8347
+    },
+    "scenario:test_case_000031": {
+      "type": "scenario",
+      "test_case_id": "test_case_000031",
+      "offset": 247489,
+      "length": 9771
+    },
+    "scenario:test_case_000021": {
+      "type": "scenario",
+      "test_case_id": "test_case_000021",
+      "offset": 257260,
+      "length": 6818
+    },
+    "scenario:test_case_000035": {
+      "type": "scenario",
+      "test_case_id": "test_case_000035",
+      "offset": 264078,
+      "length": 9018
+    },
+    "scenario:test_case_000036": {
+      "type": "scenario",
+      "test_case_id": "test_case_000036",
+      "offset": 273096,
+      "length": 6974
+    },
+    "scenario:test_case_000010": {
+      "type": "scenario",
+      "test_case_id": "test_case_000010",
+      "offset": 280070,
+      "length": 8441
+    },
+    "scenario:test_case_000034": {
+      "type": "scenario",
+      "test_case_id": "test_case_000034",
+      "offset": 288511,
+      "length": 10527
+    }
+  }
+}

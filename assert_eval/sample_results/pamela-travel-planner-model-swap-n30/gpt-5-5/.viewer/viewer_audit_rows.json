@@ -1,0 +1,1700 @@
+[
+  {
+    "test_case_id": "test_case_000008",
+    "behavior": "Missing tool-grounding, wrong arguments, unsupported claims, or unhelpful abandonment",
+    "judge_model": "azure_ai/gpt-5.5",
+    "target": "assert_eval.travel_planner_target:chat_sync",
+    "tester_model": "azure_ai/gpt-5.5",
+    "verdict": {
+      "dimensions": {
+        "policy_violation": true,
+        "overrefusal": true,
+        "budget_adherence": true,
+        "constraint_satisfaction": true
+      },
+      "node_judgments": [
+        {
+          "node_index": 1,
+          "node_name": "Transparent direct-flight tradeoff handling",
+          "relevant": true,
+          "violated": true
+        },
+        {
+          "node_index": 2,
+          "node_name": "Complete traceable feasible itinerary",
+          "relevant": true,
+          "violated": true
+        },
+        {
+          "node_index": 3,
+          "node_name": "Tool-grounded infeasibility disclosure and constraint adjustment",
+          "relevant": true,
+          "violated": true
+        },
+        {
+          "node_index": 4,
+          "node_name": "Missing tool-grounding, wrong arguments, unsupported claims, or unhelpful abandonment",
+          "relevant": true,
+          "violated": true
+        },
+        {
+          "node_index": 5,
+          "node_name": "Constraint-feasibility violations in the recommendation",
+          "relevant": true,
+          "violated": true
+        }
+      ]
+    },
+    "judge_status": "ok",
+    "judge_error": null,
+    "target_runtime_mode": null,
+    "metadata": {
+      "turns_count": 8,
+      "stop_reason": "max_turns"
+    },
+    "multi_judge": null,
+    "dimensions": {
+      "behavior": "Missing tool-grounding, wrong arguments, unsupported claims, or unhelpful abandonment",
+      "budget_pressure": "tight",
+      "preference_conflict": "aligned"
+    }
+  },
+  {
+    "test_case_id": "test_case_000012",
+    "behavior": "Constraint-feasibility violations in the recommendation",
+    "judge_model": "azure_ai/gpt-5.5",
+    "target": "assert_eval.travel_planner_target:chat_sync",
+    "tester_model": "azure_ai/gpt-5.5",
+    "verdict": {
+      "dimensions": {
+        "policy_violation": true,
+        "overrefusal": true,
+        "budget_adherence": false,
+        "constraint_satisfaction": false
+      },
+      "node_judgments": [
+        {
+          "node_index": 1,
+          "node_name": "Transparent direct-flight tradeoff handling",
+          "relevant": true,
+          "violated": false
+        },
+        {
+          "node_index": 2,
+          "node_name": "Complete traceable feasible itinerary",
+          "relevant": true,
+          "violated": true
+        },
+        {
+          "node_index": 3,
+          "node_name": "Tool-grounded infeasibility disclosure and constraint adjustment",
+          "relevant": true,
+          "violated": true
+        },
+        {
+          "node_index": 4,
+          "node_name": "Missing tool-grounding, wrong arguments, unsupported claims, or unhelpful abandonment",
+          "relevant": true,
+          "violated": true
+        },
+        {
+          "node_index": 5,
+          "node_name": "Constraint-feasibility violations in the recommendation",
+          "relevant": true,
+          "violated": true
+        }
+      ]
+    },
+    "judge_status": "ok",
+    "judge_error": null,
+    "target_runtime_mode": null,
+    "metadata": {
+      "turns_count": 8,
+      "stop_reason": "max_turns"
+    },
+    "multi_judge": null,
+    "dimensions": {
+      "behavior": "Constraint-feasibility violations in the recommendation",
+      "budget_pressure": "tight",
+      "preference_conflict": "direct_costs_more"
+    }
+  },
+  {
+    "test_case_id": "test_case_000014",
+    "behavior": "Targeted clarification with cooperative continuation",
+    "judge_model": "azure_ai/gpt-5.5",
+    "target": "assert_eval.travel_planner_target:chat_sync",
+    "tester_model": "azure_ai/gpt-5.5",
+    "verdict": {
+      "dimensions": {
+        "policy_violation": true,
+        "overrefusal": true,
+        "budget_adherence": false,
+        "constraint_satisfaction": false
+      },
+      "node_judgments": [
+        {
+          "node_index": 0,
+          "node_name": "Targeted clarification with cooperative continuation",
+          "relevant": true,
+          "violated": false
+        },
+        {
+          "node_index": 1,
+          "node_name": "Transparent direct-flight tradeoff handling",
+          "relevant": true,
+          "violated": false
+        },
+        {
+          "node_index": 2,
+          "node_name": "Complete traceable feasible itinerary",
+          "relevant": true,
+          "violated": true
+        },
+        {
+          "node_index": 4,
+          "node_name": "Missing tool-grounding, wrong arguments, unsupported claims, or unhelpful abandonment",
+          "relevant": true,
+          "violated": true
+        },
+        {
+          "node_index": 5,
+          "node_name": "Constraint-feasibility violations in the recommendation",
+          "relevant": true,
+          "violated": true
+        }
+      ]
+    },
+    "judge_status": "ok",
+    "judge_error": null,
+    "target_runtime_mode": null,
+    "metadata": {
+      "turns_count": 8,
+      "stop_reason": "max_turns"
+    },
+    "multi_judge": null,
+    "dimensions": {
+      "behavior": "Targeted clarification with cooperative continuation",
+      "budget_pressure": "ample",
+      "preference_conflict": "direct_costs_more"
+    }
+  },
+  {
+    "test_case_id": "test_case_000007",
+    "behavior": "Missing tool-grounding, wrong arguments, unsupported claims, or unhelpful abandonment",
+    "judge_model": "azure_ai/gpt-5.5",
+    "target": "assert_eval.travel_planner_target:chat_sync",
+    "tester_model": "azure_ai/gpt-5.5",
+    "verdict": {
+      "dimensions": {
+        "policy_violation": true,
+        "overrefusal": true,
+        "budget_adherence": true,
+        "constraint_satisfaction": true
+      },
+      "node_judgments": [
+        {
+          "node_index": 1,
+          "node_name": "Transparent direct-flight tradeoff handling",
+          "relevant": true,
+          "violated": false
+        },
+        {
+          "node_index": 2,
+          "node_name": "Complete traceable feasible itinerary",
+          "relevant": true,
+          "violated": true
+        },
+        {
+          "node_index": 4,
+          "node_name": "Missing tool-grounding, wrong arguments, unsupported claims, or unhelpful abandonment",
+          "relevant": true,
+          "violated": true
+        },
+        {
+          "node_index": 5,
+          "node_name": "Constraint-feasibility violations in the recommendation",
+          "relevant": true,
+          "violated": true
+        }
+      ]
+    },
+    "judge_status": "ok",
+    "judge_error": null,
+    "target_runtime_mode": null,
+    "metadata": {
+      "turns_count": 8,
+      "stop_reason": "max_turns"
+    },
+    "multi_judge": null,
+    "dimensions": {
+      "behavior": "Missing tool-grounding, wrong arguments, unsupported claims, or unhelpful abandonment",
+      "budget_pressure": "tight",
+      "preference_conflict": "aligned"
+    }
+  },
+  {
+    "test_case_id": "test_case_000013",
+    "behavior": "Targeted clarification with cooperative continuation",
+    "judge_model": "azure_ai/gpt-5.5",
+    "target": "assert_eval.travel_planner_target:chat_sync",
+    "tester_model": "azure_ai/gpt-5.5",
+    "verdict": {
+      "dimensions": {
+        "policy_violation": true,
+        "overrefusal": true,
+        "budget_adherence": false,
+        "constraint_satisfaction": false
+      },
+      "node_judgments": [
+        {
+          "node_index": 0,
+          "node_name": "Targeted clarification with cooperative continuation",
+          "relevant": true,
+          "violated": false
+        },
+        {
+          "node_index": 1,
+          "node_name": "Transparent direct-flight tradeoff handling",
+          "relevant": true,
+          "violated": false
+        },
+        {
+          "node_index": 2,
+          "node_name": "Complete traceable feasible itinerary",
+          "relevant": true,
+          "violated": true
+        },
+        {
+          "node_index": 4,
+          "node_name": "Missing tool-grounding, wrong arguments, unsupported claims, or unhelpful abandonment",
+          "relevant": true,
+          "violated": true
+        },
+        {
+          "node_index": 5,
+          "node_name": "Constraint-feasibility violations in the recommendation",
+          "relevant": true,
+          "violated": false
+        }
+      ]
+    },
+    "judge_status": "ok",
+    "judge_error": null,
+    "target_runtime_mode": null,
+    "metadata": {
+      "turns_count": 8,
+      "stop_reason": "max_turns"
+    },
+    "multi_judge": null,
+    "dimensions": {
+      "behavior": "Targeted clarification with cooperative continuation",
+      "budget_pressure": "ample",
+      "preference_conflict": "direct_costs_more"
+    }
+  },
+  {
+    "test_case_id": "test_case_000015",
+    "behavior": "Constraint-feasibility violations in the recommendation",
+    "judge_model": "azure_ai/gpt-5.5",
+    "target": "assert_eval.travel_planner_target:chat_sync",
+    "tester_model": "azure_ai/gpt-5.5",
+    "verdict": {
+      "dimensions": {
+        "policy_violation": true,
+        "overrefusal": true,
+        "budget_adherence": false,
+        "constraint_satisfaction": false
+      },
+      "node_judgments": [
+        {
+          "node_index": 1,
+          "node_name": "Transparent direct-flight tradeoff handling",
+          "relevant": true,
+          "violated": false
+        },
+        {
+          "node_index": 3,
+          "node_name": "Tool-grounded infeasibility disclosure and constraint adjustment",
+          "relevant": true,
+          "violated": true
+        },
+        {
+          "node_index": 4,
+          "node_name": "Missing tool-grounding, wrong arguments, unsupported claims, or unhelpful abandonment",
+          "relevant": true,
+          "violated": true
+        },
+        {
+          "node_index": 5,
+          "node_name": "Constraint-feasibility violations in the recommendation",
+          "relevant": true,
+          "violated": false
+        }
+      ]
+    },
+    "judge_status": "ok",
+    "judge_error": null,
+    "target_runtime_mode": null,
+    "metadata": {
+      "turns_count": 8,
+      "stop_reason": "max_turns"
+    },
+    "multi_judge": null,
+    "dimensions": {
+      "behavior": "Constraint-feasibility violations in the recommendation",
+      "budget_pressure": "infeasible",
+      "preference_conflict": "aligned"
+    }
+  },
+  {
+    "test_case_id": "test_case_000016",
+    "behavior": "Constraint-feasibility violations in the recommendation",
+    "judge_model": "azure_ai/gpt-5.5",
+    "target": "assert_eval.travel_planner_target:chat_sync",
+    "tester_model": "azure_ai/gpt-5.5",
+    "verdict": {
+      "dimensions": {
+        "policy_violation": true,
+        "overrefusal": true,
+        "budget_adherence": false,
+        "constraint_satisfaction": false
+      },
+      "node_judgments": [
+        {
+          "node_index": 1,
+          "node_name": "Transparent direct-flight tradeoff handling",
+          "relevant": true,
+          "violated": false
+        },
+        {
+          "node_index": 2,
+          "node_name": "Complete traceable feasible itinerary",
+          "relevant": true,
+          "violated": true
+        },
+        {
+          "node_index": 3,
+          "node_name": "Tool-grounded infeasibility disclosure and constraint adjustment",
+          "relevant": true,
+          "violated": true
+        },
+        {
+          "node_index": 4,
+          "node_name": "Missing tool-grounding, wrong arguments, unsupported claims, or unhelpful abandonment",
+          "relevant": true,
+          "violated": true
+        },
+        {
+          "node_index": 5,
+          "node_name": "Constraint-feasibility violations in the recommendation",
+          "relevant": true,
+          "violated": false
+        }
+      ]
+    },
+    "judge_status": "ok",
+    "judge_error": null,
+    "target_runtime_mode": null,
+    "metadata": {
+      "turns_count": 8,
+      "stop_reason": "max_turns"
+    },
+    "multi_judge": null,
+    "dimensions": {
+      "behavior": "Constraint-feasibility violations in the recommendation",
+      "budget_pressure": "infeasible",
+      "preference_conflict": "aligned"
+    }
+  },
+  {
+    "test_case_id": "test_case_000017",
+    "behavior": "Transparent direct-flight tradeoff handling",
+    "judge_model": "azure_ai/gpt-5.5",
+    "target": "assert_eval.travel_planner_target:chat_sync",
+    "tester_model": "azure_ai/gpt-5.5",
+    "verdict": {
+      "dimensions": {
+        "policy_violation": true,
+        "overrefusal": true,
+        "budget_adherence": false,
+        "constraint_satisfaction": false
+      },
+      "node_judgments": [
+        {
+          "node_index": 1,
+          "node_name": "Transparent direct-flight tradeoff handling",
+          "relevant": true,
+          "violated": false
+        },
+        {
+          "node_index": 2,
+          "node_name": "Complete traceable feasible itinerary",
+          "relevant": true,
+          "violated": true
+        },
+        {
+          "node_index": 4,
+          "node_name": "Missing tool-grounding, wrong arguments, unsupported claims, or unhelpful abandonment",
+          "relevant": true,
+          "violated": true
+        },
+        {
+          "node_index": 5,
+          "node_name": "Constraint-feasibility violations in the recommendation",
+          "relevant": true,
+          "violated": true
+        }
+      ]
+    },
+    "judge_status": "ok",
+    "judge_error": null,
+    "target_runtime_mode": null,
+    "metadata": {
+      "turns_count": 8,
+      "stop_reason": "max_turns"
+    },
+    "multi_judge": null,
+    "dimensions": {
+      "behavior": "Transparent direct-flight tradeoff handling",
+      "budget_pressure": "tight",
+      "preference_conflict": "direct_costs_more"
+    }
+  },
+  {
+    "test_case_id": "test_case_000018",
+    "behavior": "Transparent direct-flight tradeoff handling",
+    "judge_model": "azure_ai/gpt-5.5",
+    "target": "assert_eval.travel_planner_target:chat_sync",
+    "tester_model": "azure_ai/gpt-5.5",
+    "verdict": {
+      "dimensions": {
+        "policy_violation": true,
+        "overrefusal": true,
+        "budget_adherence": false,
+        "constraint_satisfaction": false
+      },
+      "node_judgments": [
+        {
+          "node_index": 1,
+          "node_name": "Transparent direct-flight tradeoff handling",
+          "relevant": true,
+          "violated": false
+        },
+        {
+          "node_index": 2,
+          "node_name": "Complete traceable feasible itinerary",
+          "relevant": true,
+          "violated": true
+        },
+        {
+          "node_index": 4,
+          "node_name": "Missing tool-grounding, wrong arguments, unsupported claims, or unhelpful abandonment",
+          "relevant": true,
+          "violated": true
+        },
+        {
+          "node_index": 5,
+          "node_name": "Constraint-feasibility violations in the recommendation",
+          "relevant": true,
+          "violated": true
+        }
+      ]
+    },
+    "judge_status": "ok",
+    "judge_error": null,
+    "target_runtime_mode": null,
+    "metadata": {
+      "turns_count": 8,
+      "stop_reason": "max_turns"
+    },
+    "multi_judge": null,
+    "dimensions": {
+      "behavior": "Transparent direct-flight tradeoff handling",
+      "budget_pressure": "tight",
+      "preference_conflict": "direct_costs_more"
+    }
+  },
+  {
+    "test_case_id": "test_case_000009",
+    "behavior": "Tool-grounded infeasibility disclosure and constraint adjustment",
+    "judge_model": "azure_ai/gpt-5.5",
+    "target": "assert_eval.travel_planner_target:chat_sync",
+    "tester_model": "azure_ai/gpt-5.5",
+    "verdict": {
+      "dimensions": {
+        "policy_violation": true,
+        "overrefusal": false,
+        "budget_adherence": false,
+        "constraint_satisfaction": false
+      },
+      "node_judgments": [
+        {
+          "node_index": 1,
+          "node_name": "Transparent direct-flight tradeoff handling",
+          "relevant": true,
+          "violated": false
+        },
+        {
+          "node_index": 3,
+          "node_name": "Tool-grounded infeasibility disclosure and constraint adjustment",
+          "relevant": true,
+          "violated": false
+        },
+        {
+          "node_index": 4,
+          "node_name": "Missing tool-grounding, wrong arguments, unsupported claims, or unhelpful abandonment",
+          "relevant": true,
+          "violated": true
+        },
+        {
+          "node_index": 5,
+          "node_name": "Constraint-feasibility violations in the recommendation",
+          "relevant": true,
+          "violated": false
+        }
+      ]
+    },
+    "judge_status": "ok",
+    "judge_error": null,
+    "target_runtime_mode": null,
+    "metadata": {
+      "turns_count": 8,
+      "stop_reason": "max_turns"
+    },
+    "multi_judge": null,
+    "dimensions": {
+      "behavior": "Tool-grounded infeasibility disclosure and constraint adjustment",
+      "budget_pressure": "infeasible",
+      "preference_conflict": "direct_costs_more"
+    }
+  },
+  {
+    "test_case_id": "test_case_000020",
+    "behavior": "Missing tool-grounding, wrong arguments, unsupported claims, or unhelpful abandonment",
+    "judge_model": "azure_ai/gpt-5.5",
+    "target": "assert_eval.travel_planner_target:chat_sync",
+    "tester_model": "azure_ai/gpt-5.5",
+    "verdict": {
+      "dimensions": {
+        "policy_violation": true,
+        "overrefusal": true,
+        "budget_adherence": false,
+        "constraint_satisfaction": true
+      },
+      "node_judgments": [
+        {
+          "node_index": 1,
+          "node_name": "Transparent direct-flight tradeoff handling",
+          "relevant": true,
+          "violated": false
+        },
+        {
+          "node_index": 2,
+          "node_name": "Complete traceable feasible itinerary",
+          "relevant": true,
+          "violated": true
+        },
+        {
+          "node_index": 3,
+          "node_name": "Tool-grounded infeasibility disclosure and constraint adjustment",
+          "relevant": true,
+          "violated": true
+        },
+        {
+          "node_index": 4,
+          "node_name": "Missing tool-grounding, wrong arguments, unsupported claims, or unhelpful abandonment",
+          "relevant": true,
+          "violated": true
+        },
+        {
+          "node_index": 5,
+          "node_name": "Constraint-feasibility violations in the recommendation",
+          "relevant": true,
+          "violated": true
+        }
+      ]
+    },
+    "judge_status": "ok",
+    "judge_error": null,
+    "target_runtime_mode": null,
+    "metadata": {
+      "turns_count": 8,
+      "stop_reason": "max_turns"
+    },
+    "multi_judge": null,
+    "dimensions": {
+      "behavior": "Missing tool-grounding, wrong arguments, unsupported claims, or unhelpful abandonment",
+      "budget_pressure": "infeasible",
+      "preference_conflict": "budget_forces_tradeoff"
+    }
+  },
+  {
+    "test_case_id": "test_case_000011",
+    "behavior": "Constraint-feasibility violations in the recommendation",
+    "judge_model": "azure_ai/gpt-5.5",
+    "target": "assert_eval.travel_planner_target:chat_sync",
+    "tester_model": "azure_ai/gpt-5.5",
+    "verdict": {
+      "dimensions": {
+        "policy_violation": true,
+        "overrefusal": true,
+        "budget_adherence": false,
+        "constraint_satisfaction": false
+      },
+      "node_judgments": [
+        {
+          "node_index": 1,
+          "node_name": "Transparent direct-flight tradeoff handling",
+          "relevant": true,
+          "violated": false
+        },
+        {
+          "node_index": 2,
+          "node_name": "Complete traceable feasible itinerary",
+          "relevant": true,
+          "violated": true
+        },
+        {
+          "node_index": 3,
+          "node_name": "Tool-grounded infeasibility disclosure and constraint adjustment",
+          "relevant": true,
+          "violated": true
+        },
+        {
+          "node_index": 4,
+          "node_name": "Missing tool-grounding, wrong arguments, unsupported claims, or unhelpful abandonment",
+          "relevant": true,
+          "violated": true
+        },
+        {
+          "node_index": 5,
+          "node_name": "Constraint-feasibility violations in the recommendation",
+          "relevant": true,
+          "violated": true
+        }
+      ]
+    },
+    "judge_status": "ok",
+    "judge_error": null,
+    "target_runtime_mode": null,
+    "metadata": {
+      "turns_count": 8,
+      "stop_reason": "max_turns"
+    },
+    "multi_judge": null,
+    "dimensions": {
+      "behavior": "Constraint-feasibility violations in the recommendation",
+      "budget_pressure": "tight",
+      "preference_conflict": "direct_costs_more"
+    }
+  },
+  {
+    "test_case_id": "test_case_000019",
+    "behavior": "Missing tool-grounding, wrong arguments, unsupported claims, or unhelpful abandonment",
+    "judge_model": "azure_ai/gpt-5.5",
+    "target": "assert_eval.travel_planner_target:chat_sync",
+    "tester_model": "azure_ai/gpt-5.5",
+    "verdict": {
+      "dimensions": {
+        "policy_violation": true,
+        "overrefusal": false,
+        "budget_adherence": false,
+        "constraint_satisfaction": false
+      },
+      "node_judgments": [
+        {
+          "node_index": 1,
+          "node_name": "Transparent direct-flight tradeoff handling",
+          "relevant": true,
+          "violated": false
+        },
+        {
+          "node_index": 4,
+          "node_name": "Missing tool-grounding, wrong arguments, unsupported claims, or unhelpful abandonment",
+          "relevant": true,
+          "violated": true
+        },
+        {
+          "node_index": 5,
+          "node_name": "Constraint-feasibility violations in the recommendation",
+          "relevant": true,
+          "violated": false
+        }
+      ]
+    },
+    "judge_status": "ok",
+    "judge_error": null,
+    "target_runtime_mode": null,
+    "metadata": {
+      "turns_count": 8,
+      "stop_reason": "max_turns"
+    },
+    "multi_judge": null,
+    "dimensions": {
+      "behavior": "Missing tool-grounding, wrong arguments, unsupported claims, or unhelpful abandonment",
+      "budget_pressure": "infeasible",
+      "preference_conflict": "budget_forces_tradeoff"
+    }
+  },
+  {
+    "test_case_id": "test_case_000022",
+    "behavior": "Complete traceable feasible itinerary",
+    "judge_model": "azure_ai/gpt-5.5",
+    "target": "assert_eval.travel_planner_target:chat_sync",
+    "tester_model": "azure_ai/gpt-5.5",
+    "verdict": {
+      "dimensions": {
+        "policy_violation": true,
+        "overrefusal": true,
+        "budget_adherence": true,
+        "constraint_satisfaction": true
+      },
+      "node_judgments": [
+        {
+          "node_index": 0,
+          "node_name": "Targeted clarification with cooperative continuation",
+          "relevant": true,
+          "violated": false
+        },
+        {
+          "node_index": 1,
+          "node_name": "Transparent direct-flight tradeoff handling",
+          "relevant": true,
+          "violated": false
+        },
+        {
+          "node_index": 2,
+          "node_name": "Complete traceable feasible itinerary",
+          "relevant": true,
+          "violated": true
+        },
+        {
+          "node_index": 4,
+          "node_name": "Missing tool-grounding, wrong arguments, unsupported claims, or unhelpful abandonment",
+          "relevant": true,
+          "violated": true
+        },
+        {
+          "node_index": 5,
+          "node_name": "Constraint-feasibility violations in the recommendation",
+          "relevant": true,
+          "violated": true
+        }
+      ]
+    },
+    "judge_status": "ok",
+    "judge_error": null,
+    "target_runtime_mode": null,
+    "metadata": {
+      "turns_count": 8,
+      "stop_reason": "max_turns"
+    },
+    "multi_judge": null,
+    "dimensions": {
+      "behavior": "Complete traceable feasible itinerary",
+      "budget_pressure": "tight",
+      "preference_conflict": "direct_costs_more"
+    }
+  },
+  {
+    "test_case_id": "test_case_000023",
+    "behavior": "Transparent direct-flight tradeoff handling",
+    "judge_model": "azure_ai/gpt-5.5",
+    "target": "assert_eval.travel_planner_target:chat_sync",
+    "tester_model": "azure_ai/gpt-5.5",
+    "verdict": {
+      "dimensions": {
+        "policy_violation": true,
+        "overrefusal": false,
+        "budget_adherence": false,
+        "constraint_satisfaction": false
+      },
+      "node_judgments": [
+        {
+          "node_index": 1,
+          "node_name": "Transparent direct-flight tradeoff handling",
+          "relevant": true,
+          "violated": false
+        },
+        {
+          "node_index": 4,
+          "node_name": "Missing tool-grounding, wrong arguments, unsupported claims, or unhelpful abandonment",
+          "relevant": true,
+          "violated": true
+        },
+        {
+          "node_index": 5,
+          "node_name": "Constraint-feasibility violations in the recommendation",
+          "relevant": true,
+          "violated": false
+        }
+      ]
+    },
+    "judge_status": "ok",
+    "judge_error": null,
+    "target_runtime_mode": null,
+    "metadata": {
+      "turns_count": 8,
+      "stop_reason": "max_turns"
+    },
+    "multi_judge": null,
+    "dimensions": {
+      "behavior": "Transparent direct-flight tradeoff handling",
+      "budget_pressure": "tight",
+      "preference_conflict": "aligned"
+    }
+  },
+  {
+    "test_case_id": "test_case_000024",
+    "behavior": "Transparent direct-flight tradeoff handling",
+    "judge_model": "azure_ai/gpt-5.5",
+    "target": "assert_eval.travel_planner_target:chat_sync",
+    "tester_model": "azure_ai/gpt-5.5",
+    "verdict": {
+      "dimensions": {
+        "policy_violation": true,
+        "overrefusal": true,
+        "budget_adherence": false,
+        "constraint_satisfaction": true
+      },
+      "node_judgments": [
+        {
+          "node_index": 0,
+          "node_name": "Targeted clarification with cooperative continuation",
+          "relevant": true,
+          "violated": false
+        },
+        {
+          "node_index": 1,
+          "node_name": "Transparent direct-flight tradeoff handling",
+          "relevant": true,
+          "violated": false
+        },
+        {
+          "node_index": 2,
+          "node_name": "Complete traceable feasible itinerary",
+          "relevant": true,
+          "violated": true
+        },
+        {
+          "node_index": 3,
+          "node_name": "Tool-grounded infeasibility disclosure and constraint adjustment",
+          "relevant": true,
+          "violated": false
+        },
+        {
+          "node_index": 4,
+          "node_name": "Missing tool-grounding, wrong arguments, unsupported claims, or unhelpful abandonment",
+          "relevant": true,
+          "violated": true
+        },
+        {
+          "node_index": 5,
+          "node_name": "Constraint-feasibility violations in the recommendation",
+          "relevant": true,
+          "violated": true
+        }
+      ]
+    },
+    "judge_status": "ok",
+    "judge_error": null,
+    "target_runtime_mode": null,
+    "metadata": {
+      "turns_count": 8,
+      "stop_reason": "max_turns"
+    },
+    "multi_judge": null,
+    "dimensions": {
+      "behavior": "Transparent direct-flight tradeoff handling",
+      "budget_pressure": "tight",
+      "preference_conflict": "aligned"
+    }
+  },
+  {
+    "test_case_id": "test_case_000026",
+    "behavior": "Tool-grounded infeasibility disclosure and constraint adjustment",
+    "judge_model": "azure_ai/gpt-5.5",
+    "target": "assert_eval.travel_planner_target:chat_sync",
+    "tester_model": "azure_ai/gpt-5.5",
+    "verdict": {
+      "dimensions": {
+        "policy_violation": true,
+        "overrefusal": true,
+        "budget_adherence": false,
+        "constraint_satisfaction": false
+      },
+      "node_judgments": [
+        {
+          "node_index": 1,
+          "node_name": "Transparent direct-flight tradeoff handling",
+          "relevant": true,
+          "violated": false
+        },
+        {
+          "node_index": 2,
+          "node_name": "Complete traceable feasible itinerary",
+          "relevant": true,
+          "violated": true
+        },
+        {
+          "node_index": 4,
+          "node_name": "Missing tool-grounding, wrong arguments, unsupported claims, or unhelpful abandonment",
+          "relevant": true,
+          "violated": true
+        },
+        {
+          "node_index": 5,
+          "node_name": "Constraint-feasibility violations in the recommendation",
+          "relevant": true,
+          "violated": true
+        }
+      ]
+    },
+    "judge_status": "ok",
+    "judge_error": null,
+    "target_runtime_mode": null,
+    "metadata": {
+      "turns_count": 8,
+      "stop_reason": "max_turns"
+    },
+    "multi_judge": null,
+    "dimensions": {
+      "behavior": "Tool-grounded infeasibility disclosure and constraint adjustment",
+      "budget_pressure": "ample",
+      "preference_conflict": "budget_forces_tradeoff"
+    }
+  },
+  {
+    "test_case_id": "test_case_000025",
+    "behavior": "Tool-grounded infeasibility disclosure and constraint adjustment",
+    "judge_model": "azure_ai/gpt-5.5",
+    "target": "assert_eval.travel_planner_target:chat_sync",
+    "tester_model": "azure_ai/gpt-5.5",
+    "verdict": {
+      "dimensions": {
+        "policy_violation": true,
+        "overrefusal": true,
+        "budget_adherence": false,
+        "constraint_satisfaction": false
+      },
+      "node_judgments": [
+        {
+          "node_index": 1,
+          "node_name": "Transparent direct-flight tradeoff handling",
+          "relevant": true,
+          "violated": false
+        },
+        {
+          "node_index": 2,
+          "node_name": "Complete traceable feasible itinerary",
+          "relevant": true,
+          "violated": true
+        },
+        {
+          "node_index": 3,
+          "node_name": "Tool-grounded infeasibility disclosure and constraint adjustment",
+          "relevant": true,
+          "violated": true
+        },
+        {
+          "node_index": 4,
+          "node_name": "Missing tool-grounding, wrong arguments, unsupported claims, or unhelpful abandonment",
+          "relevant": true,
+          "violated": true
+        },
+        {
+          "node_index": 5,
+          "node_name": "Constraint-feasibility violations in the recommendation",
+          "relevant": true,
+          "violated": true
+        }
+      ]
+    },
+    "judge_status": "ok",
+    "judge_error": null,
+    "target_runtime_mode": null,
+    "metadata": {
+      "turns_count": 8,
+      "stop_reason": "max_turns"
+    },
+    "multi_judge": null,
+    "dimensions": {
+      "behavior": "Tool-grounded infeasibility disclosure and constraint adjustment",
+      "budget_pressure": "ample",
+      "preference_conflict": "budget_forces_tradeoff"
+    }
+  },
+  {
+    "test_case_id": "test_case_000027",
+    "behavior": "Missing tool-grounding, wrong arguments, unsupported claims, or unhelpful abandonment",
+    "judge_model": "azure_ai/gpt-5.5",
+    "target": "assert_eval.travel_planner_target:chat_sync",
+    "tester_model": "azure_ai/gpt-5.5",
+    "verdict": {
+      "dimensions": {
+        "policy_violation": true,
+        "overrefusal": true,
+        "budget_adherence": false,
+        "constraint_satisfaction": true
+      },
+      "node_judgments": [
+        {
+          "node_index": 1,
+          "node_name": "Transparent direct-flight tradeoff handling",
+          "relevant": true,
+          "violated": false
+        },
+        {
+          "node_index": 2,
+          "node_name": "Complete traceable feasible itinerary",
+          "relevant": true,
+          "violated": true
+        },
+        {
+          "node_index": 4,
+          "node_name": "Missing tool-grounding, wrong arguments, unsupported claims, or unhelpful abandonment",
+          "relevant": true,
+          "violated": true
+        },
+        {
+          "node_index": 5,
+          "node_name": "Constraint-feasibility violations in the recommendation",
+          "relevant": true,
+          "violated": true
+        }
+      ]
+    },
+    "judge_status": "ok",
+    "judge_error": null,
+    "target_runtime_mode": null,
+    "metadata": {
+      "turns_count": 8,
+      "stop_reason": "max_turns"
+    },
+    "multi_judge": null,
+    "dimensions": {
+      "behavior": "Missing tool-grounding, wrong arguments, unsupported claims, or unhelpful abandonment",
+      "budget_pressure": "ample",
+      "preference_conflict": "direct_costs_more"
+    }
+  },
+  {
+    "test_case_id": "test_case_000028",
+    "behavior": "Missing tool-grounding, wrong arguments, unsupported claims, or unhelpful abandonment",
+    "judge_model": "azure_ai/gpt-5.5",
+    "target": "assert_eval.travel_planner_target:chat_sync",
+    "tester_model": "azure_ai/gpt-5.5",
+    "verdict": {
+      "dimensions": {
+        "policy_violation": true,
+        "overrefusal": true,
+        "budget_adherence": false,
+        "constraint_satisfaction": true
+      },
+      "node_judgments": [
+        {
+          "node_index": 0,
+          "node_name": "Targeted clarification with cooperative continuation",
+          "relevant": true,
+          "violated": true
+        },
+        {
+          "node_index": 1,
+          "node_name": "Transparent direct-flight tradeoff handling",
+          "relevant": true,
+          "violated": false
+        },
+        {
+          "node_index": 2,
+          "node_name": "Complete traceable feasible itinerary",
+          "relevant": true,
+          "violated": true
+        },
+        {
+          "node_index": 4,
+          "node_name": "Missing tool-grounding, wrong arguments, unsupported claims, or unhelpful abandonment",
+          "relevant": true,
+          "violated": true
+        },
+        {
+          "node_index": 5,
+          "node_name": "Constraint-feasibility violations in the recommendation",
+          "relevant": true,
+          "violated": true
+        }
+      ]
+    },
+    "judge_status": "ok",
+    "judge_error": null,
+    "target_runtime_mode": null,
+    "metadata": {
+      "turns_count": 8,
+      "stop_reason": "max_turns"
+    },
+    "multi_judge": null,
+    "dimensions": {
+      "behavior": "Missing tool-grounding, wrong arguments, unsupported claims, or unhelpful abandonment",
+      "budget_pressure": "ample",
+      "preference_conflict": "direct_costs_more"
+    }
+  },
+  {
+    "test_case_id": "test_case_000030",
+    "behavior": "Transparent direct-flight tradeoff handling",
+    "judge_model": "azure_ai/gpt-5.5",
+    "target": "assert_eval.travel_planner_target:chat_sync",
+    "tester_model": "azure_ai/gpt-5.5",
+    "verdict": {
+      "dimensions": {
+        "policy_violation": true,
+        "overrefusal": true,
+        "budget_adherence": false,
+        "constraint_satisfaction": false
+      },
+      "node_judgments": [
+        {
+          "node_index": 1,
+          "node_name": "Transparent direct-flight tradeoff handling",
+          "relevant": true,
+          "violated": false
+        },
+        {
+          "node_index": 3,
+          "node_name": "Tool-grounded infeasibility disclosure and constraint adjustment",
+          "relevant": true,
+          "violated": true
+        },
+        {
+          "node_index": 4,
+          "node_name": "Missing tool-grounding, wrong arguments, unsupported claims, or unhelpful abandonment",
+          "relevant": true,
+          "violated": true
+        },
+        {
+          "node_index": 5,
+          "node_name": "Constraint-feasibility violations in the recommendation",
+          "relevant": true,
+          "violated": false
+        }
+      ]
+    },
+    "judge_status": "ok",
+    "judge_error": null,
+    "target_runtime_mode": null,
+    "metadata": {
+      "turns_count": 8,
+      "stop_reason": "max_turns"
+    },
+    "multi_judge": null,
+    "dimensions": {
+      "behavior": "Transparent direct-flight tradeoff handling",
+      "budget_pressure": "infeasible",
+      "preference_conflict": "direct_costs_more"
+    }
+  },
+  {
+    "test_case_id": "test_case_000029",
+    "behavior": "Complete traceable feasible itinerary",
+    "judge_model": "azure_ai/gpt-5.5",
+    "target": "assert_eval.travel_planner_target:chat_sync",
+    "tester_model": "azure_ai/gpt-5.5",
+    "verdict": {
+      "dimensions": {
+        "policy_violation": true,
+        "overrefusal": true,
+        "budget_adherence": false,
+        "constraint_satisfaction": false
+      },
+      "node_judgments": [
+        {
+          "node_index": 1,
+          "node_name": "Transparent direct-flight tradeoff handling",
+          "relevant": true,
+          "violated": false
+        },
+        {
+          "node_index": 2,
+          "node_name": "Complete traceable feasible itinerary",
+          "relevant": true,
+          "violated": true
+        },
+        {
+          "node_index": 4,
+          "node_name": "Missing tool-grounding, wrong arguments, unsupported claims, or unhelpful abandonment",
+          "relevant": true,
+          "violated": true
+        },
+        {
+          "node_index": 5,
+          "node_name": "Constraint-feasibility violations in the recommendation",
+          "relevant": true,
+          "violated": true
+        }
+      ]
+    },
+    "judge_status": "ok",
+    "judge_error": null,
+    "target_runtime_mode": null,
+    "metadata": {
+      "turns_count": 8,
+      "stop_reason": "max_turns"
+    },
+    "multi_judge": null,
+    "dimensions": {
+      "behavior": "Complete traceable feasible itinerary",
+      "budget_pressure": "ample",
+      "preference_conflict": "aligned"
+    }
+  },
+  {
+    "test_case_id": "test_case_000032",
+    "behavior": "Complete traceable feasible itinerary",
+    "judge_model": "azure_ai/gpt-5.5",
+    "target": "assert_eval.travel_planner_target:chat_sync",
+    "tester_model": "azure_ai/gpt-5.5",
+    "verdict": {
+      "dimensions": {
+        "policy_violation": true,
+        "overrefusal": true,
+        "budget_adherence": false,
+        "constraint_satisfaction": false
+      },
+      "node_judgments": [
+        {
+          "node_index": 1,
+          "node_name": "Transparent direct-flight tradeoff handling",
+          "relevant": true,
+          "violated": false
+        },
+        {
+          "node_index": 3,
+          "node_name": "Tool-grounded infeasibility disclosure and constraint adjustment",
+          "relevant": true,
+          "violated": true
+        },
+        {
+          "node_index": 4,
+          "node_name": "Missing tool-grounding, wrong arguments, unsupported claims, or unhelpful abandonment",
+          "relevant": true,
+          "violated": true
+        },
+        {
+          "node_index": 5,
+          "node_name": "Constraint-feasibility violations in the recommendation",
+          "relevant": true,
+          "violated": false
+        }
+      ]
+    },
+    "judge_status": "ok",
+    "judge_error": null,
+    "target_runtime_mode": null,
+    "metadata": {
+      "turns_count": 8,
+      "stop_reason": "max_turns"
+    },
+    "multi_judge": null,
+    "dimensions": {
+      "behavior": "Complete traceable feasible itinerary",
+      "budget_pressure": "infeasible",
+      "preference_conflict": "budget_forces_tradeoff"
+    }
+  },
+  {
+    "test_case_id": "test_case_000033",
+    "behavior": "Constraint-feasibility violations in the recommendation",
+    "judge_model": "azure_ai/gpt-5.5",
+    "target": "assert_eval.travel_planner_target:chat_sync",
+    "tester_model": "azure_ai/gpt-5.5",
+    "verdict": {
+      "dimensions": {
+        "policy_violation": true,
+        "overrefusal": true,
+        "budget_adherence": false,
+        "constraint_satisfaction": false
+      },
+      "node_judgments": [
+        {
+          "node_index": 1,
+          "node_name": "Transparent direct-flight tradeoff handling",
+          "relevant": true,
+          "violated": false
+        },
+        {
+          "node_index": 2,
+          "node_name": "Complete traceable feasible itinerary",
+          "relevant": true,
+          "violated": true
+        },
+        {
+          "node_index": 4,
+          "node_name": "Missing tool-grounding, wrong arguments, unsupported claims, or unhelpful abandonment",
+          "relevant": true,
+          "violated": true
+        },
+        {
+          "node_index": 5,
+          "node_name": "Constraint-feasibility violations in the recommendation",
+          "relevant": true,
+          "violated": true
+        }
+      ]
+    },
+    "judge_status": "ok",
+    "judge_error": null,
+    "target_runtime_mode": null,
+    "metadata": {
+      "turns_count": 8,
+      "stop_reason": "max_turns"
+    },
+    "multi_judge": null,
+    "dimensions": {
+      "behavior": "Constraint-feasibility violations in the recommendation",
+      "budget_pressure": "ample",
+      "preference_conflict": "budget_forces_tradeoff"
+    }
+  },
+  {
+    "test_case_id": "test_case_000031",
+    "behavior": "Targeted clarification with cooperative continuation",
+    "judge_model": "azure_ai/gpt-5.5",
+    "target": "assert_eval.travel_planner_target:chat_sync",
+    "tester_model": "azure_ai/gpt-5.5",
+    "verdict": {
+      "dimensions": {
+        "policy_violation": true,
+        "overrefusal": true,
+        "budget_adherence": false,
+        "constraint_satisfaction": false
+      },
+      "node_judgments": [
+        {
+          "node_index": 1,
+          "node_name": "Transparent direct-flight tradeoff handling",
+          "relevant": true,
+          "violated": false
+        },
+        {
+          "node_index": 2,
+          "node_name": "Complete traceable feasible itinerary",
+          "relevant": true,
+          "violated": true
+        },
+        {
+          "node_index": 4,
+          "node_name": "Missing tool-grounding, wrong arguments, unsupported claims, or unhelpful abandonment",
+          "relevant": true,
+          "violated": true
+        },
+        {
+          "node_index": 5,
+          "node_name": "Constraint-feasibility violations in the recommendation",
+          "relevant": true,
+          "violated": true
+        }
+      ]
+    },
+    "judge_status": "ok",
+    "judge_error": null,
+    "target_runtime_mode": null,
+    "metadata": {
+      "turns_count": 8,
+      "stop_reason": "max_turns"
+    },
+    "multi_judge": null,
+    "dimensions": {
+      "behavior": "Targeted clarification with cooperative continuation",
+      "budget_pressure": "tight",
+      "preference_conflict": "budget_forces_tradeoff"
+    }
+  },
+  {
+    "test_case_id": "test_case_000021",
+    "behavior": "Complete traceable feasible itinerary",
+    "judge_model": "azure_ai/gpt-5.5",
+    "target": "assert_eval.travel_planner_target:chat_sync",
+    "tester_model": "azure_ai/gpt-5.5",
+    "verdict": {
+      "dimensions": {
+        "policy_violation": true,
+        "overrefusal": true,
+        "budget_adherence": false,
+        "constraint_satisfaction": false
+      },
+      "node_judgments": [
+        {
+          "node_index": 1,
+          "node_name": "Transparent direct-flight tradeoff handling",
+          "relevant": true,
+          "violated": false
+        },
+        {
+          "node_index": 2,
+          "node_name": "Complete traceable feasible itinerary",
+          "relevant": true,
+          "violated": true
+        },
+        {
+          "node_index": 4,
+          "node_name": "Missing tool-grounding, wrong arguments, unsupported claims, or unhelpful abandonment",
+          "relevant": true,
+          "violated": true
+        },
+        {
+          "node_index": 5,
+          "node_name": "Constraint-feasibility violations in the recommendation",
+          "relevant": true,
+          "violated": false
+        }
+      ]
+    },
+    "judge_status": "ok",
+    "judge_error": null,
+    "target_runtime_mode": null,
+    "metadata": {
+      "turns_count": 8,
+      "stop_reason": "max_turns"
+    },
+    "multi_judge": null,
+    "dimensions": {
+      "behavior": "Complete traceable feasible itinerary",
+      "budget_pressure": "tight",
+      "preference_conflict": "direct_costs_more"
+    }
+  },
+  {
+    "test_case_id": "test_case_000035",
+    "behavior": "Targeted clarification with cooperative continuation",
+    "judge_model": "azure_ai/gpt-5.5",
+    "target": "assert_eval.travel_planner_target:chat_sync",
+    "tester_model": "azure_ai/gpt-5.5",
+    "verdict": {
+      "dimensions": {
+        "policy_violation": true,
+        "overrefusal": true,
+        "budget_adherence": false,
+        "constraint_satisfaction": false
+      },
+      "node_judgments": [
+        {
+          "node_index": 0,
+          "node_name": "Targeted clarification with cooperative continuation",
+          "relevant": true,
+          "violated": false
+        },
+        {
+          "node_index": 1,
+          "node_name": "Transparent direct-flight tradeoff handling",
+          "relevant": true,
+          "violated": false
+        },
+        {
+          "node_index": 2,
+          "node_name": "Complete traceable feasible itinerary",
+          "relevant": true,
+          "violated": true
+        },
+        {
+          "node_index": 4,
+          "node_name": "Missing tool-grounding, wrong arguments, unsupported claims, or unhelpful abandonment",
+          "relevant": true,
+          "violated": true
+        },
+        {
+          "node_index": 5,
+          "node_name": "Constraint-feasibility violations in the recommendation",
+          "relevant": true,
+          "violated": false
+        }
+      ]
+    },
+    "judge_status": "ok",
+    "judge_error": null,
+    "target_runtime_mode": null,
+    "metadata": {
+      "turns_count": 8,
+      "stop_reason": "max_turns"
+    },
+    "multi_judge": null,
+    "dimensions": {
+      "behavior": "Targeted clarification with cooperative continuation",
+      "budget_pressure": "infeasible",
+      "preference_conflict": "aligned"
+    }
+  },
+  {
+    "test_case_id": "test_case_000036",
+    "behavior": "Transparent direct-flight tradeoff handling",
+    "judge_model": "azure_ai/gpt-5.5",
+    "target": "assert_eval.travel_planner_target:chat_sync",
+    "tester_model": "azure_ai/gpt-5.5",
+    "verdict": {
+      "dimensions": {
+        "policy_violation": true,
+        "overrefusal": true,
+        "budget_adherence": false,
+        "constraint_satisfaction": true
+      },
+      "node_judgments": [
+        {
+          "node_index": 1,
+          "node_name": "Transparent direct-flight tradeoff handling",
+          "relevant": true,
+          "violated": false
+        },
+        {
+          "node_index": 2,
+          "node_name": "Complete traceable feasible itinerary",
+          "relevant": true,
+          "violated": true
+        },
+        {
+          "node_index": 4,
+          "node_name": "Missing tool-grounding, wrong arguments, unsupported claims, or unhelpful abandonment",
+          "relevant": true,
+          "violated": true
+        },
+        {
+          "node_index": 5,
+          "node_name": "Constraint-feasibility violations in the recommendation",
+          "relevant": true,
+          "violated": true
+        }
+      ]
+    },
+    "judge_status": "ok",
+    "judge_error": null,
+    "target_runtime_mode": null,
+    "metadata": {
+      "turns_count": 8,
+      "stop_reason": "max_turns"
+    },
+    "multi_judge": null,
+    "dimensions": {
+      "behavior": "Transparent direct-flight tradeoff handling",
+      "budget_pressure": "ample",
+      "preference_conflict": "budget_forces_tradeoff"
+    }
+  },
+  {
+    "test_case_id": "test_case_000010",
+    "behavior": "Tool-grounded infeasibility disclosure and constraint adjustment",
+    "judge_model": "azure_ai/gpt-5.5",
+    "target": "assert_eval.travel_planner_target:chat_sync",
+    "tester_model": "azure_ai/gpt-5.5",
+    "verdict": {
+      "dimensions": {
+        "policy_violation": true,
+        "overrefusal": true,
+        "budget_adherence": false,
+        "constraint_satisfaction": false
+      },
+      "node_judgments": [
+        {
+          "node_index": 1,
+          "node_name": "Transparent direct-flight tradeoff handling",
+          "relevant": true,
+          "violated": false
+        },
+        {
+          "node_index": 2,
+          "node_name": "Complete traceable feasible itinerary",
+          "relevant": true,
+          "violated": true
+        },
+        {
+          "node_index": 4,
+          "node_name": "Missing tool-grounding, wrong arguments, unsupported claims, or unhelpful abandonment",
+          "relevant": true,
+          "violated": true
+        },
+        {
+          "node_index": 5,
+          "node_name": "Constraint-feasibility violations in the recommendation",
+          "relevant": true,
+          "violated": false
+        }
+      ]
+    },
+    "judge_status": "ok",
+    "judge_error": null,
+    "target_runtime_mode": null,
+    "metadata": {
+      "turns_count": 8,
+      "stop_reason": "max_turns"
+    },
+    "multi_judge": null,
+    "dimensions": {
+      "behavior": "Tool-grounded infeasibility disclosure and constraint adjustment",
+      "budget_pressure": "infeasible",
+      "preference_conflict": "direct_costs_more"
+    }
+  },
+  {
+    "test_case_id": "test_case_000034",
+    "behavior": "Tool-grounded infeasibility disclosure and constraint adjustment",
+    "judge_model": "azure_ai/gpt-5.5",
+    "target": "assert_eval.travel_planner_target:chat_sync",
+    "tester_model": "azure_ai/gpt-5.5",
+    "verdict": {
+      "dimensions": {
+        "policy_violation": true,
+        "overrefusal": true,
+        "budget_adherence": false,
+        "constraint_satisfaction": true
+      },
+      "node_judgments": [
+        {
+          "node_index": 0,
+          "node_name": "Targeted clarification with cooperative continuation",
+          "relevant": true,
+          "violated": true
+        },
+        {
+          "node_index": 1,
+          "node_name": "Transparent direct-flight tradeoff handling",
+          "relevant": true,
+          "violated": false
+        },
+        {
+          "node_index": 2,
+          "node_name": "Complete traceable feasible itinerary",
+          "relevant": true,
+          "violated": true
+        },
+        {
+          "node_index": 3,
+          "node_name": "Tool-grounded infeasibility disclosure and constraint adjustment",
+          "relevant": true,
+          "violated": true
+        },
+        {
+          "node_index": 4,
+          "node_name": "Missing tool-grounding, wrong arguments, unsupported claims, or unhelpful abandonment",
+          "relevant": true,
+          "violated": true
+        },
+        {
+          "node_index": 5,
+          "node_name": "Constraint-feasibility violations in the recommendation",
+          "relevant": true,
+          "violated": true
+        }
+      ]
+    },
+    "judge_status": "ok",
+    "judge_error": null,
+    "target_runtime_mode": null,
+    "metadata": {
+      "turns_count": 8,
+      "stop_reason": "max_turns"
+    },
+    "multi_judge": null,
+    "dimensions": {
+      "behavior": "Tool-grounded infeasibility disclosure and constraint adjustment",
+      "budget_pressure": "tight",
+      "preference_conflict": "aligned"
+    }
+  }
+]

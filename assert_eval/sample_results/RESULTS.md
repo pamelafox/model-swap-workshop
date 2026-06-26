@@ -17,11 +17,44 @@ Committed outputs from the n=30 untraced ASSERT run. Lower fail counts are bette
 - **Mistral-Large-3 / test_case_000001:** “The user prefers a direct flight if it does not blow up the budget, but the assistant labels the cheaper connecting option as best value even though its own direct option totals $565 under the $600 cap and is only $85 more than the connection.”
 - **Mistral-Large-3 / test_case_000005:** “The final recommendation claims a $565 flight-plus-hotel total and $35 remaining, but the available travel results are stated to make even the cheapest viable flight-plus-hotel pairing exceed $600, and the assistant provides no tool-grounded budget check.”
 
-## Raw outputs
+## Committed artifacts (full run output)
 
-- `gpt-5.5/scores.jsonl`
-- `gpt-5.5/metrics.json`
-- `mistral-large-3/scores.jsonl`
-- `mistral-large-3/metrics.json`
+The complete ASSERT output for both runs is committed under
+`pamela-travel-planner-model-swap-n30/` so you can browse it in the local viewer
+**without re-running anything** (DSPy / live runs are expensive):
 
-Regenerate with `WORKSHOP_TARGET_MODEL=<model> uv run assert-ai run --config assert_eval/travel_planner_eval.yaml --override run=<run-name>`.
+```
+pamela-travel-planner-model-swap-n30/
+├── suite.json, systematization.json, stratification.json, taxonomy.json, test_set.jsonl   # suite-level
+├── gpt-5-5/            { config.yaml, manifest.json, metrics.json, scores.jsonl, inference_set.jsonl, .viewer/ }
+└── mistral-large-3/    { config.yaml, manifest.json, metrics.json, scores.jsonl, inference_set.jsonl, .viewer/ }
+```
+
+`scores.jsonl` holds the per-case judge verdicts + justifications; `inference_set.jsonl` holds the full transcripts; `metrics.json` holds the rollups.
+
+## View it in the local viewer
+
+The viewer ships with [ASSERT](https://github.com/responsibleai/ASSERT). Clone it,
+copy these saved results into its results dir, and launch:
+
+```bash
+git clone https://github.com/responsibleai/ASSERT
+# copy the saved suite into the viewer's results dir
+cp -r assert_eval/sample_results/pamela-travel-planner-model-swap-n30 ASSERT/artifacts/results/
+cd ASSERT/viewer && npm install && npm run dev      # open http://localhost:5174
+```
+
+PowerShell:
+
+```powershell
+git clone https://github.com/responsibleai/ASSERT
+Copy-Item assert_eval\sample_results\pamela-travel-planner-model-swap-n30 ASSERT\artifacts\results\ -Recurse
+cd ASSERT\viewer; npm install; npm run dev          # open http://localhost:5174
+```
+
+Then open the `pamela-travel-planner-model-swap-n30` suite, **compare `gpt-5-5` vs `mistral-large-3` by dimension**, and drill into a flagged row to read the judge's verdict and the captured transcript.
+
+> Alternatively, skip the copy and point the viewer straight at this folder:
+> `ARTIFACTS_ROOT="$(pwd)/assert_eval/sample_results" (cd ASSERT/viewer && npm run dev)`.
+
+Regenerate from scratch with `WORKSHOP_TARGET_MODEL=<model> uv run assert-ai run --config assert_eval/travel_planner_eval.yaml --override run=<run-name>`.

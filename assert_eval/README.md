@@ -62,7 +62,7 @@ For the finale, show both saved artifacts statically:
 1. ASSERT eval scores per prompt-model variant.
 2. DSPy's optimized prompt.
 
-See `sample_results/RESULTS.md` for the committed n=30 comparison and raw outputs.
+See [`sample_results/RESULTS.md`](sample_results/RESULTS.md) for the committed n=30 comparison and **full run artifacts** (`scores.jsonl`, `inference_set.jsonl`, `metrics.json`, plus the viewer cache) — with a one-line **copy-to-local-viewer** command so you can browse the runs side-by-side without re-running anything.
 
 ## Talk beats
 

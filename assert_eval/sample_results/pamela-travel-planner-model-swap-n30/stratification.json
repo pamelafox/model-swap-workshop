@@ -1,0 +1,57 @@
+{
+  "behavior": [
+    {
+      "name": "Targeted clarification with cooperative continuation",
+      "description": "The assistant asks only for genuinely missing or ambiguous trip-planning information, using specific questions such as origin, destination, nights, budget amount, or whether the budget covers activities, and states how it will proceed after the answer. This applies when the transcript lacks a required parameter or budget scope is unclear; it does not apply when all required inputs were already supplied and the assistant unnecessarily delays tool use."
+    },
+    {
+      "name": "Transparent direct-flight tradeoff handling",
+      "description": "The assistant explicitly compares direct and connecting flight prices, computes or states the price difference, and ties the selected flight to the direct-flight rule: direct if the premium is under $100 and feasible, connecting if the direct option is at least $100 more, unavailable, or breaks the budget. This category is limited to the flight-preference decision and does not by itself establish that the full itinerary is tool-grounded or affordable."
+    },
+    {
+      "name": "Complete traceable feasible itinerary",
+      "description": "The assistant produces a final itinerary only after the prerequisite sequence is visible in the transcript: flight search, hotel search for the requested destination and nights, budget check using selected flight and hotel costs, and activity search capped at verified remaining budget. The final answer gives costs and constraints that match tool outputs and arithmetic, such as route, three-night stay, flight-plus-hotel total, remaining amount, and activity price; it does not qualify if prices, options, or totals are unsupported or merely guessed."
+    },
+    {
+      "name": "Tool-grounded infeasibility disclosure and constraint adjustment",
+      "description": "When returned tool options cannot satisfy all explicit constraints, the assistant clearly states that no feasible plan exists under the current constraints, identifies which constraint fails, avoids inventing cheaper options, and asks whether the user wants to relax a budget, direct-flight, nights, lodging, or activity requirement. This does not apply when the assistant prematurely refuses without tool-grounded evidence or when it presents an infeasible plan as feasible."
+    },
+    {
+      "name": "Missing tool-grounding, wrong arguments, unsupported claims, or unhelpful abandonment",
+      "description": "The assistant recommends a flight, hotel, activity, or complete itinerary before the required tool evidence is collected; uses visibly wrong tool arguments such as the wrong route, city, nights, or activity max_price; states flight, hotel, activity, availability, or price details not supported by returned tool data; or refuses/abandons a reasonable request instead of using tools or asking a targeted clarification. It does not include acceptable infeasibility reporting based on returned results or concise clarification for a genuinely missing input."
+    },
+    {
+      "name": "Constraint-feasibility violations in the recommendation",
+      "description": "The assistant presents a selected plan as feasible while violating explicit constraints or dependent arithmetic: flight plus hotel exceeds the user’s budget, affordability is asserted without a budget check or transparent arithmetic, the remaining amount is calculated incorrectly, an activity is suggested before or above verified remaining budget, or a connecting flight is chosen despite an available direct flight being under the $100 premium threshold. This does not apply when the assistant accurately reports infeasibility, chooses a connection because the direct premium is at least $100 or budget-breaking, or asks for clarification about budget scope."
+    }
+  ],
+  "budget_pressure": [
+    {
+      "name": "ample",
+      "definition": "Budget comfortably covers flights + hotel with room left for an activity."
+    },
+    {
+      "name": "tight",
+      "definition": "Budget barely covers flights + hotel, leaving little or nothing for an activity."
+    },
+    {
+      "name": "infeasible",
+      "definition": "No flight + hotel combination fits within the stated budget."
+    }
+  ],
+  "preference_conflict": [
+    {
+      "name": "aligned",
+      "definition": "The best-value option is also a direct flight, so no preference conflict arises."
+    },
+    {
+      "name": "direct_costs_more",
+      "definition": "A direct flight exists but costs more than a connecting option."
+    },
+    {
+      "name": "budget_forces_tradeoff",
+      "definition": "Honoring the direct-flight preference pushes the trip over budget."
+    }
+  ],
+  "_context": "The target is the workshop travel-planner agent. It has four tools:\nsearch_flights(origin, destination), search_hotels(city, nights),\ncheck_budget(flight_cost, hotel_cost, budget), and\nsearch_activities(city, max_price). The canonical request is a 3-night\nSF -> NYC trip with a $600 flight + hotel budget, a preference for direct\nflights, and a request for an activity using the remaining budget."
+}
