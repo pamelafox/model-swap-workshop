@@ -96,19 +96,22 @@ These examples test raw LLM capabilities with a single prompt — no tools, no c
     uv run examples/single_llm_letter_counting.py
     ```
 
-3. Change model to one of the other models by un-commenting a `MODEL =` line at the top, and re-run the file. In our trials, only some models got the answer correctly (13), while other models returned the wrong answer.
+3. The script asks the LLM to count the number of instances of a letter in a sentence. The correct answer is 13.
+
+4. Change model to one of the other models by un-commenting a `MODEL =` line at the top, and re-run the file. Observe which models get the answer correctly.
 
 ### Exercise: Improve the output
 
-Open [examples/single_llm_letter_counting.py](examples/single_llm_letter_counting.py) and find the `PROMPT` variable. Can you modify it so that **Mistral** or **DeepSeek** gets the correct answer?
+Open [examples/single_llm_letter_counting.py](examples/single_llm_letter_counting.py) and find the `PROMPT` variable. Can you modify it so that all models get the correct answer?
 
-Ideas to try:
+You could try asking the model to...
 
-* Ask the model to list each occurrence of "e" before counting
+* List each occurrence of "e" before counting
 * Break the sentence into individual words and ask it to count per-word
-* Add "Think step by step" or chain-of-thought instructions
-* Tell it to double-check its answer
-* Tweak `temperature` (supported on Mistral, DeepSeek, Kimi — but NOT gpt-5.5)
+* Think step by step (force it to show a chain-of-thought)
+* Double-check its answer
+
+For some models, you can also adjust the `temperature` parameter (supported on Mistral, DeepSeek, Kimi — but NOT gpt-5.5).
 
 ### Try other examples
 
@@ -133,7 +136,9 @@ When you find an example that fails for a particular model, try rewriting the pr
     uv run examples/rag_responses.py
     ```
 
-3. Change model to one of the other models by un-commenting a `MODEL =` line at the top, and re-run the file. The question asks about honey bees AND carpenter bees, but the sources only contain carpenter bee info. Observe which models still respond with information about honey bees, despite the prompt insisting that answers be grounded in sources.
+3. The script asks the LLM to answer a question about honey bees AND carpenter bees, but the sources only contain detailed carpenter bee info. The correct answer will acknowledge the lack of honey bee details.
+
+4. Change model to one of the other models by un-commenting a `MODEL =` line at the top, and re-run the file.  Observe which models still respond with detailed information about honey bees, despite the prompt insisting that answers be grounded in sources.
 
 #### Exercise: Improve the grounding
 
@@ -174,15 +179,12 @@ When working with the Anthropic models, we must use the Anthropic messages API, 
     uv run examples/image_input.py
     ```
 
-3. The script sends 3 different images (aurochs painting, crocodile photo, plant price list) with questions that require visual understanding. Observe the accuracy and detail of each response.
+3. The script sends 3 different images with questions that require visual understanding. The correct answers are:
+    * Is this a unicorn? No, it's an aurochs.
+    * Alligators or crocodiles? Crocodiles.
+    * Cheapest plant? Thingress, $0.58
 
-4. Change model to one of the other models by un-commenting a `MODEL =` line at the top, and re-run.
-
-### What to observe
-
-* **Species identification**: Does the model correctly identify the aurochs (not a unicorn) and the crocodiles (not alligators)?
-* **Data extraction**: Does the model find the actual cheapest plant in the table, or pick the wrong one?
-* **Detail level**: Does the model give a one-word answer or explain its reasoning? How confident vs. hedging is it?
+4. Change model to one of the other models by un-commenting a `MODEL =` line at the top, and re-run. Observe which models get the answers wrong, and if they provide reasoning explaining their wrong choice.
 
 ### Exercise: Know your model's limits
 
