@@ -1,5 +1,6 @@
 import json
 import os
+from pathlib import Path
 
 from dotenv import load_dotenv
 from lunr import lunr
@@ -22,7 +23,7 @@ client = OpenAI(
 )
 
 # Index the data from the JSON - each object has id, text, and embedding
-with open("rag_ingested_chunks.json") as file:
+with open(Path(__file__).parent / "rag_ingested_chunks.json") as file:
     documents = json.load(file)
     documents_by_id = {doc["id"]: doc for doc in documents}
 index = lunr(ref="id", fields=["text"], documents=documents)

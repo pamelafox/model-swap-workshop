@@ -1,5 +1,6 @@
 import os
 import warnings
+from pathlib import Path
 
 # Must be set before importing openai/pydantic to avoid MockValSer crash.
 # See: https://github.com/openai/openai-python/issues/1306
@@ -37,7 +38,7 @@ class Receipt(BaseModel):
 SYSTEM_PROMPT = "Extract the information from the receipt"
 
 # Prepare PDF as markdown text
-md_text = pymupdf4llm.to_markdown("example_receipt.pdf")
+md_text = pymupdf4llm.to_markdown(str(Path(__file__).parent / "example_receipt.pdf"))
 
 if api_type == "openai_responses":
     endpoint = os.environ["FOUNDRY_MODELS_ENDPOINT"] + "/openai/v1"

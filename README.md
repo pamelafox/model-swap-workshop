@@ -1,10 +1,12 @@
 # Model Swap Workshop
 
+[![Open in GitHub Codespaces](https://img.shields.io/static/v1?style=for-the-badge&label=GitHub+Codespaces&message=Open&color=brightgreen&logo=github)](https://codespaces.new/pamelafox/model-swap-workshop)
+
 Welcome! In this workshop you'll run the same scenarios across multiple frontier LLMs, observe where they differ, then tweak prompts and tool definitions to improve results. At the end, you'll quantify the tradeoffs with an eval suite.
 
 ## Table of contents
 
-1. [Install the prerequisites](#install-the-prerequisites)
+1. [Getting started](#getting-started)
 2. [Setup the environment](#setup-the-environment)
 3. [Part 1: Single LLM calls](#part-1-single-llm-calls)
 4. [Part 2: RAG](#part-2-rag)
@@ -15,26 +17,41 @@ Welcome! In this workshop you'll run the same scenarios across multiple frontier
 9. [Part 7: Evaluations](#part-7-evaluations)
 10. [Part 8: Prompt optimization](#part-8-prompt-optimization)
 11. [Recap](#recap)
+12. [Resources](#resources)
 
-## Install the prerequisites
+## Getting started
 
-1. **Python 3.10+**: Check with `python --version`. Install from [python.org](https://www.python.org/downloads/) if needed.
+The quickest way to get started is GitHub Codespaces, since it will setup everything for you.
 
-2. **uv** (Python package manager): Install with:
+### GitHub Codespaces
 
-   ```bash
-   curl -LsSf https://astral.sh/uv/install.sh | sh
-   ```
+1. Open the repository (this may take several minutes):
 
-   Or on macOS: `brew install uv`
+    [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/pamelafox/model-swap-workshop)
 
-3. **Install dependencies**: From the repo root, run:
+2. Open a terminal window
+3. Continue with the [Setup the environment](#setup-the-environment) steps
 
-   ```bash
-   uv sync
-   ```
+### Local environment
 
-   This creates a `.venv` and installs all packages from `pyproject.toml`.
+1. Make sure the following tools are installed:
+
+    * [Python 3.10+](https://www.python.org/downloads/)
+    * [uv](https://docs.astral.sh/uv/getting-started/installation/)
+    * Git
+
+2. Clone the repository:
+
+    ```shell
+    git clone https://github.com/pamelafox/model-swap-workshop
+    cd model-swap-workshop
+    ```
+
+3. Install the dependencies:
+
+    ```shell
+    uv sync
+    ```
 
 ## Setup the environment
 
@@ -337,7 +354,7 @@ You've been manually tweaking prompts all workshop. [DSPy](https://dspy.ai/) aut
 
 3. Watch the terminal output as GEPA proposes prompts. It discovers strategies like explicit word-counting procedures, verify-then-rewrite loops, and final verification passes — the same techniques a prompt engineer would find manually, but discovered automatically.
 
-4. After optimization, the script prints the winning instructions and saves the optimized program to `dspy_multi_constraint_optimized.json`.
+4. After optimization, the script prints the winning instructions and saves the optimized program to `examples/dspy_multi_constraint_optimized.json`.
 
 ### What to observe
 
@@ -363,3 +380,16 @@ You've been manually tweaking prompts all workshop. [DSPy](https://dspy.ai/) aut
 | Tool loop efficiency | gpt-5.5, DeepSeek | Fewer calls = lower cost/latency |
 
 **Key takeaway**: "Just swap the model" is never just swapping the model. Prompts, tool definitions, and output strategies all need tuning per model. Evals let you quantify instead of guessing.
+
+---
+
+## Resources
+
+* [Microsoft Foundry Documentation](https://learn.microsoft.com/azure/ai-foundry/)
+* [Agent Framework Documentation](https://learn.microsoft.com/agent-framework/)
+* [OpenAI Python SDK](https://github.com/openai/openai-python)
+* [Anthropic Python SDK](https://github.com/anthropics/anthropic-sdk-python)
+* [LiteLLM](https://github.com/BerriAI/litellm)
+* [PydanticAI](https://ai.pydantic.dev/)
+* [LangChain](https://python.langchain.com/)
+* [langchain-azure-ai](https://github.com/langchain-ai/langchain-azure)

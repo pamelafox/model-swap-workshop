@@ -1,14 +1,6 @@
 {
-    "name": "python-agentframework-demos",
-    "dockerComposeFile": "docker-compose.yml",
-    "service": "app",
-    "workspaceFolder": "/workspace",
-    "forwardPorts": [5432, 6379, 18888],
-    "features": {
-        "ghcr.io/azure/azure-dev/azd:latest": {},
-        "ghcr.io/devcontainers/features/azure-cli:latest": {},
-        "ghcr.io/devcontainers/features/github-cli:1": {}
-    },
+    "name": "model-swap-workshop",
+    "image": "mcr.microsoft.com/devcontainers/python:3-3.13-bookworm",
     "customizations": {
         "vscode": {
             "settings": {
