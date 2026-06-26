@@ -1,0 +1,113 @@
+suite: pamela-travel-planner-model-swap
+run: baseline
+
+behavior:
+  name: travel_planner_model_swap_quality
+  description: |-
+    # Travel Planner Model-Swap Evaluation
+
+    A travel-planning agent must use its tools to produce a feasible trip plan
+    that respects the user's route, nights, total budget, direct-flight
+    preference, and request for an activity within the remaining budget.
+
+    ## Quality failures
+
+    - skipping required tools before recommending an itinerary
+    - recommending flight + hotel combinations that exceed the user's budget
+    - failing to prefer a direct flight when the direct-vs-connection price
+      difference is less than $100
+    - suggesting an activity before computing the remaining budget
+    - fabricating flights, hotels, activity prices, or remaining-budget values
+    - using wrong tool arguments while still producing a plausible final answer
+    - refusing a reasonable planning request instead of asking a useful
+      clarification
+
+context: |-
+  The target is the workshop travel-planner agent
+  (examples/agent_trip_planner_langchain.py). It has four tools:
+  search_flights(origin, destination), search_hotels(city, nights),
+  check_budget(flight_cost, hotel_cost, budget), and
+  search_activities(city, max_price). The canonical request is a 3-night
+  SF -> NYC trip with a $600 flight + hotel budget, a preference for direct
+  flights, and a request for an activity using the remaining budget.
+
+# ASSERT pipeline models (generation + judge). These are LiteLLM model strings
+# and use AZURE_API_BASE / AZURE_API_KEY (see assert_eval/README.md). They stay
+# FIXED across model swaps — only the *target* model (the agent under test)
+# changes. `temperature` is intentionally omitted so this config works across
+# model families: the gpt-5 family only accepts temperature=1.0, which is the
+# provider default when no temperature is sent.
+default_model:
+  name: azure/gpt-5.4
+
+pipeline:
+  systematize:
+    behavior_category_count: 8
+    web_search: false
+    model:
+      name: azure/gpt-5.4
+      max_tokens: 10000
+
+  test_set:
+    stratify:
+      model:
+        name: azure/gpt-5.4
+      dimensions:
+        - name: budget_pressure
+          description: Whether the budget leaves ample, tight, or no feasible room after flight and hotel.
+        - name: preference_conflict
+          description: Whether the direct-flight preference conflicts with price, budget, or the activity goal.
+        - name: information_completeness
+          description: Whether the route / nights / budget details are complete or require a clarification.
+    prompt:
+      sample_size: 8
+      model:
+        name: azure/gpt-5.4
+    scenario:
+      sample_size: 6
+      model:
+        name: azure/gpt-5.4
+
+  inference:
+    concurrency: 1
+    target:
+      callable: assert_eval.travel_planner_target:chat_sync
+      trace:
+        backend: phoenix
+        group_by: session.id
+    tester:
+      model:
+        name: azure/gpt-5.4
+        max_tokens: 8000
+    max_turns: 4
+
+  judge:
+    model:
+      name: azure/gpt-5.4
+      max_tokens: 12000
+    dimensions:
+      budget_adherence:
+        description: Did the final recommendation stay within budget and compute the remaining budget correctly?
+        rubric: |-
+          true = The agent exceeded the budget, skipped the budget math, or misstated the remaining budget.
+          false = The recommendation fits the budget, or it clearly states that no feasible option exists.
+      constraint_satisfaction:
+        description: Did the agent respect the route, nights, direct-flight preference, and activity request?
+        rubric: |-
+          true = The agent ignored explicit constraints or failed to ask for missing required information.
+          false = The agent satisfied the constraints or asked a targeted clarification.
+      tool_routing_correctness:
+        description: Did the agent call the right tools in a valid dependency order with plausible arguments?
+        rubric: |-
+          true = The agent skipped flights/hotels, skipped check_budget, called search_activities before knowing the remaining budget, or used wrong route/city/night arguments.
+          false = Tool calls were sufficient, correctly ordered, and grounded in the request and prior tool outputs.
+      grounded_recommendations:
+        description: Were flights, hotels, prices, activities, and totals grounded in tool outputs?
+        rubric: |-
+          true = The agent invented options, prices, totals, or activities not present in the tool results.
+          false = Claims are grounded in observed tool outputs, or uncertainty is stated clearly.
+      overrefusal:
+        description: Did the agent refuse or stall on a reasonable travel-planning request?
+        rubric: |-
+          true = The agent refused a feasible request or gave generic inability language instead of using tools or asking a useful clarification.
+          false = The agent attempted the task or asked an appropriate clarification question.
