@@ -66,7 +66,10 @@ _SYSTEM_PROMPT = (
     "5. If the user asks for activity suggestions, use search_activities with the remaining budget after flight+hotel."
 )
 
-_TARGET_MODEL = os.environ.get("WORKSHOP_TARGET_MODEL", "gpt-5.5")
+_TARGET_MODEL = (
+    os.environ.get("WORKSHOP_TARGET_MODEL")
+    or os.environ.get("FOUNDRY_OPENAI_DEPLOYMENT", "gpt-5.5")
+)
 
 
 def _build_model(name: str):
