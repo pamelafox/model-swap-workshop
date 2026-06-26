@@ -1,19 +1,11 @@
-"""ASSERT callable target — workshop travel planner, provider-aware.
+"""ASSERT callable target for the workshop travel planner.
 
-The workshop's travel-planner agents are OpenAI-endpoint only, so to compare
-models across providers (e.g. gpt-5.5 vs Claude) on the *same* agent we rebuild
-the planner on **pydantic-ai** — the framework Pamela already uses for her
-cross-provider examples — reusing her *exact* tools and system prompt. Only the
-model client changes, so a model swap is a true apples-to-apples comparison.
+The workshop's travel-planner agents use Foundry's OpenAI-compatible endpoint.
+For ASSERT, we rebuild the same planner on pydantic-ai while reusing Pamela's
+exact tools and system prompt. Only WORKSHOP_TARGET_MODEL changes between runs.
 
-Select the model under test with ``WORKSHOP_TARGET_MODEL`` (default ``gpt-5.5``).
-Names starting with ``claude`` route to the Foundry Anthropic endpoint with
-extended thinking ("reasoning") enabled; everything else routes to the Foundry
-OpenAI-compatible endpoint.
-
-Env (loaded from .env by the workshop):
-  FOUNDRY_MODELS_ENDPOINT, FOUNDRY_API_KEY                      # OpenAI-family models
-  FOUNDRY_ANTHROPIC_MODELS_ENDPOINT, FOUNDRY_ANTHROPIC_API_KEY  # Claude models
+Env loaded from .env by the workshop:
+  FOUNDRY_MODELS_ENDPOINT, FOUNDRY_API_KEY
 """
 
 from __future__ import annotations
@@ -74,21 +66,12 @@ _TARGET_MODEL = (
 
 def _build_model(name: str):
     """Construct a pydantic-ai model client for the named Foundry deployment."""
-    if name.lower().startswith("claude"):
-        from anthropic import AsyncAnthropic
-        from pydantic_ai.models.anthropic import AnthropicModel
-        from pydantic_ai.providers.anthropic import AnthropicProvider
-
-        client = AsyncAnthropic(
-            base_url=os.environ["FOUNDRY_ANTHROPIC_MODELS_ENDPOINT"] + "/anthropic",
-            api_key=os.environ["FOUNDRY_ANTHROPIC_API_KEY"],
-        )
-        return AnthropicModel(name, provider=AnthropicProvider(anthropic_client=client))
-
     from openai import AsyncOpenAI
     from pydantic_ai.models.openai import OpenAIChatModel
     from pydantic_ai.providers.openai import OpenAIProvider
 
+    # The same pydantic-ai pattern extends to other providers (for example,
+    # Claude on an Anthropic endpoint) if you have access; this lab keeps one endpoint.
     client = AsyncOpenAI(
         base_url=os.environ["FOUNDRY_MODELS_ENDPOINT"] + "/openai/v1",
         api_key=os.environ["FOUNDRY_API_KEY"],
@@ -97,22 +80,11 @@ def _build_model(name: str):
 
 
 def _build_agent(name: str) -> Agent:
-    kwargs = {}
-    if name.lower().startswith("claude"):
-        # "reasoning medium": extended thinking with a moderate budget.
-        # max_tokens must exceed the thinking budget.
-        from pydantic_ai.models.anthropic import AnthropicModelSettings
-
-        kwargs["model_settings"] = AnthropicModelSettings(
-            max_tokens=8000,
-            anthropic_thinking={"type": "enabled", "budget_tokens": 4096},
-        )
     return Agent(
         _build_model(name),
         system_prompt=_SYSTEM_PROMPT,
         tools=_TOOLS,
         instrument=_TRACE,
-        **kwargs,
     )
 
 

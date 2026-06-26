@@ -52,7 +52,7 @@ pipeline:
     stratify:
       # Explicit-mode dimensions (each with `levels`) so stratification does NOT
       # call the web_search tool — required for Foundry models routed via
-      # `azure_ai/*` (e.g. gpt-5.5, Claude), which don't expose the OpenAI
+      # `azure_ai/*` (e.g. gpt-5.5), which don't expose the OpenAI
       # Responses API web_search_preview tool. Switch to `description`-only
       # (generated mode) only when your stratify model is an `azure/*` Azure
       # OpenAI deployment with web search enabled.
