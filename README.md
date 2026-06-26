@@ -286,7 +286,9 @@ Ideas to try:
 
 ## Part 7: Evaluations
 
-Now quantify what you observed.
+In Part 6 you *watched* the models plan trips differently — gpt-5.5 batched its tool calls, others explored more combos, some skipped the budget check. Now **quantify** it: did each model actually stay on budget, respect the constraints, and ground its recommendations in tool results — on *your* travel-planner scenario?
+
+A generic benchmark won't answer that. This is where [ASSERT](https://github.com/responsibleai/ASSERT) comes in: you write a behavior spec (what a good trip plan looks like), and ASSERT generates scenario-specific test cases, runs them against your agent, and an LLM judge scores each run on dimensions *you* define — budget adherence, constraint satisfaction, tool routing, grounding.
 
 ### 7a: Basic programmatic evals
 
@@ -294,25 +296,41 @@ Now quantify what you observed.
 uv run examples/evals_basic.py
 ```
 
-This runs test cases (letter counting, spatial reasoning, tool calling) across all models and checks against ground truth. No LLM judge needed — just exact match and schema validation.
+This runs test cases (letter counting, spatial reasoning, tool calling) across all models and checks against ground truth. No LLM judge needed — just exact match and schema validation. Useful capability probes, but they don't tell you whether the *travel planner* is any good.
 
-### 7b: LLM judge (GroundednessEvaluator)
+### 7b: Scenario-grounded evaluation with ASSERT
 
-```bash
-uv run examples/evals_foundry_judge.py
-```
+The eval lives under [`assert_eval/`](assert_eval/): a behavior spec, a thin pydantic-ai target that reuses the **Part 6 tools + system prompt**, and scenario-specific judge dimensions. Full setup and speaker notes are in [`assert_eval/README.md`](assert_eval/README.md).
 
-Uses `azure-ai-evaluation` with `GroundednessEvaluator` to score the RAG outputs. The judge (gpt-5.5) evaluates whether each model's response is grounded in the provided sources.
+1. Install ASSERT and point its pipeline (generation + judge) at your Foundry account:
 
-### 7c: Agent eval (ToolCallAccuracyEvaluator)
+    ```bash
+    uv add assert-ai
+    export AZURE_API_BASE="$FOUNDRY_MODELS_ENDPOINT"
+    export AZURE_AI_API_KEY="$FOUNDRY_API_KEY"
+    ```
 
-```bash
-uv run examples/evals_agent.py
-```
+2. Hold the eval fixed; swap only the **target** model — exactly like Part 6, but now scored on the same generated suite:
 
-Uses `ToolCallAccuracyEvaluator` to score whether models made correct tool calls with correct arguments, given the system prompt context.
+    ```bash
+    WORKSHOP_TARGET_MODEL="gpt-5.5"         uv run assert-ai run --config assert_eval/travel_planner_eval.yaml --override run=gpt-55
+    WORKSHOP_TARGET_MODEL="Mistral-Large-3" uv run assert-ai run --config assert_eval/travel_planner_eval.yaml --override run=mistral-large-3
+    ```
 
+3. **Short on time?** The results are already saved — see [`assert_eval/sample_results/`](assert_eval/sample_results/) for a committed n=30 comparison you can browse in the local viewer without re-running. Copy-to-viewer instructions are in [`sample_results/RESULTS.md`](assert_eval/sample_results/RESULTS.md).
 
+#### What to observe
+
+Same fixed scenario, swap the model, compare per dimension (fail count, lower = better):
+
+| Dimension | gpt-5.5 | Mistral-Large-3 |
+|-----------|--------:|----------------:|
+| budget_adherence | 4/36 (11%) | 10/36 (28%) |
+| constraint_satisfaction | 10/36 (28%) | 24/36 (67%) |
+
+On *this* travel-planner scenario, gpt-5.5 stays on budget and respects constraints far more reliably than Mistral-Large-3 — the "which model should I ship for this workflow?" answer a leaderboard can't give you. (Directional: single gpt-5.5 judge pass, untraced; enable trace capture for the tool-routing/grounding dimensions — see [`assert_eval/README.md`](assert_eval/README.md).)
+
+> Single-metric judges still have their place: `GroundednessEvaluator` ([examples/evals_foundry_judge.py](examples/evals_foundry_judge.py)) and `ToolCallAccuracyEvaluator` ([examples/evals_agent.py](examples/evals_agent.py)) score one isolated signal each. ASSERT scores the whole travel-planning behavior on generated scenarios — the eval you'd actually gate a model swap on.
 
 ---
 
@@ -341,6 +359,10 @@ You've been manually tweaking prompts all workshop. [DSPy](https://dspy.ai/) aut
 - **GEPA's generated prompts**: The optimizer discovers a structured procedure — draft each line, enumerate words to verify count, rewrite if wrong, do a final pass. This is exactly what a human prompt engineer would discover through trial and error.
 - **Try a different student model**: Change `STUDENT_MODEL` to `Kimi-K2.6` and re-run. The optimizer will generate different instructions tuned to that model's quirks.
 
+### Close the loop with ASSERT
+
+DSPy optimizes against a *metric*. Point that metric at the **ASSERT scenario scores** from Part 7 instead of a toy proxy, and you're optimizing the prompt against the same travel-planner evaluation you used to compare models — measure → optimize → re-measure, all scenario-grounded. The closed-loop sketch (with the train/held-out split that keeps it honest) is in [`assert_eval/README.md`](assert_eval/README.md).
+
 ### Discussion
 
 - How does automated prompt optimization compare to manual tweaking?
@@ -357,5 +379,6 @@ You've been manually tweaking prompts all workshop. [DSPy](https://dspy.ai/) aut
 | Grounding / hallucination | gpt-5.5, Kimi, DeepSeek | Stronger system prompt instructions |
 | Tool arg normalization | gpt-5.5, Kimi | Tighter parameter descriptions, examples |
 | Tool loop efficiency | gpt-5.5, DeepSeek | Fewer calls = lower cost/latency |
+| Travel-planner scenario (budget, constraints) — ASSERT | gpt-5.5 over Mistral-Large-3 | A scenario-grounded eval that scores *your* workflow, not a generic benchmark |
 
-**Key takeaway**: "Just swap the model" is never just swapping the model. Prompts, tool definitions, and output strategies all need tuning per model. Evals let you quantify instead of guessing.
+**Key takeaway**: "Just swap the model" is never just swapping the model. Prompts, tool definitions, and output strategies all need tuning per model. Scenario-grounded evals (ASSERT) let you quantify the tradeoffs on *your* workflow instead of guessing — and gate the swap on them.
