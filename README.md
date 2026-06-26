@@ -2,7 +2,7 @@
 
 Welcome! In this workshop you'll run the same scenarios across multiple frontier LLMs, observe where they differ, then tweak prompts and tool definitions to improve results. At the end, you'll quantify the tradeoffs with an eval suite.
 
-### Table of contents
+## Table of contents
 
 1. [Install the prerequisites](#install-the-prerequisites)
 2. [Setup the environment](#setup-the-environment)
@@ -86,18 +86,18 @@ These examples test raw LLM capabilities with a single prompt — no tools, no c
 Open [examples/single_llm_letter_counting.py](examples/single_llm_letter_counting.py) and find the `PROMPT` variable. Can you modify it so that **Mistral** or **DeepSeek** gets the correct answer?
 
 Ideas to try:
-- Ask the model to list each occurrence of "e" before counting
-- Break the sentence into individual words and ask it to count per-word
-- Add "Think step by step" or chain-of-thought instructions
-- Tell it to double-check its answer
-- Tweak `temperature` (supported on Mistral, DeepSeek, Kimi — but NOT gpt-5.5)
 
+* Ask the model to list each occurrence of "e" before counting
+* Break the sentence into individual words and ask it to count per-word
+* Add "Think step by step" or chain-of-thought instructions
+* Tell it to double-check its answer
+* Tweak `temperature` (supported on Mistral, DeepSeek, Kimi — but NOT gpt-5.5)
 
 ### Try other examples
 
-We've included other examples of single LLM calls where the output varies based on the model used. 
+We've included other examples of single LLM calls where the output varies based on the model used.
 
-* [examples/single_llm_spatial_reasoning.py](examples/single_llm_spatial_reasoning.py): We check the LLM's spatial reasoning ability by describing a series of turns, and then asking "Which direction am I facing after these turns?". 
+* [examples/single_llm_spatial_reasoning.py](examples/single_llm_spatial_reasoning.py): We check the LLM's spatial reasoning ability by describing a series of turns, and then asking "Which direction am I facing after these turns?".
 * [examples/single_llm_multi_constraint.py](examples/single_llm_multi_constraint.py): We ask the LLM to write a poem that satisfies multiple rules about start letters and number of words.
 * [examples/single_llm_self_calibration.py](examples/single_llm_self_calibration.py): We ask the LLM a question that should not be directly answerable from the weights, and then ask it, "How confident are you in your answer?". Generally, the best models report low confidence.
 
@@ -125,10 +125,11 @@ Set your `MODEL` to a deployment that responded with an ungrounded answer.
 Open [examples/rag_responses.py](examples/rag_responses.py) and find the `SYSTEM_MESSAGE`. Can you strengthen the grounding instructions so that the model sticks to the sources?
 
 Ideas to try:
-- Add explicit instructions like "If information is not in the sources, say so clearly"
-- Add "NEVER make up information that isn't in the provided sources"
-- Use a structured format: "For each claim, cite the source ID or state 'not in sources'"
-- Add a negative example: "Do NOT mention facts about honey bees unless they appear in the sources"
+
+* Add explicit instructions like "If information is not in the sources, say so clearly"
+* Add "NEVER make up information that isn't in the provided sources"
+* Use a structured format: "For each claim, cite the source ID or state 'not in sources'"
+* Add a negative example: "Do NOT mention facts about honey bees unless they appear in the sources"
 
 ### Run the RAG example with Anthropic models
 
@@ -140,6 +141,7 @@ When working with the Anthropic models, we must use the Anthropic messages API, 
     ```bash
     uv run examples/rag_messages.py
     ```
+
 3. Change model to one of the other models by un-commenting a `MODEL =` line at the top, and re-run the file. Opus is the largest in the family, then Sonnet, then Haiku. Observe any differences in the output quality across the models. In our experiments, all three generated fully grounded answers. If you see otherwise, try modifying the prompt or other parameters to improve the output.
 
 ---
@@ -161,16 +163,17 @@ When working with the Anthropic models, we must use the Anthropic messages API, 
 
 ### What to observe
 
-- **Species identification**: Does the model correctly identify the aurochs (not a unicorn) and the crocodiles (not alligators)?
-- **Data extraction**: Does the model find the actual cheapest plant in the table, or pick the wrong one?
-- **Detail level**: Does the model give a one-word answer or explain its reasoning? How confident vs. hedging is it?
+* **Species identification**: Does the model correctly identify the aurochs (not a unicorn) and the crocodiles (not alligators)?
+* **Data extraction**: Does the model find the actual cheapest plant in the table, or pick the wrong one?
+* **Detail level**: Does the model give a one-word answer or explain its reasoning? How confident vs. hedging is it?
 
 ### Exercise: Know your model's limits
 
 Unlike prompt or tool description issues, vision failures are fundamental capability gaps — you can't prompt your way to better eyesight. Try adding your own images to the `EXAMPLES` list and see which models handle them:
-- A diagram or chart with small text
-- An image with handwritten content
-- A screenshot of code
+
+* A diagram or chart with small text
+* An image with handwritten content
+* A screenshot of code
 
 Which models would you trust for a production vision task? Which would you rule out?
 
@@ -189,16 +192,17 @@ Which models would you trust for a production vision task? Which would you rule 
 
 3. Observe how the model normalizes the user's message into structured tool arguments. The display at the bottom compares the expected tool call output to the model's actual output.
 
-3. Change model to one of the other models by un-commenting a `MODEL =` line at the top, and re-run the file. Observe whether the output matches the expected tool call arguments.
+4. Change model to one of the other models by un-commenting a `MODEL =` line at the top, and re-run the file. Observe whether the output matches the expected tool call arguments.
 
 ### Exercise: Improve tool argument quality
 
 In our experiments, several models added "me" or "you" to attendees list, or appended "Teams" to the location. Can you get ALL models to match the expected output?
 
 Ideas to try:
-- Tighten the attendees description: `"List of attendee names only (first name or full name). Do not include the organizer."`
-- Make the location description more explicit: `"Room name, or exactly 'Virtual' for online meetings. Do not include the platform name."`
-- Add an example in the tool description: `"e.g. ['Sarah', 'Marcus', 'Priya']"`
+
+* Tighten the attendees description: `"List of attendee names only (first name or full name). Do not include the organizer."`
+* Make the location description more explicit: `"Room name, or exactly 'Virtual' for online meetings. Do not include the platform name."`
+* Add an example in the tool description: `"e.g. ['Sarah', 'Marcus', 'Priya']"`
 
 Which description changes fix which models?
 
@@ -223,17 +227,18 @@ In this example, we give the model a `calculate` tool and ask a multi-step word 
 
 ### What to observe
 
-- **gpt-5.5, DeepSeek, Kimi**: 4–5 calls — combine discount + subtraction into one step (e.g. `45 * 0.70`)
-- **Mistral**: 7 calls — decomposes every operation separately (e.g. `45 * 0.30` then `45 - 13.5`)
+* **gpt-5.5, DeepSeek, Kimi**: 4–5 calls — combine discount + subtraction into one step (e.g. `45 * 0.70`)
+* **Mistral**: 7 calls — decomposes every operation separately (e.g. `45 * 0.30` then `45 - 13.5`)
 
 ### Exercise: Reduce tool calls
 
 Choose the model that used the highest number of tool calls. Can you get it to use fewer?
 
 Ideas to try:
-- Change the system prompt to say "Combine operations where possible"
-- Make the tool description say "You can use compound expressions like `(45 * 0.70) * 0.90`"
-- Add an example expression in the `code` parameter description
+
+* Change the system prompt to say "Combine operations where possible"
+* Make the tool description say "You can use compound expressions like `(45 * 0.70) * 0.90`"
+* Add an example expression in the `code` parameter description
 
 ### Discussion
 
@@ -248,7 +253,7 @@ Is fewer tool calls always better? What are the cost/latency tradeoffs of more g
 1. Pick your framework and open the corresponding file:
 
     | Framework | File |
-    |-----------|------|
+    | --------- | ---- |
     | PydanticAI | [examples/agent_trip_planner_pydanticai.py](examples/agent_trip_planner_pydanticai.py) |
     | LangChain | [examples/agent_trip_planner_langchain.py](examples/agent_trip_planner_langchain.py) |
     | Microsoft Agent Framework | [examples/agent_trip_planner_maf.py](examples/agent_trip_planner_maf.py) |
@@ -269,18 +274,19 @@ Is fewer tool calls always better? What are the cost/latency tradeoffs of more g
 
 ### What to observe
 
-- **Parallel vs serial**: gpt-5.5 batches `search_flights` + `search_hotels` in one parallel turn; other models may call them one at a time
-- **Budget checks**: gpt-5.5/DeepSeek verify once; Kimi/Mistral explore multiple flight+hotel combos
-- **Dependency awareness**: `search_activities` needs the remaining budget from `check_budget`. Does the model wait for the result, or guess the value and call them in parallel?
+* **Parallel vs serial**: gpt-5.5 batches `search_flights` + `search_hotels` in one parallel turn; other models may call them one at a time
+* **Budget checks**: gpt-5.5/DeepSeek verify once; Kimi/Mistral explore multiple flight+hotel combos
+* **Dependency awareness**: `search_activities` needs the remaining budget from `check_budget`. Does the model wait for the result, or guess the value and call them in parallel?
 
 ### Exercise: Control agent thoroughness
 
 Can you get the "thorough" models to be more concise, or the "concise" models to explore more options?
 
 Ideas to try:
-- Add "Present only the single best option" to the system prompt
-- Add "Always check at least 3 combinations before recommending" to the system prompt
-- Change the budget to $400 (tighter constraint) — does behavior change?
+
+* Add "Present only the single best option" to the system prompt
+* Add "Always check at least 3 combinations before recommending" to the system prompt
+* Change the budget to $400 (tighter constraint) — does behavior change?
 
 ---
 
@@ -312,8 +318,6 @@ uv run examples/evals_agent.py
 
 Uses `ToolCallAccuracyEvaluator` to score whether models made correct tool calls with correct arguments, given the system prompt context.
 
-
-
 ---
 
 ## Part 8: Prompt optimization
@@ -337,22 +341,22 @@ You've been manually tweaking prompts all workshop. [DSPy](https://dspy.ai/) aut
 
 ### What to observe
 
-- **Real improvement**: Mistral baseline scores 0% on the multi-constraint task (wrong word count). After optimization, it scores 100%. GEPA found instructions that teach the model to count words explicitly before outputting.
-- **GEPA's generated prompts**: The optimizer discovers a structured procedure — draft each line, enumerate words to verify count, rewrite if wrong, do a final pass. This is exactly what a human prompt engineer would discover through trial and error.
-- **Try a different student model**: Change `STUDENT_MODEL` to `Kimi-K2.6` and re-run. The optimizer will generate different instructions tuned to that model's quirks.
+* **Real improvement**: Mistral baseline scores 0% on the multi-constraint task (wrong word count). After optimization, it scores 100%. GEPA found instructions that teach the model to count words explicitly before outputting.
+* **GEPA's generated prompts**: The optimizer discovers a structured procedure — draft each line, enumerate words to verify count, rewrite if wrong, do a final pass. This is exactly what a human prompt engineer would discover through trial and error.
+* **Try a different student model**: Change `STUDENT_MODEL` to `Kimi-K2.6` and re-run. The optimizer will generate different instructions tuned to that model's quirks.
 
 ### Discussion
 
-- How does automated prompt optimization compare to manual tweaking?
-- When would you use DSPy in production vs. hand-tuning?
-- What tasks benefit most from prompt optimization vs. needing a better model?
+* How does automated prompt optimization compare to manual tweaking?
+* When would you use DSPy in production vs. hand-tuning?
+* What tasks benefit most from prompt optimization vs. needing a better model?
 
 ---
 
 ## Recap
 
 | What we tested | Winner(s) | What helps weaker models |
-|----------------|-----------|--------------------------|
+| -------------- | --------- | ------------------------ |
 | Raw reasoning (counting, spatial) | gpt-5.5, Kimi | Chain-of-thought prompts, code tools |
 | Grounding / hallucination | gpt-5.5, Kimi, DeepSeek | Stronger system prompt instructions |
 | Tool arg normalization | gpt-5.5, Kimi | Tighter parameter descriptions, examples |

@@ -99,6 +99,7 @@ MAF documentation: https://learn.microsoft.com/agent-framework/
     All four models handle multilingual well — no meaningful correctness variance found.
 - [x] Try code execution (with monty, maybe with tool calling)
 - [x] Add evals
+- [ ] Add ASSERT- https://github.com/responsibleai/ASSERT - on an agent
 
 ## Package management
 
