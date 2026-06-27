@@ -7,7 +7,7 @@ from openai import OpenAI
 
 load_dotenv()
 
-endpoint = os.environ["FOUNDRY_MODELS_ENDPOINT"] + "/openai/v1"
+endpoint = os.environ["FOUNDRY_MODELS_ENDPOINT"]
 api_key = os.environ["FOUNDRY_API_KEY"]
 
 # === Choose a model (comment/uncomment) ===

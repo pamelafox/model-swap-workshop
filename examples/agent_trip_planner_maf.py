@@ -36,7 +36,7 @@ deployment_name = os.environ.get("FOUNDRY_OPENAI_DEPLOYMENT", MODEL)
 
 client = OpenAIChatClient(
     model=deployment_name,
-    azure_endpoint=endpoint,
+    base_url=endpoint,
     api_key=api_key,
 )
 

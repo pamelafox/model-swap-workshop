@@ -18,15 +18,15 @@ provider = os.environ.get("MODEL_CHOICE", "openai")
 
 if provider == "openai":
     client = AsyncOpenAI(
-        base_url=os.environ["FOUNDRY_MODELS_ENDPOINT"] + "/openai/v1",
+        base_url=os.environ["FOUNDRY_MODELS_ENDPOINT"],
         api_key=os.environ["FOUNDRY_API_KEY"],
     )
-    model = OpenAIChatModel(os.environ["FOUNDRY_OPENAI_DEPLOYMENT"], provider=OpenAIProvider(openai_client=client))
+    model = OpenAIChatModel(os.environ.get("FOUNDRY_OPENAI_DEPLOYMENT", "gpt-5.5"), provider=OpenAIProvider(openai_client=client))
 
 elif provider == "claude":
     foundry_client = AsyncAnthropic(
-        api_key=os.environ["FOUNDRY_API_KEY"],
-        base_url=os.environ["FOUNDRY_MODELS_ENDPOINT"] + "/anthropic",
+        api_key=os.environ["FOUNDRY_ANTHROPIC_API_KEY"],
+        base_url=os.environ["FOUNDRY_ANTHROPIC_MODELS_ENDPOINT"],
     )
     model = AnthropicModel(
         os.environ["FOUNDRY_CLAUDE_DEPLOYMENT"],

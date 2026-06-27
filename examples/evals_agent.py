@@ -25,14 +25,14 @@ from openai import OpenAI
 
 load_dotenv()
 
-endpoint = os.environ["FOUNDRY_MODELS_ENDPOINT"] + "/openai/v1"
+endpoint = os.environ["FOUNDRY_MODELS_ENDPOINT"]
 api_key = os.environ["FOUNDRY_API_KEY"]
 
 client = OpenAI(base_url=endpoint, api_key=api_key)
 
 # Judge model configuration
 model_config: AzureOpenAIModelConfiguration = {
-    "azure_endpoint": os.environ["FOUNDRY_MODELS_ENDPOINT"],
+    "azure_endpoint": os.environ["FOUNDRY_MODELS_ENDPOINT"].removesuffix("/openai/v1"),
     "azure_deployment": os.environ.get("FOUNDRY_OPENAI_DEPLOYMENT", "gpt-5.5"),
     "api_key": api_key,
 }

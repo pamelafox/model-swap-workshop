@@ -24,7 +24,6 @@ EXAMPLES=(
     "single_llm_multi_constraint"
     "rag_responses"
     "rag_messages"
-    "entity_extraction"
     "anthropic_messages"
     "agentframework_agent"
     "langchain_agent"
@@ -131,10 +130,6 @@ run_for_model() {
 
     run_example_case "rag_messages" "$model_name :: rag_messages" \
         uv run examples/rag_messages.py
-
-    run_example_case "entity_extraction" "$model_name :: entity_extraction" \
-        env FOUNDRY_OPENAI_DEPLOYMENT="$model_name" \
-        uv run examples/entity_extraction.py
 
     run_example_case "anthropic_messages" "$model_name :: anthropic_messages" \
         env FOUNDRY_CLAUDE_DEPLOYMENT="$model_name" \

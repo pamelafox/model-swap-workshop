@@ -30,7 +30,7 @@ deployment_name = os.environ.get("FOUNDRY_OPENAI_DEPLOYMENT", MODEL)
 
 
 client = OpenAI(
-    base_url=os.environ["FOUNDRY_MODELS_ENDPOINT"] + "/openai/v1",
+    base_url=os.environ["FOUNDRY_MODELS_ENDPOINT"],
     api_key=os.environ["FOUNDRY_API_KEY"],
 )
 

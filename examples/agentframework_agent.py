@@ -14,10 +14,10 @@ load_dotenv()
 
 endpoint = os.environ["FOUNDRY_MODELS_ENDPOINT"]
 api_key = os.environ["FOUNDRY_API_KEY"]
-deployment_name = os.environ["FOUNDRY_OPENAI_DEPLOYMENT"]
+deployment_name = os.environ.get("FOUNDRY_OPENAI_DEPLOYMENT", "gpt-5.5")
 client = OpenAIChatClient(
     model=deployment_name,
-    azure_endpoint=endpoint,
+    base_url=endpoint,
     api_key=api_key,
 )
 

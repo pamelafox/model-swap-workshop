@@ -6,10 +6,14 @@ from openai import OpenAI
 
 load_dotenv()
 
-endpoint = os.environ["FOUNDRY_MODELS_ENDPOINT"] + "/openai/v1"
+endpoint = os.environ["FOUNDRY_MODELS_ENDPOINT"]
 api_key = os.environ["FOUNDRY_API_KEY"]
-deployment_name = os.environ["FOUNDRY_OPENAI_DEPLOYMENT"]
-deployment_name = "DeepSeek-V4-Flash"
+
+MODEL = "DeepSeek-V4-Flash"
+# MODEL = "gpt-5.5"
+# MODEL = "Kimi-K2.6"
+# MODEL = "Mistral-Large-3"
+deployment_name = os.environ.get("FOUNDRY_OPENAI_DEPLOYMENT", MODEL)
 
 client = OpenAI(
     base_url=endpoint,

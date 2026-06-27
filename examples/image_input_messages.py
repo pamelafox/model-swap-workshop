@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-endpoint = os.environ["FOUNDRY_ANTHROPIC_MODELS_ENDPOINT"] + "/anthropic"
+endpoint = os.environ["FOUNDRY_ANTHROPIC_MODELS_ENDPOINT"]
 api_key = os.environ["FOUNDRY_ANTHROPIC_API_KEY"]
 
 # === Choose a model (comment/uncomment) ===

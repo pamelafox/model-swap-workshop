@@ -16,6 +16,7 @@ import json
 from enum import Enum
 
 import rich
+from anthropic import Anthropic
 from dotenv import load_dotenv
 from openai import OpenAI
 from pydantic import BaseModel
@@ -24,19 +25,22 @@ load_dotenv()
 
 warnings.filterwarnings("ignore", message="Pydantic serializer warnings", category=UserWarning)
 
+api_type = os.environ.get("API_TYPE", "openai_responses")
+
 MODEL = "gpt-5.5"
 # MODEL = "Kimi-K2.6"
 # MODEL = "DeepSeek-V4-Flash"
 # MODEL = "Mistral-Large-3"
 deployment_name = os.environ.get("FOUNDRY_OPENAI_DEPLOYMENT", MODEL)
 
-endpoint = os.environ["FOUNDRY_MODELS_ENDPOINT"] + "/openai/v1"
-api_key = os.environ["FOUNDRY_API_KEY"]
+if api_type != "anthropic_messages":
+    endpoint = os.environ["FOUNDRY_MODELS_ENDPOINT"]
+    api_key = os.environ["FOUNDRY_API_KEY"]
 
-client = OpenAI(
-    base_url=endpoint,
-    api_key=api_key,
-)
+    client = OpenAI(
+        base_url=endpoint,
+        api_key=api_key,
+    )
 
 
 class TripType(str, Enum):
@@ -69,7 +73,26 @@ We want to splurge on business class from San Francisco to Tokyo. \
 Thinking of leaving this Saturday and coming back the following Friday."""
 
 
-if deployment_name.startswith("gpt-"):
+if api_type == "anthropic_messages":
+    endpoint = os.environ["FOUNDRY_ANTHROPIC_MODELS_ENDPOINT"]
+    api_key = os.environ["FOUNDRY_ANTHROPIC_API_KEY"]
+    deployment_name = "claude-sonnet-4-5"
+
+    client = Anthropic(
+        api_key=api_key,
+        base_url=endpoint,
+    )
+
+    response = client.messages.parse(
+        model=deployment_name,
+        max_tokens=1024,
+        system=SYSTEM_PROMPT,
+        messages=[{"role": "user", "content": USER_PROMPT}],
+        output_format=FlightBooking,
+    )
+    rich.print(response.parsed_output)
+
+elif deployment_name.startswith("gpt-"):
     # GPT models support strict structured output via responses.parse
     response = client.responses.parse(
         model=deployment_name,
