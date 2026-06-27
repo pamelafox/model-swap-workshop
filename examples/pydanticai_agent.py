@@ -29,7 +29,7 @@ elif provider == "claude":
         base_url=os.environ["FOUNDRY_ANTHROPIC_MODELS_ENDPOINT"],
     )
     model = AnthropicModel(
-        os.environ["FOUNDRY_CLAUDE_DEPLOYMENT"],
+        os.environ.get("FOUNDRY_ANTHROPIC_DEPLOYMENT", "claude-sonnet-4-5"),
         provider=AnthropicProvider(anthropic_client=foundry_client),
     )
 else:
