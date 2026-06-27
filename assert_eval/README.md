@@ -12,13 +12,16 @@ Claude is on a personal account and out of scope for this lab; the same pydantic
 |---|---|
 | `travel_planner_eval.yaml` | Scenario spec, generated test cases, and judge dimensions. |
 | `travel_planner_target.py` | pydantic-ai wrapper around Pamela's travel tools and system prompt. |
-| `sample_results/` | Committed n=30 ASSERT outputs for the talk. |
+| `sample_results/` | Committed traced n=100 ASSERT outputs (3 models). |
 
 ## Setup
 
 ```bash
-uv add assert-ai arize-phoenix-otel openinference-instrumentation-langchain
+uv pip install "git+https://github.com/responsibleai/ASSERT.git@main"
+uv add arize-phoenix-otel openinference-instrumentation-langchain
 ```
+
+> Trace-capture note: use `WORKSHOP_TRACE=1` to make tool routing and grounding dimensions valid. ASSERT's in-process tracer captures spans; no Phoenix server is required. Keep `openinference-instrumentation-langchain` installed, but remove `openinference-instrumentation-openai` if present because its pydantic incompatibility can corrupt pipeline calls.
 
 ASSERT uses two model paths:
 
@@ -40,18 +43,20 @@ The pipeline model stays fixed at `azure_ai/gpt-5.5` while you swap the target. 
 ## Run the model-swap loop
 
 ```bash
-WORKSHOP_TARGET_MODEL="gpt-5.5"         uv run assert-ai run --config assert_eval/travel_planner_eval.yaml --override run=gpt-5-5
-WORKSHOP_TARGET_MODEL="Mistral-Large-3" uv run assert-ai run --config assert_eval/travel_planner_eval.yaml --override run=mistral-large-3
+WORKSHOP_TARGET_MODEL="gpt-5.5" WORKSHOP_TRACE=1 uv run assert-ai run --config assert_eval/travel_planner_eval.yaml --override run=gpt-5-5
+WORKSHOP_TARGET_MODEL="Kimi-K2.6" WORKSHOP_TRACE=1 uv run assert-ai run --config assert_eval/travel_planner_eval.yaml --override run=kimi-k2-6
+WORKSHOP_TARGET_MODEL="DeepSeek-V4-Flash" WORKSHOP_TRACE=1 uv run assert-ai run --config assert_eval/travel_planner_eval.yaml --override run=deepseek-v4-flash
 ```
 
 PowerShell:
 
 ```powershell
 $env:WORKSHOP_TARGET_MODEL = "gpt-5.5"
+$env:WORKSHOP_TRACE = "1"
 uv run assert-ai run --config assert_eval\travel_planner_eval.yaml --override run=gpt-5-5
 ```
 
-Run from the repo root so `assert_eval.travel_planner_target:chat_sync` resolves. For trace-dependent dimensions, set `WORKSHOP_TRACE=1` and run a Phoenix collector; otherwise routing/grounding are measurement-invalid, not model failures.
+Run from the repo root so `assert_eval.travel_planner_target:chat_sync` resolves.
 
 ## Static results for the DSPy finale
 
@@ -62,7 +67,7 @@ For the finale, show both saved artifacts statically:
 1. ASSERT eval scores per prompt-model variant.
 2. DSPy's optimized prompt.
 
-See [`sample_results/RESULTS.md`](sample_results/RESULTS.md) for the committed n=30 comparison and **full run artifacts** (`scores.jsonl`, `inference_set.jsonl`, `metrics.json`, plus the viewer cache) — with a one-line **copy-to-local-viewer** command so you can browse the runs side-by-side without re-running anything.
+See [`sample_results/RESULTS.md`](sample_results/RESULTS.md) for the committed traced n=100 comparison and **full run artifacts** (`scores.jsonl`, `inference_set.jsonl`, `metrics.json`, plus the viewer cache) — with a one-line **copy-to-local-viewer** command so you can browse the runs side-by-side without re-running anything.
 
 ## Talk beats
 
@@ -70,28 +75,29 @@ See [`sample_results/RESULTS.md`](sample_results/RESULTS.md) for the committed n
 |---|---|---|
 | Premise | “Hold the scenario fixed while the model changes.” | Moves from vibes to measured regressions. |
 | Travel agent | Run the planner normally, then run ASSERT against it. | Converts behavior into scenario scores. |
-| **Viewer compare** | `gpt-5.5` vs `Mistral-Large-3` by dimension. | Answers “which model for this workflow?” |
+| **Viewer compare** | `gpt-5.5` vs `Kimi-K2.6` vs `DeepSeek-V4-Flash` by dimension. | Answers “which model for this workflow?” |
 | DSPy | Use ASSERT scores as the optimization signal, then re-run ASSERT. | Closes measure → optimize → re-measure. |
 
 Line to say:
 
 > “We’re not asking whether one model wins a benchmark. We’re asking: when this travel planner must stay under budget, prefer direct flights, and suggest an activity from remaining budget, which model regresses our scenario?”
 
-## Validation run: n=30, untraced
+## Validation run: n=100, trace-captured
 
-Shared fixed n=30 suite; target swapped; pipeline + judge held at `azure_ai/gpt-5.5`; single judge pass; no trace capture. Read as directional, not a definitive ranking.
+ASSERT's `gpt-5.5` generator produced identical 75-case suites for `gpt-5.5` and `Kimi-K2.6`; `DeepSeek-V4-Flash` hit transient generator failures and completed 55 cases. The table compares the 55 traced cases common to all three models; full raw outputs (75/75/55) are committed.
 
-| Dimension | gpt-5.5 | Mistral-Large-3 |
-|---|---:|---:|
-| **budget_adherence** (fail count, lower=better) | 4/36 (11%) | 10/36 (28%) |
-| **constraint_satisfaction** (fail count, lower=better) | 10/36 (28%) | 24/36 (67%) |
-| overrefusal | N/A (trace-contaminated; 89% vs 97%, excluded) | N/A |
-| tool_routing_correctness / grounded_recommendations | N/A (untraced) | N/A |
+| Dimension | gpt-5.5 | Kimi-K2.6 | DeepSeek-V4-Flash |
+|---|---:|---:|---:|
+| **budget_adherence** (fail %, lower=better) | 2% | 13% | 13% |
+| **constraint_satisfaction** (fail %, lower=better) | 5% | 13% | 27% |
+| **tool_routing_correctness** (fail %, lower=better) | 7% | 35% | 33% |
+| **grounded_recommendations** (fail %, lower=better) | 35% | 62% | 64% |
+| **overrefusal** (fail %, lower=better) | 7% | 15% | 18% |
 
-**Readout:** the smoke-run direction holds and strengthens. On this travel scenario, `gpt-5.5` has materially fewer budget and constraint failures than `Mistral-Large-3`. Still: one `gpt-5.5` judge, one pass, untraced evidence. Treat it as directional evidence for **which model to trust for this workflow**, not a global ranking.
+**Readout:** `gpt-5.5` is best across every dimension. `WORKSHOP_TRACE=1` makes tool routing and grounded recommendations valid signals because the judge can inspect the captured agent spans. `Kimi-K2.6` and `DeepSeek-V4-Flash` are roughly comparable, with DeepSeek weakest on constraint satisfaction.
 
 Known caveats:
 
+- Directional, not definitive: one run per model and no variance estimate.
 - The judge is `gpt-5.5`, so self-grading bias is possible.
-- Single judge pass means no variance estimate.
-- Untraced runs cannot validly score tool routing or grounding, and overrefusal looked trace-contaminated.
+- Comparable percentages use the 55 common traced cases, even though the full per-model raw outputs are committed.

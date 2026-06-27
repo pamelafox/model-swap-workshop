@@ -51,7 +51,6 @@ FOUNDRY_ANTHROPIC_API_KEY=YOUR-FOUNDRY-ANTHROPIC-API-KEY
 The Python files assume that the following Foundry models are deployed, with the deployment names matching the model names:
 
 * "gpt-5.5"
-* "Mistral-Large-3"
 * "Kimi-K2.6"
 * "DeepSeek-V4-Flash"
 * "claude-sonnet-4-5" (for Anthropic examples only)
@@ -83,14 +82,14 @@ These examples test raw LLM capabilities with a single prompt — no tools, no c
 
 ### Exercise: Improve the output
 
-Open [examples/single_llm_letter_counting.py](examples/single_llm_letter_counting.py) and find the `PROMPT` variable. Can you modify it so that **Mistral** or **DeepSeek** gets the correct answer?
+Open [examples/single_llm_letter_counting.py](examples/single_llm_letter_counting.py) and find the `PROMPT` variable. Can you modify it so that **Kimi** or **DeepSeek** gets the correct answer?
 
 Ideas to try:
 - Ask the model to list each occurrence of "e" before counting
 - Break the sentence into individual words and ask it to count per-word
 - Add "Think step by step" or chain-of-thought instructions
 - Tell it to double-check its answer
-- Tweak `temperature` (supported on Mistral, DeepSeek, Kimi — but NOT gpt-5.5)
+- Tweak `temperature` (supported on DeepSeek and Kimi — but NOT gpt-5.5)
 
 
 ### Try other examples
@@ -224,7 +223,7 @@ In this example, we give the model a `calculate` tool and ask a multi-step word 
 ### What to observe
 
 - **gpt-5.5, DeepSeek, Kimi**: 4–5 calls — combine discount + subtraction into one step (e.g. `45 * 0.70`)
-- **Mistral**: 7 calls — decomposes every operation separately (e.g. `45 * 0.30` then `45 - 13.5`)
+- **Less efficient models**: may decompose every operation separately (e.g. `45 * 0.30` then `45 - 13.5`)
 
 ### Exercise: Reduce tool calls
 
@@ -270,7 +269,7 @@ Is fewer tool calls always better? What are the cost/latency tradeoffs of more g
 ### What to observe
 
 - **Parallel vs serial**: gpt-5.5 batches `search_flights` + `search_hotels` in one parallel turn; other models may call them one at a time
-- **Budget checks**: gpt-5.5/DeepSeek verify once; Kimi/Mistral explore multiple flight+hotel combos
+- **Budget checks**: gpt-5.5/DeepSeek verify once; Kimi may explore multiple flight+hotel combos
 - **Dependency awareness**: `search_activities` needs the remaining budget from `check_budget`. Does the model wait for the result, or guess the value and call them in parallel?
 
 ### Exercise: Control agent thoroughness
@@ -310,25 +309,29 @@ The eval lives under [`assert_eval/`](assert_eval/): a behavior spec, a thin pyd
     export AZURE_AI_API_KEY="$FOUNDRY_API_KEY"
     ```
 
-2. Hold the eval fixed; swap only the **target** model — exactly like Part 6, but now scored on the same generated suite:
+2. Hold the eval fixed; swap only the **target** model — exactly like Part 6, but now scored on the same generated suite with trace capture enabled:
 
     ```bash
-    WORKSHOP_TARGET_MODEL="gpt-5.5"         uv run assert-ai run --config assert_eval/travel_planner_eval.yaml --override run=gpt-55
-    WORKSHOP_TARGET_MODEL="Mistral-Large-3" uv run assert-ai run --config assert_eval/travel_planner_eval.yaml --override run=mistral-large-3
+    WORKSHOP_TARGET_MODEL="gpt-5.5" WORKSHOP_TRACE=1 uv run assert-ai run --config assert_eval/travel_planner_eval.yaml --override run=gpt-5-5
+    WORKSHOP_TARGET_MODEL="Kimi-K2.6" WORKSHOP_TRACE=1 uv run assert-ai run --config assert_eval/travel_planner_eval.yaml --override run=kimi-k2-6
+    WORKSHOP_TARGET_MODEL="DeepSeek-V4-Flash" WORKSHOP_TRACE=1 uv run assert-ai run --config assert_eval/travel_planner_eval.yaml --override run=deepseek-v4-flash
     ```
 
-3. **Short on time?** The results are already saved — see [`assert_eval/sample_results/`](assert_eval/sample_results/) for a committed n=30 comparison you can browse in the local viewer without re-running. Copy-to-viewer instructions are in [`sample_results/RESULTS.md`](assert_eval/sample_results/RESULTS.md).
+3. **Short on time?** The results are already saved — see [`assert_eval/sample_results/`](assert_eval/sample_results/) for the committed traced `pamela-travel-planner-model-swap-n100` comparison you can browse in the local viewer without re-running. Copy-to-viewer instructions are in [`sample_results/RESULTS.md`](assert_eval/sample_results/RESULTS.md).
 
 #### What to observe
 
-Same fixed scenario, swap the model, compare per dimension (fail count, lower = better):
+Same fixed scenario, swap the model, compare per dimension on the 55 traced cases common to all three models (fail %, lower = better):
 
-| Dimension | gpt-5.5 | Mistral-Large-3 |
-|-----------|--------:|----------------:|
-| budget_adherence | 4/36 (11%) | 10/36 (28%) |
-| constraint_satisfaction | 10/36 (28%) | 24/36 (67%) |
+| Dimension | gpt-5.5 | Kimi-K2.6 | DeepSeek-V4-Flash |
+|-----------|--------:|----------:|-------------------:|
+| budget_adherence | 2% | 13% | 13% |
+| constraint_satisfaction | 5% | 13% | 27% |
+| tool_routing_correctness | 7% | 35% | 33% |
+| grounded_recommendations | 35% | 62% | 64% |
+| overrefusal | 7% | 15% | 18% |
 
-On *this* travel-planner scenario, gpt-5.5 stays on budget and respects constraints far more reliably than Mistral-Large-3 — the "which model should I ship for this workflow?" answer a leaderboard can't give you. (Directional: single gpt-5.5 judge pass, untraced; enable trace capture for the tool-routing/grounding dimensions — see [`assert_eval/README.md`](assert_eval/README.md).)
+On *this* travel-planner scenario, gpt-5.5 is best on every dimension. Because `WORKSHOP_TRACE=1` captures the agent's spans, `tool_routing_correctness` and `grounded_recommendations` are now real signal instead of invalid trace gaps. Kimi-K2.6 and DeepSeek-V4-Flash are roughly comparable, with DeepSeek weaker on constraint satisfaction. Treat this as directional: one run per model and a single gpt-5.5 judge pass, so self-grading bias is possible.
 
 > Single-metric judges still have their place: `GroundednessEvaluator` ([examples/evals_foundry_judge.py](examples/evals_foundry_judge.py)) and `ToolCallAccuracyEvaluator` ([examples/evals_agent.py](examples/evals_agent.py)) score one isolated signal each. ASSERT scores the whole travel-planning behavior on generated scenarios — the eval you'd actually gate a model swap on.
 
@@ -355,7 +358,7 @@ You've been manually tweaking prompts all workshop. [DSPy](https://dspy.ai/) aut
 
 ### What to observe
 
-- **Real improvement**: Mistral baseline scores 0% on the multi-constraint task (wrong word count). After optimization, it scores 100%. GEPA found instructions that teach the model to count words explicitly before outputting.
+- **Real improvement**: A baseline student model can score 0% on the multi-constraint task (wrong word count). After optimization, it can score 100%. GEPA found instructions that teach the model to count words explicitly before outputting.
 - **GEPA's generated prompts**: The optimizer discovers a structured procedure — draft each line, enumerate words to verify count, rewrite if wrong, do a final pass. This is exactly what a human prompt engineer would discover through trial and error.
 - **Try a different student model**: Change `STUDENT_MODEL` to `Kimi-K2.6` and re-run. The optimizer will generate different instructions tuned to that model's quirks.
 
@@ -379,6 +382,6 @@ DSPy optimizes against a *metric*. Point that metric at the **ASSERT scenario sc
 | Grounding / hallucination | gpt-5.5, Kimi, DeepSeek | Stronger system prompt instructions |
 | Tool arg normalization | gpt-5.5, Kimi | Tighter parameter descriptions, examples |
 | Tool loop efficiency | gpt-5.5, DeepSeek | Fewer calls = lower cost/latency |
-| Travel-planner scenario (budget, constraints) — ASSERT | gpt-5.5 over Mistral-Large-3 | A scenario-grounded eval that scores *your* workflow, not a generic benchmark |
+| Travel-planner scenario (budget, constraints) — ASSERT | gpt-5.5 over Kimi-K2.6 and DeepSeek-V4-Flash | A scenario-grounded eval that scores *your* workflow, not a generic benchmark |
 
 **Key takeaway**: "Just swap the model" is never just swapping the model. Prompts, tool definitions, and output strategies all need tuning per model. Scenario-grounded evals (ASSERT) let you quantify the tradeoffs on *your* workflow instead of guessing — and gate the swap on them.
