@@ -1,0 +1,77 @@
+{
+  "schema_version": 1,
+  "elapsed_s": 5812.546,
+  "stages": {
+    "test_set": {
+      "calls": 34,
+      "input_tokens": 204142,
+      "output_tokens": 65481,
+      "cached_input_tokens": 26880,
+      "cache_creation_input_tokens": 0,
+      "cache_hit_rate": 0.13167305111148123,
+      "per_model": {
+        "azure_ai/gpt-5.5": {
+          "calls": 34,
+          "input_tokens": 204142,
+          "output_tokens": 65481,
+          "cached_input_tokens": 26880,
+          "cache_creation_input_tokens": 0
+        }
+      },
+      "elapsed_s": 185.735
+    },
+    "inference": {
+      "calls": 180,
+      "input_tokens": 408255,
+      "output_tokens": 17755,
+      "cached_input_tokens": 98048,
+      "cache_creation_input_tokens": 0,
+      "cache_hit_rate": 0.24016362322568002,
+      "per_model": {
+        "azure_ai/gpt-5.5": {
+          "calls": 180,
+          "input_tokens": 408255,
+          "output_tokens": 17755,
+          "cached_input_tokens": 98048,
+          "cache_creation_input_tokens": 0
+        }
+      },
+      "elapsed_s": 4674.063
+    },
+    "judge": {
+      "calls": 55,
+      "input_tokens": 650921,
+      "output_tokens": 257466,
+      "cached_input_tokens": 203776,
+      "cache_creation_input_tokens": 0,
+      "cache_hit_rate": 0.3130579594144297,
+      "per_model": {
+        "azure_ai/gpt-5.5": {
+          "calls": 55,
+          "input_tokens": 650921,
+          "output_tokens": 257466,
+          "cached_input_tokens": 203776,
+          "cache_creation_input_tokens": 0
+        }
+      },
+      "elapsed_s": 952.671
+    }
+  },
+  "per_model": {
+    "azure_ai/gpt-5.5": {
+      "calls": 269,
+      "input_tokens": 1263318,
+      "output_tokens": 340702,
+      "cached_input_tokens": 328704,
+      "cache_creation_input_tokens": 0
+    }
+  },
+  "totals": {
+    "calls": 269,
+    "input_tokens": 1263318,
+    "output_tokens": 340702,
+    "cached_input_tokens": 328704,
+    "cache_creation_input_tokens": 0,
+    "cache_hit_rate": 0.2601910207881151
+  }
+}

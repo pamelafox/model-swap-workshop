@@ -1,0 +1,95 @@
+{
+  "schema_version": 1,
+  "elapsed_s": 7428.875,
+  "stages": {
+    "systematize": {
+      "calls": 2,
+      "input_tokens": 5056,
+      "output_tokens": 5928,
+      "cached_input_tokens": 0,
+      "cache_creation_input_tokens": 0,
+      "cache_hit_rate": 0.0,
+      "per_model": {
+        "azure_ai/gpt-5.5": {
+          "calls": 2,
+          "input_tokens": 5056,
+          "output_tokens": 5928,
+          "cached_input_tokens": 0,
+          "cache_creation_input_tokens": 0
+        }
+      },
+      "elapsed_s": 102.969
+    },
+    "test_set": {
+      "calls": 34,
+      "input_tokens": 204142,
+      "output_tokens": 64012,
+      "cached_input_tokens": 19200,
+      "cache_creation_input_tokens": 0,
+      "cache_hit_rate": 0.09405217936534373,
+      "per_model": {
+        "azure_ai/gpt-5.5": {
+          "calls": 34,
+          "input_tokens": 204142,
+          "output_tokens": 64012,
+          "cached_input_tokens": 19200,
+          "cache_creation_input_tokens": 0
+        }
+      },
+      "elapsed_s": 163.688
+    },
+    "inference": {
+      "calls": 260,
+      "input_tokens": 603150,
+      "output_tokens": 23040,
+      "cached_input_tokens": 82944,
+      "cache_creation_input_tokens": 0,
+      "cache_hit_rate": 0.13751803034071128,
+      "per_model": {
+        "azure_ai/gpt-5.5": {
+          "calls": 260,
+          "input_tokens": 603150,
+          "output_tokens": 23040,
+          "cached_input_tokens": 82944,
+          "cache_creation_input_tokens": 0
+        }
+      },
+      "elapsed_s": 6133.875
+    },
+    "judge": {
+      "calls": 75,
+      "input_tokens": 966729,
+      "output_tokens": 315343,
+      "cached_input_tokens": 249600,
+      "cache_creation_input_tokens": 0,
+      "cache_hit_rate": 0.2581902477323014,
+      "per_model": {
+        "azure_ai/gpt-5.5": {
+          "calls": 75,
+          "input_tokens": 966729,
+          "output_tokens": 315343,
+          "cached_input_tokens": 249600,
+          "cache_creation_input_tokens": 0
+        }
+      },
+      "elapsed_s": 1028.219
+    }
+  },
+  "per_model": {
+    "azure_ai/gpt-5.5": {
+      "calls": 371,
+      "input_tokens": 1779077,
+      "output_tokens": 408323,
+      "cached_input_tokens": 351744,
+      "cache_creation_input_tokens": 0
+    }
+  },
+  "totals": {
+    "calls": 371,
+    "input_tokens": 1779077,
+    "output_tokens": 408323,
+    "cached_input_tokens": 351744,
+    "cache_creation_input_tokens": 0,
+    "cache_hit_rate": 0.19771150995712947
+  }
+}

@@ -1,0 +1,55 @@
+{
+  "schema_version": 4,
+  "generator_version": "viewer-read-model-v3",
+  "suite_id": "pamela-travel-planner-model-swap-n100",
+  "run_id": "kimi-k2-6",
+  "source_files": {
+    "inference_set.jsonl": {
+      "path": "inference_set.jsonl",
+      "size_bytes": 13321967,
+      "mtime_ms": 1782559277758
+    },
+    "scores.jsonl": {
+      "path": "scores.jsonl",
+      "size_bytes": 853784,
+      "mtime_ms": 1782560555632
+    },
+    "test_set.jsonl": {
+      "path": "..\\artifacts\\test_set\\v0002\\test_set.jsonl",
+      "size_bytes": 134045,
+      "mtime_ms": 1782552245328
+    },
+    "manifest.json": {
+      "path": "manifest.json",
+      "size_bytes": 1900,
+      "mtime_ms": 1782560551809
+    },
+    "config.yaml": {
+      "path": "config.yaml",
+      "size_bytes": 6046,
+      "mtime_ms": 1782518407354
+    }
+  },
+  "derived_files": {
+    "viewer_prompt_rows.json": {
+      "path": ".viewer\\viewer_prompt_rows.json",
+      "size_bytes": 22474,
+      "mtime_ms": 1782560556038
+    },
+    "viewer_audit_rows.json": {
+      "path": ".viewer\\viewer_audit_rows.json",
+      "size_bytes": 137686,
+      "mtime_ms": 1782560556054
+    },
+    "viewer_transcript_index.json": {
+      "path": ".viewer\\viewer_transcript_index.json",
+      "size_bytes": 12265,
+      "mtime_ms": 1782560555758
+    },
+    "viewer_score_index.json": {
+      "path": ".viewer\\viewer_score_index.json",
+      "size_bytes": 12100,
+      "mtime_ms": 1782560556054
+    }
+  }
+}

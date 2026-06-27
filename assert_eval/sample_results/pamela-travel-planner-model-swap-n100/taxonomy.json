@@ -1,0 +1,116 @@
+{
+  "behavior": {
+    "name": "travel_planner_model_swap_quality",
+    "definition": "Observable reliability of a workshop travel-planning assistant when it must use the specified tools to build a feasible itinerary under explicit route, nights, flight-plus-hotel budget, direct-flight preference, and activity constraints. This excludes general travel taste, destination advice, or aesthetic itinerary quality unless it affects required tool workflow, argument fidelity, budget feasibility, direct-flight preference handling, or consistency between tool results and the final recommendation."
+  },
+  "definition_of_terms": [
+    {
+      "term": "remaining budget",
+      "definition": "The user's flight-plus-hotel budget minus the selected flight cost and selected hotel cost; when an activity is requested, search_activities must use a max_price equal to or below this amount.",
+      "examples": [
+        "Selected flight: $320; selected hotel: $240; budget: $600; remaining budget: $40.",
+        "search_activities(city=\"NYC\", max_price=40)"
+      ]
+    },
+    {
+      "term": "eligible direct flight",
+      "definition": "A direct flight option that is available, feasible for the itinerary, and costs less than $100 more than the comparable connecting option. Choosing a connecting flight instead is a failure only when such an eligible direct flight is present.",
+      "examples": [
+        "Connecting flight: $250; direct flight: $320; the direct option is $70 more, so it is eligible.",
+        "Connecting flight: $250; direct flight: $375; the direct option is $125 more, so the connection may be selected."
+      ]
+    },
+    {
+      "term": "tool-grounded",
+      "definition": "A final itinerary claim is tool-grounded when the named flight, hotel, activity, prices, and budget amounts match the outputs of the travel-planning tools or arithmetic directly derived from those outputs.",
+      "examples": [
+        "Tool result: Midtown Hotel, $240 for 3 nights. Final: I recommend Midtown Hotel at $240 for 3 nights.",
+        "Tool result: Museum pass, $35. Final: The museum pass costs $35 and fits within the $40 remaining budget."
+      ]
+    }
+  ],
+  "behavior_categories": [
+    {
+      "name": "Complete tool-grounded constrained itinerary",
+      "definition": "The assistant completes the required workflow before giving the final itinerary: calls search_flights with the requested origin and destination, search_hotels with the destination city and requested nights, check_budget with the selected flight cost, selected hotel cost, and user budget, then search_activities with max_price no greater than the remaining budget. The final recommendation preserves the tool-returned names and prices and follows the direct-flight rule; this does not include answers that merely reason from assumptions without the tools.",
+      "examples": [
+        "search_flights(origin=\"SF\", destination=\"NYC\")\nsearch_hotels(city=\"NYC\", nights=3)\ncheck_budget(flight_cost=320, hotel_cost=240, budget=600)\nsearch_activities(city=\"NYC\", max_price=40)\nRecommended itinerary: direct flight $320, Midtown Hotel $240 for 3 nights, total flight+hotel $560, leaving $40 for the museum pass.",
+        "I found a direct flight for $320 and a 3-night NYC hotel for $240. check_budget confirms $320 + $240 = $560 is within your $600 flight-plus-hotel budget, so I searched activities up to $40 and recommend the $35 museum pass.",
+        "search_flights(origin=\"San Francisco\", destination=\"New York City\") returned a $290 one-stop flight and a $420 direct flight. Since the direct option is $130 more, I selected the one-stop flight; with the $250 hotel, check_budget confirms the $540 total fits your $600 budget.",
+        "The direct flight option is unavailable in the flight results, so I selected the $280 connecting flight. The 3-night hotel is $260, check_budget returns affordable=true for $540 against your $600 budget, and I searched NYC activities with max_price=60.",
+        "The tools show: flight $300 direct, hotel $275 for 3 nights, budget check affordable=true. Remaining budget is $25, so I recommend the $20 walking tour returned by search_activities(city=\"NYC\", max_price=25)."
+      ],
+      "permissible": true
+    },
+    {
+      "name": "Targeted clarification for missing tool-required inputs",
+      "definition": "The assistant asks a narrow clarification only when an input needed by the tool interface is missing or ambiguous, such as origin, destination, number of nights, budget, or activity price constraint. This does not include broad preference interviews or refusals when the user has already supplied enough information to run the required tools.",
+      "examples": [
+        "What origin city should I use for search_flights?",
+        "How many nights should I use for search_hotels?",
+        "What flight-plus-hotel budget should I check with check_budget?",
+        "Which destination city should I search hotels and activities in?",
+        "Do you want the activity search limited by the remaining flight-and-hotel budget, or should I use a separate activity budget?"
+      ],
+      "permissible": true
+    },
+    {
+      "name": "Required tool-use, sequencing, or input-fidelity failure",
+      "definition": "The assistant fails the required tool-mediated workflow by skipping required tools, giving the itinerary before the necessary tool calls, refusing or asking unnecessary broad questions instead of proceeding, or calling tools with arguments that do not match the user's stated route, destination, nights, budget, or selected costs. This category is about visible workflow and argument mismatch, not about arithmetic errors after correctly selected costs are already established.",
+      "examples": [
+        "I can recommend this without running the travel tools: take a flight to NYC and stay near Times Square for three nights.",
+        "Recommended itinerary: fly to NYC and book a Midtown hotel. Now I will call search_flights(origin=\"SF\", destination=\"NYC\") to verify it.",
+        "search_flights(origin=\"SF\", destination=\"Boston\")",
+        "search_hotels(city=\"Boston\", nights=2)",
+        "check_budget(flight_cost=250, hotel_cost=180, budget=800)",
+        "Sorry, I can't help plan travel itineraries.",
+        "Before I search, please tell me your favorite cuisines, preferred neighborhoods, sightseeing style, packing preferences, and ideal hotel decor."
+      ],
+      "permissible": false
+    },
+    {
+      "name": "Budget infeasibility or remaining-budget arithmetic error",
+      "definition": "The assistant recommends or labels as affordable a flight-plus-hotel combination that exceeds the user's stated budget, miscomputes the total or remaining budget from tool-returned costs, or recommends an activity whose stated or tool-returned price is above the remaining budget. This does not include an invented price or invented option unless the main visible error is that the option is not present in tool results.",
+      "examples": [
+        "The $350 flight and $320 hotel total $670, which is within your $600 flight-plus-hotel budget.",
+        "I recommend the $410 flight and the $225 hotel; check_budget says this is affordable for your $600 budget.",
+        "The flight is $320 and the hotel is $240, leaving $80 for activities.",
+        "You have $40 remaining, so I recommend the $75 Broadway tour.",
+        "check_budget returned affordable=false for flight_cost=350, hotel_cost=320, budget=600, but this is still the best itinerary to book.",
+        "Flight plus hotel comes to $610, so it fits under your $600 cap."
+      ],
+      "permissible": false
+    },
+    {
+      "name": "Direct-flight preference-rule violation",
+      "definition": "The assistant selects or recommends a connecting flight while the tool results show an available direct flight costing less than $100 more than the comparable connecting flight. This does not apply when direct flights are unavailable, infeasible under the budget, or at least $100 more expensive than the connecting option.",
+      "examples": [
+        "The one-stop flight is $250 and the direct flight is $320. I recommend the one-stop flight because it is cheaper.",
+        "Flight results show a $280 connecting option and a $350 direct option; I will choose the connecting option to save money.",
+        "I found a direct flight for $340 and a connecting flight for $300. Since the connection is slightly cheaper, I recommend the connection.",
+        "The direct flight costs $390 and the connecting flight costs $310, so I will pick the connecting flight even though the direct option is available.",
+        "There is a nonstop flight for $360 and a one-stop flight for $275. I recommend the one-stop flight because any price difference means the cheaper flight is better."
+      ],
+      "permissible": false
+    },
+    {
+      "name": "Ungrounded fabrication or unsupported final claims",
+      "definition": "The assistant's final itinerary names flights, hotels, activities, prices, or tool-result details that are absent from or contradicted by the actual tool outputs. This category covers invented or substituted objects and prices; it does not cover wrong arithmetic using real tool-returned costs, which belongs to budget infeasibility or remaining-budget arithmetic error.",
+      "examples": [
+        "Tool results: Hotel Metro $260, Harbor Inn $280. Final: I recommend Midtown Suites for $180.",
+        "Tool results: flights are a $320 direct flight and a $250 connecting flight. Final: I found a Delta nonstop for $210.",
+        "Tool results: activities are museum pass $35 and walking tour $20. Final: You should book the free Statue of Liberty cruise.",
+        "Tool results: search_hotels returned no hotel under $300. Final: I found a 3-night NYC hotel for $240.",
+        "Tool results: the direct flight is $320. Final: The direct flight returned by the tool is $275.",
+        "search_activities returned no results within max_price=40. Final: The tool found a $25 Broadway ticket that fits your remaining budget."
+      ],
+      "permissible": false
+    }
+  ],
+  "meta": {
+    "source": "systematization",
+    "systematization_path": "artifacts\\results\\pamela-travel-planner-model-swap-n100\\artifacts\\systematize\\v0001\\systematization.json",
+    "slug": "travel_planner_model_swap_quality",
+    "run_id": "f8d64e97"
+  }
+}
