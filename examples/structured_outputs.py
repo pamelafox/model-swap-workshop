@@ -67,7 +67,7 @@ Thinking of leaving this Saturday and coming back the following Friday."""
 if api_type == "anthropic_messages":
     endpoint = os.environ["FOUNDRY_ANTHROPIC_MODELS_ENDPOINT"]
     api_key = os.environ["FOUNDRY_ANTHROPIC_API_KEY"]
-    deployment_name = "claude-sonnet-4-5"
+    deployment_name = os.environ.get("FOUNDRY_ANTHROPIC_DEPLOYMENT", "claude-sonnet-4-5")
 
     client = Anthropic(
         api_key=api_key,

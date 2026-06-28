@@ -25,9 +25,6 @@ EXAMPLES=(
     "rag_responses"
     "rag_messages"
     "anthropic_messages"
-    "agentframework_agent"
-    "langchain_agent"
-    "pydanticai_agent"
 )
 
 if [[ -n "${ONLY_MODEL:-}" ]]; then
@@ -135,29 +132,6 @@ run_for_model() {
         env FOUNDRY_ANTHROPIC_DEPLOYMENT="$model_name" \
         uv run examples/anthropic_messages.py
 
-    run_example_case "agentframework_agent" "$model_name :: agentframework_agent (openai)" \
-        env FOUNDRY_OPENAI_DEPLOYMENT="$model_name" \
-        uv run examples/agentframework_agent.py
-
-    run_example_case "agentframework_agent" "$model_name :: agentframework_agent (claude)" \
-        env FOUNDRY_ANTHROPIC_DEPLOYMENT="$model_name" \
-        uv run examples/agentframework_agent.py
-
-    run_example_case "langchain_agent" "$model_name :: langchain_agent (openai)" \
-        env FOUNDRY_OPENAI_DEPLOYMENT="$model_name" \
-        uv run examples/langchain_agent.py
-
-    run_example_case "langchain_agent" "$model_name :: langchain_agent (claude)" \
-        env FOUNDRY_ANTHROPIC_DEPLOYMENT="$model_name" \
-        uv run examples/langchain_agent.py
-
-    run_example_case "pydanticai_agent" "$model_name :: pydanticai_agent (openai)" \
-        env FOUNDRY_OPENAI_DEPLOYMENT="$model_name" \
-        uv run examples/pydanticai_agent.py
-
-    run_example_case "pydanticai_agent" "$model_name :: pydanticai_agent (claude)" \
-        env FOUNDRY_ANTHROPIC_DEPLOYMENT="$model_name" \
-        uv run examples/pydanticai_agent.py
 }
 
 for model_name in "${MODELS[@]}"; do
