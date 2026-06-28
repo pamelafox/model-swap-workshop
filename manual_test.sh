@@ -125,18 +125,18 @@ run_for_model() {
         env FOUNDRY_OPENAI_DEPLOYMENT="$model_name" \
         uv run examples/rag_responses.py
 
-    run_example_case "rag_messages" "$model_name :: rag_messages" \
-        uv run examples/rag_messages.py
-
-    run_example_case "anthropic_messages" "$model_name :: anthropic_messages" \
-        env FOUNDRY_ANTHROPIC_DEPLOYMENT="$model_name" \
-        uv run examples/anthropic_messages.py
-
 }
 
 for model_name in "${MODELS[@]}"; do
     run_for_model "$model_name"
 done
+
+# Anthropic/Claude examples — run once (not per OpenAI model)
+run_example_case "rag_messages" "claude :: rag_messages" \
+    uv run examples/rag_messages.py
+
+run_example_case "anthropic_messages" "claude :: anthropic_messages" \
+    uv run examples/anthropic_messages.py
 
 echo
 echo "========================================"
