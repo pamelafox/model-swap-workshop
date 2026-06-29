@@ -1,0 +1,9 @@
+Evaluating tool calling: gpt-5.5
+============================================================
+  ✅ PASS  attendee_normalization   
+  ❌ FAIL  date_math_next_week        failed: ['date_is_july_8_or_9']
+  ✅ PASS  ambiguous_duration       
+  ✅ PASS  spanish_request          
+  ✅ PASS  formal_from_informal     
+
+  Result: 4/5 passed

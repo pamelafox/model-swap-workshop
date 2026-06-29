@@ -1,0 +1,26 @@
+Running groundedness evaluation with LLM judge
+Judge model: gpt-5.5
+Test cases: 12
+
+  ✅ gpt-5.5              pass   The response’s claims about carpenter bee nesting are directly supported by the context, and it accurately notes that honey bee nest-building methods are not described. The references to honey bees being associated with hives/colonies and producing honey are supported by the context or citation titles.
+  ❌ Mistral-Large-3      fail   The response includes multiple claims not supported by the context, including honey bees building wax combs in cavities, hexagonal cells, wax glands, eusocial colony structure, and carpenter bees being solitary with each female provisioning her own nest. The context supports the carpenter bee wood-carving/T-shaped nest details, but not the honey bee comparison or social-structure claims.
+  ❌ Kimi-K2.6            fail   Most carpenter-bee nesting details are supported, and the response correctly notes that honey-bee nest construction is not described. However, it adds unsupported claims such as honey bees being mentioned as “hosts for certain pathogens” and refers to excavated “chambers,” which are not stated in the context.
+  ❌ DeepSeek-V4-Flash    fail   The carpenter bee nesting details are supported, and the response correctly notes that honey bee nest-building is not described. However, the claim that honey bees build their nests in hives is an inference not directly supported by the context, which only mentions honey bee hives and honey production.
+  ✅ gpt-5.5              pass   The response’s claims about limiting flight duration, flying during cooler times, heat from flight muscle activity, and temperature limits are supported by the provided California carpenter bee context. It does not add substantive unsupported details beyond the context.
+  ❌ Mistral-Large-3      fail   The response introduces unsupported claims that carpenter bees use physiological mechanisms to dissipate excess heat and have physiological adaptations for thermoregulation. The context supports behavioral timing/limited flight and temperature tolerances, but does not detail heat-dissipation mechanisms for carpenter bees.
+  ✅ gpt-5.5              pass   All claims in the response are supported by the provided context about Xylocopa californica predators, nest parasites, honey bee interactions, and Ascosphaera apis infection.
+  ✅ Mistral-Large-3      pass   The response’s claims about the ladder-backed woodpecker, bee fly, honey bee impacts, and Ascosphaera apis infection are all supported by the provided context. It also appropriately limits the answer to Xylocopa californica as described in the sources.
+  ✅ Kimi-K2.6            pass   All factual claims in the response are supported by the provided context about Xylocopa californica, including heat absorption, limiting flight duration/timing, flight-muscle heat, and temperature limits.
+  ✅ DeepSeek-V4-Flash    pass   All factual claims in the response are supported by the provided California carpenter bee context, including heat absorption, limiting flight time, flying during cooler times, and temperature tolerance ranges.
+  ✅ Kimi-K2.6            pass   All claims in the response are supported by the provided context, including the listed predators/parasites, honey bee hive attacks, and the Ascosphaera apis infection details for X. californica.
+  ✅ DeepSeek-V4-Flash    pass   All factual claims in the response are supported by the context: the ladder-backed woodpecker attacks nests, Anthrax simson parasitizes nests, honey bees can attack and kill X. californica near hives, and Ascosphaera apis has been found in X. californica larvae with spore cysts beneath the integument.
+
+============================================================
+  SUMMARY
+============================================================
+  Model                Passed   Failed   Score
+  -------------------- -------- -------- --------
+  DeepSeek-V4-Flash    2        1        2/3
+  Kimi-K2.6            2        1        2/3
+  Mistral-Large-3      1        2        1/3
+  gpt-5.5              3        0        3/3

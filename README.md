@@ -314,23 +314,15 @@ Now quantify what you observed.
 uv run examples/evals_basic.py
 ```
 
-This runs test cases (letter counting, spatial reasoning, tool calling) across all models and checks against ground truth. No LLM judge needed — just exact match and schema validation.
+This runs 5 tool-calling edge cases across all models and checks the tool call arguments programmatically. Cases include attendee normalization, date math, ambiguous duration, a request in Spanish, and informal-to-formal extraction. No LLM judge needed — just programmatic checks.
 
-### 7b: LLM judge (GroundednessEvaluator)
-
-```bash
-uv run examples/evals_foundry_judge.py
-```
-
-Uses `azure-ai-evaluation` with `GroundednessEvaluator` to score the RAG outputs. The judge (gpt-5.5) evaluates whether each model's response is grounded in the provided sources.
-
-### 7c: Agent eval (ToolCallAccuracyEvaluator)
+### 7b: LLM-as-judge (groundedness)
 
 ```bash
-uv run examples/evals_agent.py
+uv run examples/evals_llm_judge.py
 ```
 
-Uses `ToolCallAccuracyEvaluator` to score whether models made correct tool calls with correct arguments, given the system prompt context.
+Uses a direct LLM call with a groundedness prompt to evaluate the RAG outputs from all models. The judge (gpt-5.5) checks whether each model's response is grounded in the provided sources, returning a binary pass/fail verdict with reasoning. Models that hallucinate facts not in the sources will fail.
 
 ---
 
