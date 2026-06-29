@@ -1,0 +1,40 @@
+Model: gpt-5.5
+User: I need to fly from SF to NYC next month for 3 nights. My total budget is 
+$600 for flights and hotel combined. I prefer direct flights if possible. Also 
+suggest an activity I can do with whatever budget is left over.
+
+  Turn 1 (parallel)
+    search_flights(origin='SF', destination='NYC')
+    search_hotels(city='NYC', nights=3)
+  Turn 2 (single)
+    check_budget(flight_cost=280.0, hotel_cost=285.0, budget=600.0)
+  Turn 3 (single)
+    search_activities(city='NYC', max_price=35.0)
+
+Here’s a NYC trip option that fits your $600 flight + hotel budget:             
+
+Flight: United                                                                  
+
+ • SF → NYC                                                                     
+ • Direct flight                                                                
+ • Duration: 5h 30m                                                             
+ • Cost: $280                                                                   
+
+Hotel: The Pod Hotel                                                            
+
+ • Neighborhood: Midtown                                                        
+ • Rating: 4.2                                                                  
+ • $95/night × 3 nights = $285                                                  
+
+Total flight + hotel: $565                                                      
+Remaining budget: $35                                                           
+
+I picked the direct United flight because it’s only $85 more than the cheaper   
+connecting Delta flight, and you prefer direct flights.                         
+
+Activity options within your remaining $35:                                     
+
+ • Statue of Liberty Tour — $25                                                 
+ • Museum of Modern Art — $30                                                   
+
+My recommendation: Statue of Liberty Tour for $25, leaving you about $10 extra. 

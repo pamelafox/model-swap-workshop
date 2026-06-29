@@ -28,7 +28,7 @@ load_dotenv()
 
 # Use the same Foundry endpoint and deployment attendees already have configured
 model_config: AzureOpenAIModelConfiguration = {
-    "azure_endpoint": os.environ["FOUNDRY_MODELS_ENDPOINT"],
+    "azure_endpoint": os.environ["FOUNDRY_MODELS_ENDPOINT"].removesuffix("/openai/v1"),
     "azure_deployment": os.environ.get("FOUNDRY_OPENAI_DEPLOYMENT", "gpt-5.5"),
     "api_key": os.environ["FOUNDRY_API_KEY"],
 }

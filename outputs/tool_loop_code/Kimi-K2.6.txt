@@ -1,0 +1,148 @@
+Sentence: The elderly gentleman eagerly entered the elevator.
+Lowercase 'e' count: 13
+Uppercase 'E' count: 0
+Total 'e'/'E' count: 13
+Position 2: 'e'
+Position 4: 'e'
+Position 7: 'e'
+Position 13: 'e'
+Position 17: 'e'
+Position 22: 'e'
+Position 25: 'e'
+Position 30: 'e'
+Position 33: 'e'
+Position 35: 'e'
+Position 40: 'e'
+Position 42: 'e'
+Position 44: 'e'
+User: How many times does the letter "e" appear in the following sentence? Count carefully.
+"The elderly gentleman eagerly entered the elevator."
+
+[Tool call] execute_python:
+  sentence = "The elderly gentleman eagerly entered the elevator."
+# Remove the period and count lowercase 'e'
+clean_sentence = sentence.replace('.', '')
+e_count_lower = clean_sentence.count('e')
+# Also count uppercase 'E'
+e_count_upper = clean_sentence.count('E')
+total = e_count_lower + e_count_upper
+print(f"Sentence: {sentence}")
+print(f"Lowercase 'e' count: {e_count_lower}")
+print(f"Uppercase 'E' count: {e_count_upper}")
+print(f"Total 'e'/'E' count: {total}")
+
+# Let's also show positions for verification
+for i, char in enumerate(sentence):
+    if char.lower() == 'e':
+        print(f"Position {i}: '{char}'")
+[Result] None
+
+[Tool call] execute_python:
+  sentence = "The elderly gentleman eagerly entered the elevator."
+count = sum(1 for char in sentence if char.lower() == 'e')
+count
+[Result] 13
+
+Traceback (most recent call last):
+  File "/Users/pamelafox/model-swap-workshop/.venv/lib/python3.14/site-packages/httpx/_transports/default.py", line 101, in map_httpcore_exceptions
+    yield
+  File "/Users/pamelafox/model-swap-workshop/.venv/lib/python3.14/site-packages/httpx/_transports/default.py", line 250, in handle_request
+    resp = self._pool.handle_request(req)
+  File "/Users/pamelafox/model-swap-workshop/.venv/lib/python3.14/site-packages/httpcore/_sync/connection_pool.py", line 256, in handle_request
+    raise exc from None
+  File "/Users/pamelafox/model-swap-workshop/.venv/lib/python3.14/site-packages/httpcore/_sync/connection_pool.py", line 236, in handle_request
+    response = connection.handle_request(
+        pool_request.request
+    )
+  File "/Users/pamelafox/model-swap-workshop/.venv/lib/python3.14/site-packages/httpcore/_sync/connection.py", line 103, in handle_request
+    return self._connection.handle_request(request)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/Users/pamelafox/model-swap-workshop/.venv/lib/python3.14/site-packages/httpcore/_sync/http11.py", line 136, in handle_request
+    raise exc
+  File "/Users/pamelafox/model-swap-workshop/.venv/lib/python3.14/site-packages/httpcore/_sync/http11.py", line 106, in handle_request
+    ) = self._receive_response_headers(**kwargs)
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "/Users/pamelafox/model-swap-workshop/.venv/lib/python3.14/site-packages/httpcore/_sync/http11.py", line 177, in _receive_response_headers
+    event = self._receive_event(timeout=timeout)
+  File "/Users/pamelafox/model-swap-workshop/.venv/lib/python3.14/site-packages/httpcore/_sync/http11.py", line 217, in _receive_event
+    data = self._network_stream.read(
+        self.READ_NUM_BYTES, timeout=timeout
+    )
+  File "/Users/pamelafox/model-swap-workshop/.venv/lib/python3.14/site-packages/httpcore/_backends/sync.py", line 126, in read
+    with map_exceptions(exc_map):
+         ~~~~~~~~~~~~~~^^^^^^^^^
+  File "/Users/pamelafox/.local/share/uv/python/cpython-3.14.4-macos-aarch64-none/lib/python3.14/contextlib.py", line 162, in __exit__
+    self.gen.throw(value)
+    ~~~~~~~~~~~~~~^^^^^^^
+  File "/Users/pamelafox/model-swap-workshop/.venv/lib/python3.14/site-packages/httpcore/_exceptions.py", line 14, in map_exceptions
+    raise to_exc(exc) from exc
+httpcore.ReadError: [Errno 54] Connection reset by peer
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/pamelafox/model-swap-workshop/.venv/lib/python3.14/site-packages/openai/_base_client.py", line 1037, in request
+    response = self._send_request(
+        request,
+        stream=stream or self._should_stream_response_body(request=request),
+        **kwargs,
+    )
+  File "/Users/pamelafox/model-swap-workshop/.venv/lib/python3.14/site-packages/openai/_client.py", line 440, in _send_request
+    return self._send_with_auth_retry(request, stream=stream, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pamelafox/model-swap-workshop/.venv/lib/python3.14/site-packages/openai/_client.py", line 418, in _send_with_auth_retry
+    response = super()._send_request(request, stream=stream, **kwargs)
+  File "/Users/pamelafox/model-swap-workshop/.venv/lib/python3.14/site-packages/openai/_base_client.py", line 964, in _send_request
+    return self._client.send(request, stream=stream, **kwargs)
+           ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pamelafox/model-swap-workshop/.venv/lib/python3.14/site-packages/httpx/_client.py", line 914, in send
+    response = self._send_handling_auth(
+        request,
+    ...<2 lines>...
+        history=[],
+    )
+  File "/Users/pamelafox/model-swap-workshop/.venv/lib/python3.14/site-packages/httpx/_client.py", line 942, in _send_handling_auth
+    response = self._send_handling_redirects(
+        request,
+        follow_redirects=follow_redirects,
+        history=history,
+    )
+  File "/Users/pamelafox/model-swap-workshop/.venv/lib/python3.14/site-packages/httpx/_client.py", line 979, in _send_handling_redirects
+    response = self._send_single_request(request)
+  File "/Users/pamelafox/model-swap-workshop/.venv/lib/python3.14/site-packages/httpx/_client.py", line 1014, in _send_single_request
+    response = transport.handle_request(request)
+  File "/Users/pamelafox/model-swap-workshop/.venv/lib/python3.14/site-packages/httpx/_transports/default.py", line 249, in handle_request
+    with map_httpcore_exceptions():
+         ~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/pamelafox/.local/share/uv/python/cpython-3.14.4-macos-aarch64-none/lib/python3.14/contextlib.py", line 162, in __exit__
+    self.gen.throw(value)
+    ~~~~~~~~~~~~~~^^^^^^^
+  File "/Users/pamelafox/model-swap-workshop/.venv/lib/python3.14/site-packages/httpx/_transports/default.py", line 118, in map_httpcore_exceptions
+    raise mapped_exc(message) from exc
+httpx.ReadError: [Errno 54] Connection reset by peer
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/pamelafox/model-swap-workshop/examples/tool_loop_code.py", line 70, in <module>
+    response = client.responses.create(
+        model=deployment_name,
+    ...<7 lines>...
+        store=False,
+    )
+  File "/Users/pamelafox/model-swap-workshop/.venv/lib/python3.14/site-packages/openai/resources/responses/responses.py", line 954, in create
+    return self._post(
+           ~~~~~~~~~~^
+        "/responses",
+        ^^^^^^^^^^^^^
+    ...<46 lines>...
+        stream_cls=Stream[ResponseStreamEvent],
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/pamelafox/model-swap-workshop/.venv/lib/python3.14/site-packages/openai/_base_client.py", line 1332, in post
+    return cast(ResponseT, self.request(cast_to, opts, stream=stream, stream_cls=stream_cls))
+                           ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pamelafox/model-swap-workshop/.venv/lib/python3.14/site-packages/openai/_base_client.py", line 1072, in request
+    raise APIConnectionError(request=request) from err
+openai.APIConnectionError: Connection error.

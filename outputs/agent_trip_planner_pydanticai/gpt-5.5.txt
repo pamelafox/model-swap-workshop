@@ -1,0 +1,41 @@
+Model: gpt-5.5
+User: I need to fly from SF to NYC next month for 3 nights. My total budget is 
+$600 for flights and hotel combined. I prefer direct flights if possible. Also 
+suggest an activity I can do with whatever budget is left over.
+
+  Turn 1 (parallel)
+    search_flights(origin='SF', destination='NYC')
+    search_hotels(city='NYC', nights=3)
+  Turn 2 (single)
+    check_budget(flight_cost=280, hotel_cost=285, budget=600)
+  Turn 3 (single)
+    search_activities(city='NYC', max_price=35)
+
+Here’s a good option that fits your $600 total budget for flight + hotel:       
+
+Flight: United — $280                                                           
+
+ • SF → NYC                                                                     
+ • Direct                                                                       
+ • Duration: 5h 30m                                                             
+
+Hotel: The Pod Hotel — $285 total for 3 nights                                  
+
+ • $95/night                                                                    
+ • Midtown                                                                      
+ • Rating: 4.2                                                                  
+
+Total flight + hotel: $565                                                      
+Remaining budget: $35                                                           
+
+Since you prefer direct flights, I’d recommend the United direct flight. The    
+cheaper Delta option is $195 but has 1 stop, and the direct United flight is    
+only $85 more, so it’s worth choosing the direct flight.                        
+
+With your remaining $35, you could do either of these activities:               
+
+ 1 Statue of Liberty Tour — $25                                                 
+ 2 Museum of Modern Art — $30                                                   
+
+My pick: Museum of Modern Art if you want an easy indoor activity in Manhattan, 
+or the Statue of Liberty Tour if you want a classic NYC sightseeing experience. 

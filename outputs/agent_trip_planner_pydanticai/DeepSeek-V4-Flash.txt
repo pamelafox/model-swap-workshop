@@ -1,0 +1,54 @@
+Model: DeepSeek-V4-Flash
+User: I need to fly from SF to NYC next month for 3 nights. My total budget is 
+$600 for flights and hotel combined. I prefer direct flights if possible. Also 
+suggest an activity I can do with whatever budget is left over.
+
+  Turn 1 (parallel)
+    search_flights(origin='San Francisco (SF)', destination='New York City 
+(NYC)')
+    search_hotels(city='New York City', nights=3)
+  Turn 2 (single)
+    check_budget(flight_cost=280, hotel_cost=285, budget=600)
+  Turn 3 (single)
+    search_activities(city='New York City', max_price=35)
+
+Here's my recommendation for you:                                               
+
+--------------------------------------------------------------------------------
+
+🗽 Recommended Plan                                                             
+
+✈️ Flight: United Airlines — Direct                                             
+
+ • Route: San Francisco → New York City (Direct)                                
+ • Price: $280                                                                  
+ • Duration: 5h 30m                                                             
+ • Why: Direct flight is only $85 more than the cheapest connecting option, so  
+   it's worth it for the convenience!                                           
+
+🏨 Hotel: The Pod Hotel                                                         
+
+ • Location: Midtown, NYC                                                       
+ • Price: $95/night × 3 nights = $285 total                                     
+ • Rating: ⭐ 4.2/5 — Great value in a central location                         
+
+💰 Budget Check                                                                 
+
+                                   
+ Item                      Cost    
+ ───────────────────────────────── 
+ United Flight (Direct)    $280    
+ The Pod Hotel (3 nights)  $285    
+ Total                     $565 ✅ 
+ Budget                    $600    
+ Remaining                 $35     
+                                   
+
+🎯 Suggested Activity: Museum of Modern Art (MoMA)                              
+
+ • Price: $30 (fits within your remaining $35!)                                 
+ • Category: Culture — See world-class modern art masterpieces                  
+
+Or you could do the Statue of Liberty Tour for $25 and have $10 left over.      
+
+Enjoy your trip to NYC! 🏙️                                                      

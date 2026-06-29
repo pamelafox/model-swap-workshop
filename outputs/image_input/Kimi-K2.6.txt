@@ -1,0 +1,25 @@
+=== Is this a unicorn? (examples/image_aurochs.jpg) ===
+No, this is **not a unicorn**.
+
+This image appears to be a historical illustration of an **aurochs** (*Bos primigenius*), the extinct wild ancestor of modern cattle. Key differences from a unicorn:
+
+- **Two horns** (curved) vs. a unicorn's single straight/spiral horn
+- **Bovine body** (bull/cattle-like) vs. the horse-like body of a unicorn
+- Clover hooves, bovine head shape, and thick neck typical of cattle
+
+The aurochs went extinct in 1627, and this looks like a 19th-century reconstruction or drawing based on historical descriptions. The most famous similar depictions are from the Lascaux cave paintings or early modern European illustrations.
+
+=== Are these alligators or crocodiles? (examples/image_crocodile.png) ===
+Based on the image, these are **crocodiles**.
+
+You can tell primarily by their **snout shape** — crocodiles have longer, more **pointed V-shaped snouts**, whereas alligators have broader, **rounded U-shaped snouts**. The animals in your photo show distinctly narrow, tapered snouts.
+
+A few other clues supporting crocodiles:
+- **Lighter coloration** (tan/olive rather than the dark blackish-gray typical of alligators)
+- When visible, crocodiles often show a tooth on the lower jaw that protrudes outside the upper lip even with a closed mouth
+
+They appear to be **American crocodiles** (*Crocodylus acutus*), which are commonly found in coastal areas and brackish waters in the Americas, though without location information that's harder to confirm with certainty.
+
+=== What's the cheapest plant? (examples/image_plantpage.png) ===
+Based on the price list, the cheapest plant is **Agrostis pallens** (Thingrass) at **$0.58** per unit.
+

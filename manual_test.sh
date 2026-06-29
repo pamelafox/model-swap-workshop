@@ -24,11 +24,17 @@ EXAMPLES=(
     "single_llm_multi_constraint"
     "rag_responses"
     "rag_messages"
-    "entity_extraction"
     "anthropic_messages"
-    "agentframework_agent"
-    "langchain_agent"
-    "pydanticai_agent"
+    "image_input"
+    "function_calling"
+    "tool_loop_calculator"
+    "tool_loop_code"
+    "agent_trip_planner_pydanticai"
+    "agent_trip_planner_langchain"
+    "agent_trip_planner_maf"
+    # Evals are excluded from manual testing due to expense (they make many LLM calls)
+    # evals_basic, evals_foundry_judge, evals_agent, evals_foundry_project
+    # dspy_optimize is excluded as it takes ~6 minutes to run
 )
 
 if [[ -n "${ONLY_MODEL:-}" ]]; then
@@ -129,45 +135,46 @@ run_for_model() {
         env FOUNDRY_OPENAI_DEPLOYMENT="$model_name" \
         uv run examples/rag_responses.py
 
-    run_example_case "rag_messages" "$model_name :: rag_messages" \
-        uv run examples/rag_messages.py
-
-    run_example_case "entity_extraction" "$model_name :: entity_extraction" \
+    run_example_case "function_calling" "$model_name :: function_calling" \
         env FOUNDRY_OPENAI_DEPLOYMENT="$model_name" \
-        uv run examples/entity_extraction.py
+        uv run examples/function_calling.py
 
-    run_example_case "anthropic_messages" "$model_name :: anthropic_messages" \
-        env FOUNDRY_CLAUDE_DEPLOYMENT="$model_name" \
-        uv run examples/anthropic_messages.py
-
-    run_example_case "agentframework_agent" "$model_name :: agentframework_agent (openai)" \
+    run_example_case "tool_loop_calculator" "$model_name :: tool_loop_calculator" \
         env FOUNDRY_OPENAI_DEPLOYMENT="$model_name" \
-        uv run examples/agentframework_agent.py
+        uv run examples/tool_loop_calculator.py
 
-    run_example_case "agentframework_agent" "$model_name :: agentframework_agent (claude)" \
-        env FOUNDRY_CLAUDE_DEPLOYMENT="$model_name" \
-        uv run examples/agentframework_agent.py
-
-    run_example_case "langchain_agent" "$model_name :: langchain_agent (openai)" \
+    run_example_case "tool_loop_code" "$model_name :: tool_loop_code" \
         env FOUNDRY_OPENAI_DEPLOYMENT="$model_name" \
-        uv run examples/langchain_agent.py
+        uv run examples/tool_loop_code.py
 
-    run_example_case "langchain_agent" "$model_name :: langchain_agent (claude)" \
-        env FOUNDRY_CLAUDE_DEPLOYMENT="$model_name" \
-        uv run examples/langchain_agent.py
-
-    run_example_case "pydanticai_agent" "$model_name :: pydanticai_agent (openai)" \
+    run_example_case "agent_trip_planner_pydanticai" "$model_name :: agent_trip_planner_pydanticai" \
         env FOUNDRY_OPENAI_DEPLOYMENT="$model_name" \
-        uv run examples/pydanticai_agent.py
+        uv run examples/agent_trip_planner_pydanticai.py
 
-    run_example_case "pydanticai_agent" "$model_name :: pydanticai_agent (claude)" \
-        env FOUNDRY_CLAUDE_DEPLOYMENT="$model_name" \
-        uv run examples/pydanticai_agent.py
+    run_example_case "agent_trip_planner_langchain" "$model_name :: agent_trip_planner_langchain" \
+        env FOUNDRY_OPENAI_DEPLOYMENT="$model_name" \
+        uv run examples/agent_trip_planner_langchain.py
+
+    run_example_case "agent_trip_planner_maf" "$model_name :: agent_trip_planner_maf" \
+        env FOUNDRY_OPENAI_DEPLOYMENT="$model_name" \
+        uv run examples/agent_trip_planner_maf.py
+
 }
 
 for model_name in "${MODELS[@]}"; do
     run_for_model "$model_name"
 done
+
+# Anthropic/Claude examples — run once (not per OpenAI model)
+run_example_case "rag_messages" "claude :: rag_messages" \
+    uv run examples/rag_messages.py
+
+run_example_case "anthropic_messages" "claude :: anthropic_messages" \
+    uv run examples/anthropic_messages.py
+
+# image_input doesn't support FOUNDRY_OPENAI_DEPLOYMENT override, run once
+run_example_case "image_input" "default :: image_input" \
+    uv run examples/image_input.py
 
 echo
 echo "========================================"

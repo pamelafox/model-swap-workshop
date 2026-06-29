@@ -1,0 +1,59 @@
+=== Is this a unicorn? (examples/image_aurochs.jpg) ===
+That's a great question, but I can't see any image! You haven't uploaded or attached a picture for me to look at.
+
+**Please share the image**, and I'll be happy to tell you if it's a unicorn, a horse, a donkey, or something else entirely. 🦄
+
+=== Are these alligators or crocodiles? (examples/image_crocodile.png) ===
+I cannot see any images, as I’m a text-based AI. However, I can help you tell them apart if you describe the animal (e.g., snout shape, teeth visibility, color, location). Here’s a quick guide:
+
+- **Snout:** Alligators have a wide, U-shaped snout; crocodiles have a narrow, V-shaped snout.
+- **Teeth:** When the mouth is closed, an alligator’s lower teeth are mostly hidden; a crocodile’s fourth tooth on the lower jaw sticks out over the upper lip.
+- **Color:** Alligators are darker (blackish-gray); crocodiles are lighter (olive or tan).
+- **Location:** Alligators are mostly found in the southeastern U.S. and China; crocodiles are found in tropical regions worldwide, including the Americas, Africa, Asia, and Australia.
+
+If you share a description, I can help identify which one it is!
+
+=== What's the cheapest plant? (examples/image_plantpage.png) ===
+That's a tricky question because "cheapest" can depend on whether you mean **money**, **time**, **effort**, or **space**. Here’s a breakdown of the cheapest plants from different angles:
+
+### 1. The Absolute Cheapest (Cost in Money): Free Plants
+You cannot beat **free**. The cheapest plant is one you don't pay for.
+*   **Pothos & Spider Plants:** These are the kings of "plant propagation." Almost everyone who owns one is happy to give you a cutting or a "baby" (spiderette) for free. A single cutting in a glass of water will root in weeks.
+*   **Succulent Leaves:** A single leaf from a succulent like a *jade plant* or *echeveria* can fall off and grow into a whole new plant.
+*   **Kitchen Scraps:** You can regrow green onions, lettuce, celery, and even avocado pits from scraps you'd otherwise throw away.
+
+### 2. The Cheapest to Buy (Money): Low-Cost, High-Volume Plants
+If you *must* buy something, these are typically the cheapest at a nursery or grocery store ($2–$5).
+*   **Pothos (Epipremnum aureum):** Often sold in tiny 2-inch pots for under $5. They are incredibly hardy and hard to kill.
+*   **Spider Plant (Chlorophytum comosum):** Extremely common, very cheap, and grows like a weed.
+*   **Succulents (e.g., Echeveria, Haworthia):** Small, single succulents are often the cheapest potted plants you can find.
+*   **Air Plants (Tillandsia):** Sometimes a single small one can be found for $3–$5, and they need no soil.
+*   **Aloe Vera:** A small aloe pup is often very cheap and incredibly useful (for burns).
+
+### 3. The Cheapest in Terms of Total Value (Long-Term Costs)
+This is the plant that gives you the **most return for the least money, time, and effort**.
+
+**Winner: Pothos (especially the "Golden" or "Jade" variety).**
+*   **Cost:** Very cheap to buy (or free).
+*   **Maintenance:** Virtually impossible to kill. Thrives in low light, survives neglect, doesn't need fertilizer.
+*   **Replicability:** One plant can become 100 plants over a few years via cuttings.
+*   **Lifespan:** Can live for decades with minimal care.
+
+**Runner-up: Snake Plant (Dracaena trifasciata).**
+*   **Cost:** Slightly more than pothos (maybe $8–$12 for a small one), but they are **the most resilient plants on the planet**. They can survive months without water, very low light, and almost any temperature.
+
+### 4. The Cheapest "Edible" Plant (Money & Effort)
+*   **Green Onions:** Buy a bunch for $1 from the grocery store, use the green tops, put the white roots (with an inch of stem) in a glass of water, and you'll have a new plant for free.
+
+### Summary Table
+
+| Plant | Upfront Cost | Maintenance Cost | Difficulty | Best for... |
+| :--- | :--- | :--- | :--- | :--- |
+| **Free (Pothos, Spider)** | $0 | $0 | Very Easy | The absolute cheapest. |
+| **Kitchen Scraps** | $0 | $0 | Easy | Free food. |
+| **Pothos** | $2–$5 | $0 | Trivial | Value, longevity, ease. |
+| **Succulent** | $3–$6 | $0 | Easy | A tiny, cute, cheap gift. |
+| **Snake Plant** | $8–$12 | $0 | Trivial | Ultimate "set it and forget it." |
+
+**Final Verdict:** If you want the single **cheapest plant in terms of money** (and are willing to ask a friend), it's a **free cutting of a Pothos or Spider Plant**. If you want the **cheapest to buy right now**, it's a **small succulent** or **basic Pothos** from a big-box store.
+

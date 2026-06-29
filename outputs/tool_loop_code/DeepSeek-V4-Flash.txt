@@ -1,0 +1,32 @@
+User: How many times does the letter "e" appear in the following sentence? Count carefully.
+"The elderly gentleman eagerly entered the elevator."
+
+[Tool call] execute_python:
+  sentence = "The elderly gentleman eagerly entered the elevator."
+count = sentence.lower().count('e')
+count
+[Result] 13
+
+Traceback (most recent call last):
+  File "/Users/pamelafox/model-swap-workshop/examples/tool_loop_code.py", line 70, in <module>
+    response = client.responses.create(
+        model=deployment_name,
+    ...<7 lines>...
+        store=False,
+    )
+  File "/Users/pamelafox/model-swap-workshop/.venv/lib/python3.14/site-packages/openai/resources/responses/responses.py", line 954, in create
+    return self._post(
+           ~~~~~~~~~~^
+        "/responses",
+        ^^^^^^^^^^^^^
+    ...<46 lines>...
+        stream_cls=Stream[ResponseStreamEvent],
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/pamelafox/model-swap-workshop/.venv/lib/python3.14/site-packages/openai/_base_client.py", line 1332, in post
+    return cast(ResponseT, self.request(cast_to, opts, stream=stream, stream_cls=stream_cls))
+                           ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pamelafox/model-swap-workshop/.venv/lib/python3.14/site-packages/openai/_base_client.py", line 1105, in request
+    raise self._make_status_error_from_response(err.response) from None
+openai.InternalServerError: Error code: 500 - {'error': {'message': 'The server had an error processing your request. Sorry about that! You can retry your request, or contact us through an Azure support request at: https://go.microsoft.com/fwlink/?linkid=2213926 if you keep seeing this error. (Please include the request ID 55ff7f12-3279-483f-9e61-2ae81fa85f80 in your email.)', 'type': 'server_error', 'param': None, 'code': 'server_error'}}

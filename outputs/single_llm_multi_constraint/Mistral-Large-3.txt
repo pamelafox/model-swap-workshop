@@ -1,0 +1,12 @@
+Model: Mistral-Large-3
+Prompt: List exactly 3 benefits of exercise. Each benefit must be stated in exactly 6 words. The first letter of each benefit must spell out the word 'FIT' (F, I, T). Output only the 3 benefits as a numbered list, nothing else.
+
+Response:
+1. Fortifies heart health effectively daily.
+2. Improves mood instantly with activity.
+3. Trims body fat sustainably over time.
+
+--- Validation ---
+  Line 1: 5 words, starts with 'F' | Fortifies heart health effectively daily.
+  Line 2: 5 words, starts with 'I' | Improves mood instantly with activity.
+  Line 3: 6 words, starts with 'T' | Trims body fat sustainably over time.

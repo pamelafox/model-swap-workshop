@@ -30,7 +30,7 @@ load_dotenv()
 logging.basicConfig(level=logging.WARNING)
 dspy.disable_litellm_logging()
 
-endpoint = os.environ["FOUNDRY_MODELS_ENDPOINT"] + "/openai/v1"
+endpoint = os.environ["FOUNDRY_MODELS_ENDPOINT"]
 api_key = os.environ["FOUNDRY_API_KEY"]
 
 # === Choose a student model (the one we want to optimize) ===

@@ -1,0 +1,34 @@
+Question: what are the key differences between how honey bees and carpenter bees build their nests?
+Retrieved 88 matching documents, only sending the first 5.
+
+Response from Mistral-Large-3: 
+
+Here are the key differences between how **honey bees (Apis mellifera)** and **California carpenter bees (Xylocopa californica)** build their nests, based on the provided sources:
+
+### **California Carpenter Bees (Xylocopa californica)**
+1. **Nest Construction**:
+   - They **carve nests in wood** using their sharp mandibles while vibrating their bodies, but they **do not eat the wood** [California_carpenter_bee.pdf-4].
+   - They dig tunnels in **live or dead wood** and hollow stems of plants like **Yucca and Agave**, creating a **T-shaped nest** (a main tunnel with side branches) [California_carpenter_bee.pdf-4].
+   - Nest success depends on **available pollen/nectar** and **suitable wood substrates** [California_carpenter_bee.pdf-4].
+
+2. **Social Structure**:
+   - They are **solitary bees**, meaning each female builds and provisions her own nest [California_carpenter_bee.pdf-4].
+
+### **Honey Bees (Apis mellifera)** *(implied from carpenter bee sources)*
+1. **Nest Construction**:
+   - Honey bees **do not excavate wood**—they build **wax combs** inside **pre-existing cavities** (e.g., tree hollows, beehives) [California_carpenter_bee.pdf-4 (implied by contrast)].
+   - They **produce wax** from special glands to construct hexagonal cells for brood and food storage.
+
+2. **Social Structure**:
+   - They are **highly social**, living in large colonies with a **queen, workers, and drones** [Not explicitly stated in sources, but widely known].
+
+### **Key Differences Summary**
+| Feature               | **Carpenter Bees**                          | **Honey Bees**                          |
+|-----------------------|--------------------------------------------|----------------------------------------|
+| **Nest Material**     | Wood (excavated)                           | Wax combs (built)                      |
+| **Nest Shape**        | T-shaped tunnels                           | Hexagonal cells in combs               |
+| **Social Behavior**   | Solitary                                   | Eusocial (colonies)                    |
+| **Wood Use**          | Carve but do not eat wood                  | Do not use wood                        |
+
+**Sources Cited**:
+- [California_carpenter_bee.pdf-4] (nesting behavior of *Xylocopa californica*).

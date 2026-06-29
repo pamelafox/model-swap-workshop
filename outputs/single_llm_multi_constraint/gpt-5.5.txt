@@ -1,0 +1,12 @@
+Model: gpt-5.5
+Prompt: List exactly 3 benefits of exercise. Each benefit must be stated in exactly 6 words. The first letter of each benefit must spell out the word 'FIT' (F, I, T). Output only the 3 benefits as a numbered list, nothing else.
+
+Response:
+1. Fosters stronger muscles and healthier bones.
+2. Improves mood, focus, and daily energy.
+3. Trims excess weight and boosts endurance.
+
+--- Validation ---
+  Line 1: 6 words, starts with 'F' | Fosters stronger muscles and healthier bones.
+  Line 2: 6 words, starts with 'I' | Improves mood, focus, and daily energy.
+  Line 3: 6 words, starts with 'T' | Trims excess weight and boosts endurance.
