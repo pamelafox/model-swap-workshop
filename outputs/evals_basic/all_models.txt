@@ -3,7 +3,7 @@ Evaluating tool calling across models
 
   gpt-5.5:
     ✅ PASS  attendee_normalization   
-    ❌ FAIL  date_math_next_week        failed: ['date_is_july_8_or_9']
+    ✅ PASS  date_math_next_week      
     ✅ PASS  ambiguous_duration       
     ✅ PASS  spanish_request          
     ✅ PASS  formal_from_informal     
@@ -17,14 +17,14 @@ Evaluating tool calling across models
 
   Mistral-Large-3:
     ✅ PASS  attendee_normalization   
-    ❌ FAIL  date_math_next_week        failed: ['date_is_july_8_or_9']
+    ✅ PASS  date_math_next_week      
     ✅ PASS  ambiguous_duration       
     ✅ PASS  spanish_request          
     ✅ PASS  formal_from_informal     
 
   DeepSeek-V4-Flash:
     ✅ PASS  attendee_normalization   
-    ❌ FAIL  date_math_next_week        failed: ['date_is_july_8_or_9']
+    ✅ PASS  date_math_next_week      
     ✅ PASS  ambiguous_duration       
     ✅ PASS  spanish_request          
     ✅ PASS  formal_from_informal     
@@ -34,7 +34,7 @@ Evaluating tool calling across models
 ============================================================
   Model                Passed   Failed   Score
   -------------------- -------- -------- --------
-  gpt-5.5              4        1        4/5
+  gpt-5.5              5        0        5/5
   Kimi-K2.6            5        0        5/5
-  Mistral-Large-3      4        1        4/5
-  DeepSeek-V4-Flash    4        1        4/5
+  Mistral-Large-3      5        0        5/5
+  DeepSeek-V4-Flash    5        0        5/5
