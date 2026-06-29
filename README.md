@@ -323,7 +323,6 @@ When the output is free text and can vary widely, then you may need to bring in 
 
 2. Since evals are time-intensive and costly, we've saved the evaluation results for you. Review them in [outputs/evals_llm_judge/all_models.txt](outputs/evals_llm_judge/all_models.txt). If you do want to modify an aspect and run them yourself, use `uv run examples/evals_llm_judge.py`.
 
-
 ### 7b: Scenario-grounded evaluation with ASSERT
 
 In Part 6 you *watched* the models plan trips differently — gpt-5.5 batched its tool calls, others explored more combos, some skipped the budget check. Now **quantify** it: did each model actually stay on budget, respect the constraints, and ground its recommendations in tool results — on *your* travel-planner scenario?
