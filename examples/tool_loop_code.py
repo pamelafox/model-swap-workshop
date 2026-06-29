@@ -1,3 +1,6 @@
+# /// script
+# dependencies = ["pydantic-monty>=0.0.18"]
+# ///
 import json
 import os
 

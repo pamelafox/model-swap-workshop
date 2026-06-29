@@ -1,17 +1,20 @@
 """
-LLM judge evaluation: Use azure-ai-evaluation to score RAG groundedness.
+LLM judge evaluation: Use azure-ai-evaluation SDK to score RAG groundedness.
 
-Runs the GroundednessEvaluator against pre-recorded RAG outputs from different
-models. The test data contains responses to a question about bee nesting where
-the sources only cover carpenter bees — models that hallucinate honey bee
-facts should score low on groundedness.
+Same evaluation as evals_llm_judge.py but using the GroundednessEvaluator from
+the azure-ai-evaluation SDK instead of a direct LLM call. This gives you a
+1-5 score with structured reasoning.
 
 Requirements:
     uv add azure-ai-evaluation
 
 Usage:
-    uv run examples/evals_llm_judge.py
+    uv run examples/evals_foundry_judge.py
 """
+
+# /// script
+# dependencies = ["azure-ai-evaluation>=1.0.0"]
+# ///
 
 import os
 from pathlib import Path

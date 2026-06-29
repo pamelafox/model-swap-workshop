@@ -12,6 +12,10 @@ Usage:
     uv run examples/evals_agent.py
 """
 
+# /// script
+# dependencies = ["azure-ai-evaluation>=1.0.0"]
+# ///
+
 import json
 import os
 
