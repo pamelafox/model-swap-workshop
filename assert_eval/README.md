@@ -1,10 +1,6 @@
-# ASSERT speaker note: scenario evals for model swaps
-
-**Thesis:** evaluate model upgrades against *your* workflow, not generic benchmarks.
+# ASSERT guide
 
 This folder adds an ASSERT eval for the travel-planner scenario. It keeps the travel tools and system prompt fixed, swaps only `WORKSHOP_TARGET_MODEL`, and scores the same generated cases across prompt-model variants. The entree question: **which model should you trust for this travel-planner workflow?**
-
-Claude is on a personal account and out of scope for this lab; the same pydantic-ai target pattern extends to it if you have access.
 
 ## Files
 
@@ -68,19 +64,6 @@ For the finale, show both saved artifacts statically:
 2. DSPy's optimized prompt.
 
 See [`sample_results/RESULTS.md`](sample_results/RESULTS.md) for the committed traced n=100 comparison and **full run artifacts** (`scores.jsonl`, `inference_set.jsonl`, `metrics.json`, plus the viewer cache) — with a one-line **copy-to-local-viewer** command so you can browse the runs side-by-side without re-running anything.
-
-## Talk beats
-
-| Beat | What to show | Why it lands |
-|---|---|---|
-| Premise | “Hold the scenario fixed while the model changes.” | Moves from vibes to measured regressions. |
-| Travel agent | Run the planner normally, then run ASSERT against it. | Converts behavior into scenario scores. |
-| **Viewer compare** | `gpt-5.5` vs `Kimi-K2.6` vs `DeepSeek-V4-Flash` by dimension. | Answers “which model for this workflow?” |
-| DSPy | Use ASSERT scores as the optimization signal, then re-run ASSERT. | Closes measure → optimize → re-measure. |
-
-Line to say:
-
-> “We’re not asking whether one model wins a benchmark. We’re asking: when this travel planner must stay under budget, prefer direct flights, and suggest an activity from remaining budget, which model regresses our scenario?”
 
 ## Validation run: n=100, trace-captured
 

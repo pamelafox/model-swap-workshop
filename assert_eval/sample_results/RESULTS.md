@@ -62,6 +62,8 @@ results into its results dir, and launch:
 
 ```bash
 git clone https://github.com/responsibleai/ASSERT
+mkdir ASSERT/artifacts
+mkdir ASSERT/artifacts/results
 cp -r assert_eval/sample_results/pamela-travel-planner-model-swap-n100 ASSERT/artifacts/results/
 cd ASSERT/viewer && npm install && npm run dev      # open http://localhost:5174
 ```
