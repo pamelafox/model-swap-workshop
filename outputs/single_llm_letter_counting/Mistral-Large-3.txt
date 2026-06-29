@@ -1,0 +1,8 @@
+Model: Mistral-Large-3
+Prompt: How many times does the letter "e" appear in the following sentence? Count carefully.
+"The elderly gentleman eagerly entered the elevator."
+Give just the number.
+
+Response: 8
+
+(Correct answer: 13)

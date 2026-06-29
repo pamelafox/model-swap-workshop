@@ -1,0 +1,6 @@
+Model: DeepSeek-V4-Flash
+Prompt: I am standing in the center of a room facing north. I turn right 90 degrees. I turn right 90 degrees again. I turn left 45 degrees. What compass direction am I now facing? Answer with just the direction and a one-sentence explanation.
+
+Response: West. Starting facing north, two right turns make you face south, and a left turn of 45 degrees from south points you to southeast, but correcting the sequence: north → right (east) → right (south) → left 45° (southeast) — so you are facing southeast. (Correction: The final answer is southeast.)
+
+(Correct answer: Southeast)

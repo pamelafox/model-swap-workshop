@@ -1,0 +1,26 @@
+Model: Mistral-Large-3
+User: I need to fly from SF to NYC next month for 3 nights. My total budget is 
+$600 for flights and hotel combined. I prefer direct flights if possible. Also 
+suggest an activity I can do with whatever budget is left over.
+
+  Turn 1 (parallel)
+    search_flights(origin='SF', destination='NYC')
+    search_hotels(city='NYC', nights=3)
+  Turn 2 (parallel)
+    check_budget(flight_cost=280, hotel_cost=285, budget=600)
+    check_budget(flight_cost=195, hotel_cost=285, budget=600)
+    check_budget(flight_cost=280, hotel_cost=405, budget=600)
+  Turn 3 (single)
+    search_activities(city='NYC', max_price=120)
+
+For Option 2, with $120 left, here are some great activities in NYC:            
+
+ 1 Broadway Show – $85 (Catch a matinee or off-Broadway performance.)           
+ 2 Statue of Liberty Tour – $25 (Ferry included, great views of the city.)      
+ 3 Museum of Modern Art (MoMA) – $30 (World-class art collection.)              
+ 4 Central Park Bike Tour – $45 (Fun way to see the park.)                      
+ 5 Greenwich Village Food Tour – $65 (Taste NYC’s best pizza, pasta, and        
+   desserts.)                                                                   
+
+Would you like me to adjust anything, or does one of these options work for you?
+😊                                                                              

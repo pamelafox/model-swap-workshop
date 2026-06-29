@@ -1,0 +1,12 @@
+Model: DeepSeek-V4-Flash
+Prompt: List exactly 3 benefits of exercise. Each benefit must be stated in exactly 6 words. The first letter of each benefit must spell out the word 'FIT' (F, I, T). Output only the 3 benefits as a numbered list, nothing else.
+
+Response:
+1. Fights diseases and boosts immune function.
+2. Increases energy and improves mood daily.
+3. Tones muscles and strengthens bone density.
+
+--- Validation ---
+  Line 1: 6 words, starts with 'F' | Fights diseases and boosts immune function.
+  Line 2: 6 words, starts with 'I' | Increases energy and improves mood daily.
+  Line 3: 6 words, starts with 'T' | Tones muscles and strengthens bone density.

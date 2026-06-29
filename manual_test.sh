@@ -25,6 +25,16 @@ EXAMPLES=(
     "rag_responses"
     "rag_messages"
     "anthropic_messages"
+    "image_input"
+    "function_calling"
+    "tool_loop_calculator"
+    "tool_loop_code"
+    "agent_trip_planner_pydanticai"
+    "agent_trip_planner_langchain"
+    "agent_trip_planner_maf"
+    # Evals are excluded from manual testing due to expense (they make many LLM calls)
+    # evals_basic, evals_foundry_judge, evals_agent, evals_foundry_project
+    # dspy_optimize is excluded as it takes ~6 minutes to run
 )
 
 if [[ -n "${ONLY_MODEL:-}" ]]; then
@@ -125,6 +135,30 @@ run_for_model() {
         env FOUNDRY_OPENAI_DEPLOYMENT="$model_name" \
         uv run examples/rag_responses.py
 
+    run_example_case "function_calling" "$model_name :: function_calling" \
+        env FOUNDRY_OPENAI_DEPLOYMENT="$model_name" \
+        uv run examples/function_calling.py
+
+    run_example_case "tool_loop_calculator" "$model_name :: tool_loop_calculator" \
+        env FOUNDRY_OPENAI_DEPLOYMENT="$model_name" \
+        uv run examples/tool_loop_calculator.py
+
+    run_example_case "tool_loop_code" "$model_name :: tool_loop_code" \
+        env FOUNDRY_OPENAI_DEPLOYMENT="$model_name" \
+        uv run examples/tool_loop_code.py
+
+    run_example_case "agent_trip_planner_pydanticai" "$model_name :: agent_trip_planner_pydanticai" \
+        env FOUNDRY_OPENAI_DEPLOYMENT="$model_name" \
+        uv run examples/agent_trip_planner_pydanticai.py
+
+    run_example_case "agent_trip_planner_langchain" "$model_name :: agent_trip_planner_langchain" \
+        env FOUNDRY_OPENAI_DEPLOYMENT="$model_name" \
+        uv run examples/agent_trip_planner_langchain.py
+
+    run_example_case "agent_trip_planner_maf" "$model_name :: agent_trip_planner_maf" \
+        env FOUNDRY_OPENAI_DEPLOYMENT="$model_name" \
+        uv run examples/agent_trip_planner_maf.py
+
 }
 
 for model_name in "${MODELS[@]}"; do
@@ -137,6 +171,10 @@ run_example_case "rag_messages" "claude :: rag_messages" \
 
 run_example_case "anthropic_messages" "claude :: anthropic_messages" \
     uv run examples/anthropic_messages.py
+
+# image_input doesn't support FOUNDRY_OPENAI_DEPLOYMENT override, run once
+run_example_case "image_input" "default :: image_input" \
+    uv run examples/image_input.py
 
 echo
 echo "========================================"

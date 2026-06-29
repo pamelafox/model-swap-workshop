@@ -14,6 +14,7 @@ api_key = os.environ["FOUNDRY_API_KEY"]
 MODEL = "gpt-5.5"
 # MODEL = "Kimi-K2.6"
 # MODEL = "Mistral-Large-3"
+deployment_name = os.environ.get("FOUNDRY_OPENAI_DEPLOYMENT", MODEL)
 
 EXAMPLES = [
     ("Is this a unicorn?", "examples/image_aurochs.jpg"),
@@ -50,7 +51,7 @@ for prompt, filename in EXAMPLES:
             ],
         }
     ]
-    response = client.chat.completions.create(model=MODEL, messages=messages)
+    response = client.chat.completions.create(model=deployment_name, messages=messages)
     print(f"=== {prompt} ({filename}) ===")
     print(response.choices[0].message.content)
     print()

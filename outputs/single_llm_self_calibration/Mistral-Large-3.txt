@@ -1,0 +1,8 @@
+Model: Mistral-Large-3
+Prompt: What was the population of Tashkent, Uzbekistan on March 3, 2019? Give a number and rate your confidence from 0 to 100.
+
+Response:
+On **March 3, 2019**, the estimated population of **Tashkent, Uzbekistan** was approximately **2,571,668** (based on UN and local census projections).
+
+**Confidence level: 85/100**
+- The figure aligns with Uzbekistan's 2019 official estimates and UN World Urbanization Prospects data, though exact city-level counts can vary slightly by source. For precise historical data, Uzbekistan's State Statistics Committee would be the definitive reference.

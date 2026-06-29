@@ -1,0 +1,7 @@
+User: A store is having a sale: all shirts are 30% off their original price of $45, and there's an additional 10% loyalty discount applied after the sale price. If I buy 3 shirts and pay 8.5% sales tax on the final amount, what's my total?
+
+  [calculate] 3 * (45 * (1 - 0.30) * (1 - 0.10)) * (1 + 0.085) = 92.27924999999999
+
+Assistant: Your total is **$92.28**.
+
+(Total tool calls: 1)
