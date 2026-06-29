@@ -311,21 +311,17 @@ With evaluations, you can quantify what you observed.
 
 If you know exactly what the model should output for an input, then it's easy to evaluate using string comparison.
 
-```bash
-uv run examples/evals_basic.py
-```
+1. Open [examples/evals_basic.py](examples/evals_basic.py) and read through the code. Notice how the 5 edge cases are defined and how the programmatic checks work — attendee normalization, date math, ambiguous duration, a request in Spanish, and informal-to-formal extraction. No LLM judge needed — just programmatic checks.
 
-This script runs 5 tool-calling edge cases across all models and checks the tool call arguments programmatically. Cases include attendee normalization, date math, ambiguous duration, a request in Spanish, and informal-to-formal extraction. No LLM judge needed — just programmatic checks.
+2. Since evals are time-intensive and costly, we've saved the evaluation results for you. Review them in [outputs/evals_basic/all_models.txt](outputs/evals_basic/all_models.txt). If you do want to modify an aspect and run them yourself, use `uv run examples/evals_basic.py`.
 
 ### 7b: LLM-as-judge (groundedness)
 
 When the output is free text and can vary widely, then you may need to bring in an LLM-as-a-judge to evaluate. You must give it a clear rubric for what is pass vs. fail, and force it to provide a reasoning for its decision.
 
-```bash
-uv run examples/evals_llm_judge.py
-```
+1. Open [examples/evals_llm_judge.py](examples/evals_llm_judge.py) and read through the code. Notice how the groundedness prompt is structured, the binary pass/fail rubric, and how it forces the judge to provide reasoning.
 
-This script uses a direct LLM call with a groundedness prompt to evaluate the RAG outputs from all models. The judge LLM checks whether each model's response is grounded in the provided sources, returning a binary pass/fail verdict with reasoning. Models that hallucinate facts not in the sources will fail.
+2. Since evals are time-intensive and costly, we've saved the evaluation results for you. Review them in [outputs/evals_llm_judge/all_models.txt](outputs/evals_llm_judge/all_models.txt). If you do want to modify an aspect and run them yourself, use `uv run examples/evals_llm_judge.py`.
 
 
 ### 7b: Scenario-grounded evaluation with ASSERT
@@ -333,25 +329,11 @@ This script uses a direct LLM call with a groundedness prompt to evaluate the RA
 In Part 6 you *watched* the models plan trips differently — gpt-5.5 batched its tool calls, others explored more combos, some skipped the budget check. Now **quantify** it: did each model actually stay on budget, respect the constraints, and ground its recommendations in tool results — on *your* travel-planner scenario?
 
 A generic benchmark won't answer that. This is where [ASSERT](https://github.com/responsibleai/ASSERT) comes in: you write a behavior spec (what a good trip plan looks like), and ASSERT generates scenario-specific test cases, runs them against your agent, and an LLM judge scores each run on dimensions *you* define — budget adherence, constraint satisfaction, tool routing, grounding.
-The eval lives under [`assert_eval/`](assert_eval/): a behavior spec, a thin pydantic-ai target that reuses the **Part 6 tools + system prompt**, and scenario-specific judge dimensions. Full setup and speaker notes are in [`assert_eval/README.md`](assert_eval/README.md).
+The eval lives under [`assert_eval/`](assert_eval/): a behavior spec, a thin pydantic-ai target that reuses the **Part 6 tools + system prompt**, and scenario-specific judge dimensions.
 
-1. Install ASSERT and point its pipeline (generation + judge) at your Foundry account:
+1. Open [`assert_eval/travel_planner_eval.yaml`](assert_eval/travel_planner_eval.yaml) and [`assert_eval/travel_planner_target.py`](assert_eval/travel_planner_target.py) to see how the scenario spec and target wrapper are defined.
 
-    ```bash
-    uv add assert-ai
-    export AZURE_API_BASE="$FOUNDRY_MODELS_ENDPOINT"
-    export AZURE_AI_API_KEY="$FOUNDRY_API_KEY"
-    ```
-
-2. Hold the eval fixed; swap only the **target** model — exactly like Part 6, but now scored on the same generated suite with trace capture enabled:
-
-    ```bash
-    WORKSHOP_TARGET_MODEL="gpt-5.5" WORKSHOP_TRACE=1 uv run assert-ai run --config assert_eval/travel_planner_eval.yaml --override run=gpt-5-5
-    WORKSHOP_TARGET_MODEL="Kimi-K2.6" WORKSHOP_TRACE=1 uv run assert-ai run --config assert_eval/travel_planner_eval.yaml --override run=kimi-k2-6
-    WORKSHOP_TARGET_MODEL="DeepSeek-V4-Flash" WORKSHOP_TRACE=1 uv run assert-ai run --config assert_eval/travel_planner_eval.yaml --override run=deepseek-v4-flash
-    ```
-
-3. **Short on time?** The results are already saved — see [`assert_eval/sample_results/`](assert_eval/sample_results/) for the committed traced `pamela-travel-planner-model-swap-n100` comparison you can browse in the local viewer without re-running. Copy-to-viewer instructions are in [`sample_results/RESULTS.md`](assert_eval/sample_results/RESULTS.md).
+2. Since ASSERT runs are time-intensive and costly (generating test cases + running the agent + LLM judge scoring across multiple models), we've saved the evaluation results for you. Review them in [`assert_eval/sample_results/`](assert_eval/sample_results/) — copy-to-viewer instructions are in [`sample_results/RESULTS.md`](assert_eval/sample_results/RESULTS.md). If you do want to modify an aspect and run them yourself, see the setup steps in [`assert_eval/README.md`](assert_eval/README.md).
 
 #### What to observe
 
@@ -377,18 +359,9 @@ You've been manually tweaking prompts all workshop. [DSPy](https://dspy.ai/) aut
 
 ### Run it
 
-1. Open [examples/dspy_optimize.py](examples/dspy_optimize.py)
-2. Run the file:
+1. Open [examples/dspy_optimize.py](examples/dspy_optimize.py) and read through the code. Notice how it defines a metric for the multi-constraint task and uses DSPy's GEPA optimizer to automatically search for better prompts. GEPA generates prompt variations, evaluates each one against training examples, and keeps the best — discovering strategies like explicit word-counting procedures, verify-then-rewrite loops, and final verification passes.
 
-    ```bash
-    uv run examples/dspy_optimize.py
-    ```
-
-    This takes ~6 minutes — GEPA evaluates dozens of prompt candidates against training examples. Watch the terminal as it runs.
-
-3. Watch the terminal output as GEPA proposes prompts. It discovers strategies like explicit word-counting procedures, verify-then-rewrite loops, and final verification passes — the same techniques a prompt engineer would find manually, but discovered automatically.
-
-4. After optimization, the script prints the winning instructions and saves the optimized program to `examples/dspy_multi_constraint_optimized.json`.
+2. Since optimization runs are time-intensive (~6 minutes, evaluating dozens of prompt candidates), we've saved the results for you. Review them in [outputs/dspy_optimize/Mistral-Large-3.txt](outputs/dspy_optimize/Mistral-Large-3.txt), and see the optimized program in [examples/dspy_multi_constraint_optimized.json](examples/dspy_multi_constraint_optimized.json). If you do want to modify an aspect and run it yourself, use `uv run examples/dspy_optimize.py`.
 
 ### What to observe
 
