@@ -27,7 +27,6 @@ EXAMPLES=(
     "image_input"
     "function_calling"
     "tool_loop_calculator"
-    "tool_loop_code"
     "agent_trip_planner_pydanticai"
     "agent_trip_planner_langchain"
     "agent_trip_planner_maf"
@@ -141,10 +140,6 @@ run_for_model() {
     run_example_case "tool_loop_calculator" "$model_name :: tool_loop_calculator" \
         env FOUNDRY_OPENAI_DEPLOYMENT="$model_name" \
         uv run examples/tool_loop_calculator.py
-
-    run_example_case "tool_loop_code" "$model_name :: tool_loop_code" \
-        env FOUNDRY_OPENAI_DEPLOYMENT="$model_name" \
-        uv run examples/tool_loop_code.py
 
     run_example_case "agent_trip_planner_pydanticai" "$model_name :: agent_trip_planner_pydanticai" \
         env FOUNDRY_OPENAI_DEPLOYMENT="$model_name" \

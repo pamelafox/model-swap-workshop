@@ -1,5 +1,5 @@
 # /// script
-# dependencies = ["pydantic-monty>=0.0.18"]
+# dependencies = ["pydantic-monty>=0.0.18", "openai>=1.0", "python-dotenv"]
 # ///
 import json
 import os
