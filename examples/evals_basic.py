@@ -49,7 +49,7 @@ CALENDAR_TOOL = {
             "location": {"type": "string", "description": "Room name, or 'Virtual' for online meetings"},
             "duration_minutes": {"type": "integer", "description": "Duration of the meeting in minutes"},
         },
-        "required": ["title", "start_time", "end_time", "timezone"],
+        "required": ["title", "start_time", "end_time", "timezone", "attendees", "location", "duration_minutes"],
         "additionalProperties": False,
     },
 }
@@ -68,6 +68,7 @@ def get_tool_args(model: str, user_message: str) -> dict | None:
             {"role": "user", "content": user_message},
         ],
         tools=[CALENDAR_TOOL],
+        tool_choice="required",
         store=False,
     )
     tool_call = next((item for item in response.output if item.type == "function_call"), None)
@@ -101,7 +102,7 @@ TEST_CASES = [
     },
     {
         "name": "date_math_next_week",
-        "description": "Date math — 'next Wednesday' should resolve to July 8",
+        "description": "Date math — 'next Wednesday' from June 28 should resolve to July 1 or July 8",
         "user_message": (
             "Schedule a 2-hour planning session next Wednesday at 10am Eastern. "
             "Title it 'Q3 Roadmap Planning'. Invite Dev, Anita, and Jorge. "
@@ -110,11 +111,12 @@ TEST_CASES = [
         "checks": lambda args: {
             "title_correct": args.get("title", "").lower().replace(" ", "") == "q3roadmapplanning"
                 or "q3" in args.get("title", "").lower() and "planning" in args.get("title", "").lower(),
-            "date_is_july_8_or_9": args.get("start_time", "").startswith("2026-07-08T10:00")
-                or args.get("start_time", "").startswith("2026-07-09T10:00"),
-            "timezone_eastern": "New_York" in args.get("timezone", "") or "Eastern" in args.get("timezone", ""),
+            "date_is_wednesday": args.get("start_time", "").startswith("2026-07-01T10:00")
+                or args.get("start_time", "").startswith("2026-07-08T10:00"),
+            "timezone_iana": args.get("timezone", "") == "America/New_York",
             "duration_120": args.get("duration_minutes") == 120
-                or (args.get("end_time", "").startswith("2026-07-08T12:00") or args.get("end_time", "").startswith("2026-07-09T12:00")),
+                or args.get("end_time", "").startswith("2026-07-01T12:00")
+                or args.get("end_time", "").startswith("2026-07-08T12:00"),
             "location_room_b": "b" in args.get("location", "").lower(),
         },
     },
@@ -143,9 +145,8 @@ TEST_CASES = [
         ),
         "checks": lambda args: {
             "title_spanish": "presupuesto" in args.get("title", "").lower() or "revision" in args.get("title", "").lower().replace("ó", "o"),
-            "date_friday_july_3": args.get("start_time", "").startswith("2026-07-03T16:00")
-                or args.get("start_time", "").startswith("2026-07-04T16:00"),
-            "timezone_mexico": "Mexico" in args.get("timezone", ""),
+            "date_friday_july_3": args.get("start_time", "").startswith("2026-07-03T16:00"),
+            "timezone_iana_mexico": args.get("timezone", "") == "America/Mexico_City",
             "has_carlos": any("carlos" in a.lower() for a in args.get("attendees", [])),
             "has_maria": any("mar" in a.lower() for a in args.get("attendees", [])),
             "duration_60": args.get("duration_minutes") == 60
@@ -162,8 +163,7 @@ TEST_CASES = [
         ),
         "checks": lambda args: {
             "title_professional": "all" in args.get("title", "").lower() and "hands" in args.get("title", "").lower(),
-            "date_thursday_july_2": args.get("start_time", "").startswith("2026-07-02T09:00")
-                or args.get("start_time", "").startswith("2026-07-03T09:00"),
+            "date_thursday_july_2": args.get("start_time", "").startswith("2026-07-02T09:00"),
             "end_time_11am": "T11:00" in args.get("end_time", ""),
             "location_auditorium": "auditorium" in args.get("location", "").lower(),
             "has_required_attendees": (
