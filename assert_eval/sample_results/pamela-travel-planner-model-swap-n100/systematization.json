@@ -1,0 +1,39 @@
+{
+  "behavior": "travel_planner_model_swap_quality",
+  "systematization": "Travel planner model-swap quality is best specified as task-grounded agent reliability: the observable quality of a travel-planning assistant when it must use provided tools to construct a feasible itinerary under explicit constraints. The core construct is not general travel helpfulness or aesthetic itinerary quality, but whether the agent follows the required tool-mediated planning workflow and preserves factual/constraint consistency from tool calls through the final recommendation. The root behavior is bounded to the workshop travel-planner context with four tools: search_flights(origin, destination), search_hotels(city, nights), check_budget(flight_cost, hotel_cost, budget), and search_activities(city, max_price). The canonical request is a 3-night SF to NYC trip with a $600 flight-plus-hotel budget, a direct-flight preference, and an activity request constrained by the remaining budget.\n\nThe behavior decomposes into measurable dimensions. First, tool-use completeness: before recommending an itinerary, the assistant should call flight and hotel search tools with the requested route and stay length, compute affordability with check_budget using the selected flight and hotel costs and the user's budget, and only then search activities with a max_price equal to or no greater than remaining budget. A failure occurs when required tools are skipped, called after recommendations, or replaced with unsupported reasoning.\n\nSecond, argument fidelity: tool calls must use the user's stated origin, destination, nights, budget, and selected costs. Failures include wrong city pairs, wrong nights, wrong budget values, swapped or invented costs, or check_budget arguments that do not match the chosen flight and hotel. These errors are especially important because final answers can appear plausible despite being grounded in the wrong tool state.\n\nThird, budget feasibility: the recommended flight-plus-hotel combination must not exceed the user's total flight+hotel budget. If the user also asks for an activity, the assistant must compute the remaining budget after flight and hotel before recommending an activity. It must not suggest an activity whose stated or tool-returned price exceeds the remaining amount. A final itinerary that exceeds the budget, or that claims a remaining amount inconsistent with tool outputs, is a quality failure.\n\nFourth, direct-flight preference handling: when a direct option and a connecting option are available and the direct option costs less than $100 more than the connecting option, the assistant should prefer the direct flight. This is a preference rule, not an absolute ban on connections: a connecting flight may be selected when direct flights are unavailable, infeasible under budget, or at least $100 more expensive than the comparable connecting option. Failure occurs when the agent chooses a connection while an eligible direct flight is available.\n\nFifth, anti-fabrication and trace consistency: the final response must be grounded in actual tool results. The assistant must not invent flights, hotels, prices, activities, or remaining-budget values. It should accurately cite or summarize tool-returned options and avoid unsupported additions. A related but distinct failure is hallucinated arithmetic, where the objects are real but totals or remaining budget are wrong.\n\nSixth, clarification and refusal behavior: the request is reasonable and should not be refused. If information required by the tool interface is missing or ambiguous, the assistant should ask a targeted clarification; otherwise it should proceed. In the canonical request, the correct behavior is to use the tools rather than refuse or ask unnecessary broad questions.\n\nThe selected measurement framing treats the behavior as end-to-end task reliability with sequential constraints, because the important failures often occur across the tool-call trace and final answer rather than in a single utterance. Alternative framings were considered: general travel recommendation quality, which would include subjective preferences and destination content beyond this benchmark; tool-use safety, which would overemphasize misuse rather than feasibility; and factual hallucination alone, which would miss budget, sequencing, and preference-rule errors. The final concept specification therefore contains both problematic patterns and acceptable patterns, including multi-turn/tool-sequence phenomena.",
+  "summary_items": [
+    {
+      "description": "Root construct",
+      "example": "Task-grounded travel-planner reliability under route, nights, budget, direct-flight, and activity constraints."
+    },
+    {
+      "description": "Required workflow",
+      "example": "Call search_flights and search_hotels, select feasible options, call check_budget with selected costs and user budget, then call search_activities using the remaining budget."
+    },
+    {
+      "description": "Budget failures",
+      "example": "Recommending a $350 flight and $320 hotel for a $600 flight+hotel budget."
+    },
+    {
+      "description": "Direct-flight rule",
+      "example": "Choosing a connecting $250 flight over a direct $320 flight is a failure because the direct flight is less than $100 more."
+    },
+    {
+      "description": "Fabrication failures",
+      "example": "Claiming a hotel costs $180 when no tool result returned that hotel or price."
+    },
+    {
+      "description": "Argument-fidelity failures",
+      "example": "Calling search_hotels(city='Boston', nights=2) for a 3-night NYC request while giving a plausible NYC itinerary."
+    },
+    {
+      "description": "Acceptable clarification behavior",
+      "example": "Asking for missing travel dates or origin only when needed, not refusing the canonical request."
+    }
+  ],
+  "meta": {
+    "mode": "research",
+    "model": "azure_ai/gpt-5.5",
+    "reasoning_effort": null
+  }
+}

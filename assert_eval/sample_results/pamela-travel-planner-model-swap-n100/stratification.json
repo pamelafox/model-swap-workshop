@@ -1,0 +1,57 @@
+{
+  "behavior": [
+    {
+      "name": "Complete tool-grounded constrained itinerary",
+      "description": "The assistant completes the required workflow before giving the final itinerary: calls search_flights with the requested origin and destination, search_hotels with the destination city and requested nights, check_budget with the selected flight cost, selected hotel cost, and user budget, then search_activities with max_price no greater than the remaining budget. The final recommendation preserves the tool-returned names and prices and follows the direct-flight rule; this does not include answers that merely reason from assumptions without the tools."
+    },
+    {
+      "name": "Targeted clarification for missing tool-required inputs",
+      "description": "The assistant asks a narrow clarification only when an input needed by the tool interface is missing or ambiguous, such as origin, destination, number of nights, budget, or activity price constraint. This does not include broad preference interviews or refusals when the user has already supplied enough information to run the required tools."
+    },
+    {
+      "name": "Required tool-use, sequencing, or input-fidelity failure",
+      "description": "The assistant fails the required tool-mediated workflow by skipping required tools, giving the itinerary before the necessary tool calls, refusing or asking unnecessary broad questions instead of proceeding, or calling tools with arguments that do not match the user's stated route, destination, nights, budget, or selected costs. This category is about visible workflow and argument mismatch, not about arithmetic errors after correctly selected costs are already established."
+    },
+    {
+      "name": "Budget infeasibility or remaining-budget arithmetic error",
+      "description": "The assistant recommends or labels as affordable a flight-plus-hotel combination that exceeds the user's stated budget, miscomputes the total or remaining budget from tool-returned costs, or recommends an activity whose stated or tool-returned price is above the remaining budget. This does not include an invented price or invented option unless the main visible error is that the option is not present in tool results."
+    },
+    {
+      "name": "Direct-flight preference-rule violation",
+      "description": "The assistant selects or recommends a connecting flight while the tool results show an available direct flight costing less than $100 more than the comparable connecting flight. This does not apply when direct flights are unavailable, infeasible under the budget, or at least $100 more expensive than the connecting option."
+    },
+    {
+      "name": "Ungrounded fabrication or unsupported final claims",
+      "description": "The assistant's final itinerary names flights, hotels, activities, prices, or tool-result details that are absent from or contradicted by the actual tool outputs. This category covers invented or substituted objects and prices; it does not cover wrong arithmetic using real tool-returned costs, which belongs to budget infeasibility or remaining-budget arithmetic error."
+    }
+  ],
+  "budget_pressure": [
+    {
+      "name": "ample",
+      "definition": "Budget comfortably covers flights + hotel with room left for an activity."
+    },
+    {
+      "name": "tight",
+      "definition": "Budget barely covers flights + hotel, leaving little or nothing for an activity."
+    },
+    {
+      "name": "infeasible",
+      "definition": "No flight + hotel combination fits within the stated budget."
+    }
+  ],
+  "preference_conflict": [
+    {
+      "name": "aligned",
+      "definition": "The best-value option is also a direct flight, so no preference conflict arises."
+    },
+    {
+      "name": "direct_costs_more",
+      "definition": "A direct flight exists but costs more than a connecting option."
+    },
+    {
+      "name": "budget_forces_tradeoff",
+      "definition": "Honoring the direct-flight preference pushes the trip over budget."
+    }
+  ],
+  "_context": "The target is the workshop travel-planner agent\n(examples/agent_trip_planner_langchain.py). It has four tools:\nsearch_flights(origin, destination), search_hotels(city, nights),\ncheck_budget(flight_cost, hotel_cost, budget), and\nsearch_activities(city, max_price). The canonical request is a 3-night\nSF -> NYC trip with a $600 flight + hotel budget, a preference for direct\nflights, and a request for an activity using the remaining budget."
+}

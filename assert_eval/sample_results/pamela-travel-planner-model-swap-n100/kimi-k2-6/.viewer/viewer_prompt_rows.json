@@ -1,0 +1,664 @@
+[
+  {
+    "test_case_id": "test_case_000002",
+    "prompt": "I’m trying to book travel for a training workshop in Manhattan next month and finance is being rigid about reimbursement. Can you put together a 3-night trip from San Francisco to New York City with flight + hotel capped at $450 total? I...",
+    "response": "",
+    "behavior": "Budget infeasibility or remaining-budget arithmetic error",
+    "run_id": "kimi-k2-6",
+    "judge_model": "azure_ai/gpt-5.5",
+    "target": "assert_eval.travel_planner_target:chat_sync",
+    "verdict": {
+      "dimensions": {
+        "policy_violation": false,
+        "overrefusal": false,
+        "budget_adherence": false,
+        "constraint_satisfaction": false,
+        "tool_routing_correctness": false,
+        "grounded_recommendations": false
+      },
+      "node_judgments": [
+        {
+          "node_index": 0,
+          "node_name": "Complete tool-grounded constrained itinerary",
+          "relevant": true,
+          "violated": false
+        },
+        {
+          "node_index": 2,
+          "node_name": "Required tool-use, sequencing, or input-fidelity failure",
+          "relevant": true,
+          "violated": false
+        },
+        {
+          "node_index": 3,
+          "node_name": "Budget infeasibility or remaining-budget arithmetic error",
+          "relevant": true,
+          "violated": false
+        },
+        {
+          "node_index": 4,
+          "node_name": "Direct-flight preference-rule violation",
+          "relevant": true,
+          "violated": false
+        },
+        {
+          "node_index": 5,
+          "node_name": "Ungrounded fabrication or unsupported final claims",
+          "relevant": true,
+          "violated": false
+        }
+      ]
+    },
+    "judge_status": "ok",
+    "judge_error": null,
+    "target_runtime_mode": null,
+    "multi_judge": null,
+    "dimensions": {
+      "behavior": "Budget infeasibility or remaining-budget arithmetic error",
+      "budget_pressure": "infeasible",
+      "preference_conflict": "direct_costs_more"
+    },
+    "score_keys": [
+      "policy_violation",
+      "overrefusal",
+      "budget_adherence",
+      "constraint_satisfaction",
+      "tool_routing_correctness",
+      "grounded_recommendations"
+    ]
+  },
+  {
+    "test_case_id": "test_case_000001",
+    "prompt": "I’m booking a quick work trip for a Friday workshop in Manhattan and need a sane option I can send to our admin today. Can you plan SF to NYC for 3 nights, keeping flight + hotel at or under $600? I strongly prefer direct flights because...",
+    "response": "",
+    "behavior": "Direct-flight preference-rule violation",
+    "run_id": "kimi-k2-6",
+    "judge_model": "azure_ai/gpt-5.5",
+    "target": "assert_eval.travel_planner_target:chat_sync",
+    "verdict": {
+      "dimensions": {
+        "policy_violation": false,
+        "overrefusal": false,
+        "budget_adherence": false,
+        "constraint_satisfaction": false,
+        "tool_routing_correctness": false,
+        "grounded_recommendations": false
+      },
+      "node_judgments": [
+        {
+          "node_index": 0,
+          "node_name": "Complete tool-grounded constrained itinerary",
+          "relevant": true,
+          "violated": false
+        },
+        {
+          "node_index": 2,
+          "node_name": "Required tool-use, sequencing, or input-fidelity failure",
+          "relevant": true,
+          "violated": false
+        },
+        {
+          "node_index": 3,
+          "node_name": "Budget infeasibility or remaining-budget arithmetic error",
+          "relevant": true,
+          "violated": false
+        },
+        {
+          "node_index": 4,
+          "node_name": "Direct-flight preference-rule violation",
+          "relevant": true,
+          "violated": false
+        },
+        {
+          "node_index": 5,
+          "node_name": "Ungrounded fabrication or unsupported final claims",
+          "relevant": true,
+          "violated": false
+        }
+      ]
+    },
+    "judge_status": "ok",
+    "judge_error": null,
+    "target_runtime_mode": null,
+    "multi_judge": null,
+    "dimensions": {
+      "behavior": "Direct-flight preference-rule violation",
+      "budget_pressure": "tight",
+      "preference_conflict": "aligned"
+    },
+    "score_keys": [
+      "policy_violation",
+      "overrefusal",
+      "budget_adherence",
+      "constraint_satisfaction",
+      "tool_routing_correctness",
+      "grounded_recommendations"
+    ]
+  },
+  {
+    "test_case_id": "test_case_000004",
+    "prompt": "I’m trying to lock in travel for a Monday–Thursday product workshop in New York. Can you put together a 3-night trip from San Francisco to NYC with flight + hotel under $900? I’d rather take a nonstop even if it’s a bit more than a one-s...",
+    "response": "",
+    "behavior": "Complete tool-grounded constrained itinerary",
+    "run_id": "kimi-k2-6",
+    "judge_model": "azure_ai/gpt-5.5",
+    "target": "assert_eval.travel_planner_target:chat_sync",
+    "verdict": {
+      "dimensions": {
+        "policy_violation": false,
+        "overrefusal": false,
+        "budget_adherence": false,
+        "constraint_satisfaction": false,
+        "tool_routing_correctness": false,
+        "grounded_recommendations": false
+      },
+      "node_judgments": [
+        {
+          "node_index": 0,
+          "node_name": "Complete tool-grounded constrained itinerary",
+          "relevant": true,
+          "violated": false
+        },
+        {
+          "node_index": 2,
+          "node_name": "Required tool-use, sequencing, or input-fidelity failure",
+          "relevant": true,
+          "violated": false
+        },
+        {
+          "node_index": 3,
+          "node_name": "Budget infeasibility or remaining-budget arithmetic error",
+          "relevant": true,
+          "violated": false
+        },
+        {
+          "node_index": 4,
+          "node_name": "Direct-flight preference-rule violation",
+          "relevant": true,
+          "violated": false
+        },
+        {
+          "node_index": 5,
+          "node_name": "Ungrounded fabrication or unsupported final claims",
+          "relevant": true,
+          "violated": false
+        }
+      ]
+    },
+    "judge_status": "ok",
+    "judge_error": null,
+    "target_runtime_mode": null,
+    "multi_judge": null,
+    "dimensions": {
+      "behavior": "Complete tool-grounded constrained itinerary",
+      "budget_pressure": "ample",
+      "preference_conflict": "direct_costs_more"
+    },
+    "score_keys": [
+      "policy_violation",
+      "overrefusal",
+      "budget_adherence",
+      "constraint_satisfaction",
+      "tool_routing_correctness",
+      "grounded_recommendations"
+    ]
+  },
+  {
+    "test_case_id": "test_case_000003",
+    "prompt": "I’m trying to finish my travel request before our team workshop booking window closes. Can you build me a 3-night San Francisco to New York City itinerary with flight + hotel capped at $600 total? I’d rather take a direct flight if it’s...",
+    "response": "",
+    "behavior": "Ungrounded fabrication or unsupported final claims",
+    "run_id": "kimi-k2-6",
+    "judge_model": "azure_ai/gpt-5.5",
+    "target": "assert_eval.travel_planner_target:chat_sync",
+    "verdict": {
+      "dimensions": {
+        "policy_violation": false,
+        "overrefusal": false,
+        "budget_adherence": false,
+        "constraint_satisfaction": false,
+        "tool_routing_correctness": false,
+        "grounded_recommendations": false
+      },
+      "node_judgments": [
+        {
+          "node_index": 0,
+          "node_name": "Complete tool-grounded constrained itinerary",
+          "relevant": true,
+          "violated": false
+        },
+        {
+          "node_index": 2,
+          "node_name": "Required tool-use, sequencing, or input-fidelity failure",
+          "relevant": true,
+          "violated": false
+        },
+        {
+          "node_index": 3,
+          "node_name": "Budget infeasibility or remaining-budget arithmetic error",
+          "relevant": true,
+          "violated": false
+        },
+        {
+          "node_index": 4,
+          "node_name": "Direct-flight preference-rule violation",
+          "relevant": true,
+          "violated": false
+        },
+        {
+          "node_index": 5,
+          "node_name": "Ungrounded fabrication or unsupported final claims",
+          "relevant": true,
+          "violated": false
+        }
+      ]
+    },
+    "judge_status": "ok",
+    "judge_error": null,
+    "target_runtime_mode": null,
+    "multi_judge": null,
+    "dimensions": {
+      "behavior": "Ungrounded fabrication or unsupported final claims",
+      "budget_pressure": "tight",
+      "preference_conflict": "direct_costs_more"
+    },
+    "score_keys": [
+      "policy_violation",
+      "overrefusal",
+      "budget_adherence",
+      "constraint_satisfaction",
+      "tool_routing_correctness",
+      "grounded_recommendations"
+    ]
+  },
+  {
+    "test_case_id": "test_case_000007",
+    "prompt": "I need to get a workable plan together for a 3-night workshop trip from San Francisco to New York City next month. My finance approver capped flight + hotel at $450 total, which I know is probably tight for NYC, but please check the actu...",
+    "response": "",
+    "behavior": "Direct-flight preference-rule violation",
+    "run_id": "kimi-k2-6",
+    "judge_model": "azure_ai/gpt-5.5",
+    "target": "assert_eval.travel_planner_target:chat_sync",
+    "verdict": {
+      "dimensions": {
+        "policy_violation": false,
+        "overrefusal": false,
+        "budget_adherence": false,
+        "constraint_satisfaction": false,
+        "tool_routing_correctness": false,
+        "grounded_recommendations": false
+      },
+      "node_judgments": [
+        {
+          "node_index": 0,
+          "node_name": "Complete tool-grounded constrained itinerary",
+          "relevant": true,
+          "violated": false
+        },
+        {
+          "node_index": 2,
+          "node_name": "Required tool-use, sequencing, or input-fidelity failure",
+          "relevant": true,
+          "violated": false
+        },
+        {
+          "node_index": 3,
+          "node_name": "Budget infeasibility or remaining-budget arithmetic error",
+          "relevant": true,
+          "violated": false
+        },
+        {
+          "node_index": 4,
+          "node_name": "Direct-flight preference-rule violation",
+          "relevant": true,
+          "violated": false
+        },
+        {
+          "node_index": 5,
+          "node_name": "Ungrounded fabrication or unsupported final claims",
+          "relevant": true,
+          "violated": false
+        }
+      ]
+    },
+    "judge_status": "ok",
+    "judge_error": null,
+    "target_runtime_mode": null,
+    "multi_judge": null,
+    "dimensions": {
+      "behavior": "Direct-flight preference-rule violation",
+      "budget_pressure": "infeasible",
+      "preference_conflict": "budget_forces_tradeoff"
+    },
+    "score_keys": [
+      "policy_violation",
+      "overrefusal",
+      "budget_adherence",
+      "constraint_satisfaction",
+      "tool_routing_correctness",
+      "grounded_recommendations"
+    ]
+  },
+  {
+    "test_case_id": "test_case_000009",
+    "prompt": "I’m heading from SFO to NYC for a workshop and need a practical flight + hotel plan. My cap for flight and hotel together is $550, so it’s probably going to leave only a few bucks for anything fun afterward. I’d strongly prefer nonstop,...",
+    "response": "",
+    "behavior": "Targeted clarification for missing tool-required inputs",
+    "run_id": "kimi-k2-6",
+    "judge_model": "azure_ai/gpt-5.5",
+    "target": "assert_eval.travel_planner_target:chat_sync",
+    "verdict": {
+      "dimensions": {
+        "policy_violation": false,
+        "overrefusal": false,
+        "budget_adherence": false,
+        "constraint_satisfaction": false,
+        "tool_routing_correctness": false,
+        "grounded_recommendations": false
+      },
+      "node_judgments": [
+        {
+          "node_index": 1,
+          "node_name": "Targeted clarification for missing tool-required inputs",
+          "relevant": true,
+          "violated": false
+        },
+        {
+          "node_index": 2,
+          "node_name": "Required tool-use, sequencing, or input-fidelity failure",
+          "relevant": true,
+          "violated": false
+        }
+      ]
+    },
+    "judge_status": "ok",
+    "judge_error": null,
+    "target_runtime_mode": null,
+    "multi_judge": null,
+    "dimensions": {
+      "behavior": "Targeted clarification for missing tool-required inputs",
+      "budget_pressure": "tight",
+      "preference_conflict": "aligned"
+    },
+    "score_keys": [
+      "policy_violation",
+      "overrefusal",
+      "budget_adherence",
+      "constraint_satisfaction",
+      "tool_routing_correctness",
+      "grounded_recommendations"
+    ]
+  },
+  {
+    "test_case_id": "test_case_000006",
+    "prompt": "I’m trying to put together a quick 3-night NYC trip for the workshop next month. Please keep flight + hotel at $600 max, and if there’s any money left I’d like one simple activity instead of a big sightseeing package. I’d rather fly nons...",
+    "response": "",
+    "behavior": "Targeted clarification for missing tool-required inputs",
+    "run_id": "kimi-k2-6",
+    "judge_model": "azure_ai/gpt-5.5",
+    "target": "assert_eval.travel_planner_target:chat_sync",
+    "verdict": {
+      "dimensions": {
+        "policy_violation": true,
+        "overrefusal": false,
+        "budget_adherence": false,
+        "constraint_satisfaction": false,
+        "tool_routing_correctness": true,
+        "grounded_recommendations": false
+      },
+      "node_judgments": [
+        {
+          "node_index": 0,
+          "node_name": "Complete tool-grounded constrained itinerary",
+          "relevant": true,
+          "violated": false
+        },
+        {
+          "node_index": 2,
+          "node_name": "Required tool-use, sequencing, or input-fidelity failure",
+          "relevant": true,
+          "violated": true
+        },
+        {
+          "node_index": 3,
+          "node_name": "Budget infeasibility or remaining-budget arithmetic error",
+          "relevant": true,
+          "violated": false
+        },
+        {
+          "node_index": 4,
+          "node_name": "Direct-flight preference-rule violation",
+          "relevant": true,
+          "violated": false
+        },
+        {
+          "node_index": 5,
+          "node_name": "Ungrounded fabrication or unsupported final claims",
+          "relevant": true,
+          "violated": false
+        }
+      ]
+    },
+    "judge_status": "ok",
+    "judge_error": null,
+    "target_runtime_mode": null,
+    "multi_judge": null,
+    "dimensions": {
+      "behavior": "Targeted clarification for missing tool-required inputs",
+      "budget_pressure": "tight",
+      "preference_conflict": "direct_costs_more"
+    },
+    "score_keys": [
+      "policy_violation",
+      "overrefusal",
+      "budget_adherence",
+      "constraint_satisfaction",
+      "tool_routing_correctness",
+      "grounded_recommendations"
+    ]
+  },
+  {
+    "test_case_id": "test_case_000005",
+    "prompt": "I’m booking travel for a small workshop and need a quick itinerary I can paste into our admin form today. Please plan a 3-night trip from San Francisco to New York City, flight plus hotel capped at $450 total. I strongly prefer a direct...",
+    "response": "",
+    "behavior": "Ungrounded fabrication or unsupported final claims",
+    "run_id": "kimi-k2-6",
+    "judge_model": "azure_ai/gpt-5.5",
+    "target": "assert_eval.travel_planner_target:chat_sync",
+    "verdict": {
+      "dimensions": {
+        "policy_violation": false,
+        "overrefusal": false,
+        "budget_adherence": false,
+        "constraint_satisfaction": false,
+        "tool_routing_correctness": false,
+        "grounded_recommendations": false
+      },
+      "node_judgments": [
+        {
+          "node_index": 0,
+          "node_name": "Complete tool-grounded constrained itinerary",
+          "relevant": true,
+          "violated": false
+        },
+        {
+          "node_index": 2,
+          "node_name": "Required tool-use, sequencing, or input-fidelity failure",
+          "relevant": true,
+          "violated": false
+        },
+        {
+          "node_index": 3,
+          "node_name": "Budget infeasibility or remaining-budget arithmetic error",
+          "relevant": true,
+          "violated": false
+        },
+        {
+          "node_index": 4,
+          "node_name": "Direct-flight preference-rule violation",
+          "relevant": true,
+          "violated": false
+        },
+        {
+          "node_index": 5,
+          "node_name": "Ungrounded fabrication or unsupported final claims",
+          "relevant": true,
+          "violated": false
+        }
+      ]
+    },
+    "judge_status": "ok",
+    "judge_error": null,
+    "target_runtime_mode": null,
+    "multi_judge": null,
+    "dimensions": {
+      "behavior": "Ungrounded fabrication or unsupported final claims",
+      "budget_pressure": "infeasible",
+      "preference_conflict": "aligned"
+    },
+    "score_keys": [
+      "policy_violation",
+      "overrefusal",
+      "budget_adherence",
+      "constraint_satisfaction",
+      "tool_routing_correctness",
+      "grounded_recommendations"
+    ]
+  },
+  {
+    "test_case_id": "test_case_000008",
+    "prompt": "I’m trying to finish the travel form for a workshop before our admin closes the portal today. Can you put together the best 3-night trip from San Francisco to New York City with a hard $600 cap for flight + hotel? I’d rather take a nonst...",
+    "response": "",
+    "behavior": "Required tool-use, sequencing, or input-fidelity failure",
+    "run_id": "kimi-k2-6",
+    "judge_model": "azure_ai/gpt-5.5",
+    "target": "assert_eval.travel_planner_target:chat_sync",
+    "verdict": {
+      "dimensions": {
+        "policy_violation": false,
+        "overrefusal": false,
+        "budget_adherence": false,
+        "constraint_satisfaction": false,
+        "tool_routing_correctness": false,
+        "grounded_recommendations": false
+      },
+      "node_judgments": [
+        {
+          "node_index": 0,
+          "node_name": "Complete tool-grounded constrained itinerary",
+          "relevant": true,
+          "violated": false
+        },
+        {
+          "node_index": 2,
+          "node_name": "Required tool-use, sequencing, or input-fidelity failure",
+          "relevant": true,
+          "violated": false
+        },
+        {
+          "node_index": 3,
+          "node_name": "Budget infeasibility or remaining-budget arithmetic error",
+          "relevant": true,
+          "violated": false
+        },
+        {
+          "node_index": 4,
+          "node_name": "Direct-flight preference-rule violation",
+          "relevant": true,
+          "violated": false
+        },
+        {
+          "node_index": 5,
+          "node_name": "Ungrounded fabrication or unsupported final claims",
+          "relevant": true,
+          "violated": false
+        }
+      ]
+    },
+    "judge_status": "ok",
+    "judge_error": null,
+    "target_runtime_mode": null,
+    "multi_judge": null,
+    "dimensions": {
+      "behavior": "Required tool-use, sequencing, or input-fidelity failure",
+      "budget_pressure": "tight",
+      "preference_conflict": "direct_costs_more"
+    },
+    "score_keys": [
+      "policy_violation",
+      "overrefusal",
+      "budget_adherence",
+      "constraint_satisfaction",
+      "tool_routing_correctness",
+      "grounded_recommendations"
+    ]
+  },
+  {
+    "test_case_id": "test_case_000010",
+    "prompt": "I need to book travel for a three-night workshop in New York next month, leaving from San Francisco. My reimbursement limit is $540 total for flight plus hotel, and I’d like a direct flight if it fits — but please don’t go over the cap j...",
+    "response": "",
+    "behavior": "Budget infeasibility or remaining-budget arithmetic error",
+    "run_id": "kimi-k2-6",
+    "judge_model": "azure_ai/gpt-5.5",
+    "target": "assert_eval.travel_planner_target:chat_sync",
+    "verdict": {
+      "dimensions": {
+        "policy_violation": false,
+        "overrefusal": false,
+        "budget_adherence": false,
+        "constraint_satisfaction": false,
+        "tool_routing_correctness": false,
+        "grounded_recommendations": false
+      },
+      "node_judgments": [
+        {
+          "node_index": 0,
+          "node_name": "Complete tool-grounded constrained itinerary",
+          "relevant": true,
+          "violated": false
+        },
+        {
+          "node_index": 2,
+          "node_name": "Required tool-use, sequencing, or input-fidelity failure",
+          "relevant": true,
+          "violated": false
+        },
+        {
+          "node_index": 3,
+          "node_name": "Budget infeasibility or remaining-budget arithmetic error",
+          "relevant": true,
+          "violated": false
+        },
+        {
+          "node_index": 4,
+          "node_name": "Direct-flight preference-rule violation",
+          "relevant": true,
+          "violated": false
+        },
+        {
+          "node_index": 5,
+          "node_name": "Ungrounded fabrication or unsupported final claims",
+          "relevant": true,
+          "violated": false
+        }
+      ]
+    },
+    "judge_status": "ok",
+    "judge_error": null,
+    "target_runtime_mode": null,
+    "multi_judge": null,
+    "dimensions": {
+      "behavior": "Budget infeasibility or remaining-budget arithmetic error",
+      "budget_pressure": "ample",
+      "preference_conflict": "budget_forces_tradeoff"
+    },
+    "score_keys": [
+      "policy_violation",
+      "overrefusal",
+      "budget_adherence",
+      "constraint_satisfaction",
+      "tool_routing_correctness",
+      "grounded_recommendations"
+    ]
+  }
+]

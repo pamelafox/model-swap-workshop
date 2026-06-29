@@ -68,7 +68,6 @@ FOUNDRY_ANTHROPIC_API_KEY=YOUR-FOUNDRY-ANTHROPIC-API-KEY
 The Python files assume that the following Foundry models are deployed, with the deployment names matching the model names:
 
 * "gpt-5.5"
-* "Mistral-Large-3"
 * "Kimi-K2.6"
 * "DeepSeek-V4-Flash"
 * "claude-sonnet-4-5" (for Anthropic examples only)
@@ -306,23 +305,69 @@ Ideas to try:
 
 ## Part 7: Evaluations
 
-Now quantify what you observed.
+With evaluations, you can quantify what you observed.
 
 ### 7a: Basic programmatic evals
+
+If you know exactly what the model should output for an input, then it's easy to evaluate using string comparison.
 
 ```bash
 uv run examples/evals_basic.py
 ```
 
-This runs 5 tool-calling edge cases across all models and checks the tool call arguments programmatically. Cases include attendee normalization, date math, ambiguous duration, a request in Spanish, and informal-to-formal extraction. No LLM judge needed — just programmatic checks.
+This script runs 5 tool-calling edge cases across all models and checks the tool call arguments programmatically. Cases include attendee normalization, date math, ambiguous duration, a request in Spanish, and informal-to-formal extraction. No LLM judge needed — just programmatic checks.
 
 ### 7b: LLM-as-judge (groundedness)
+
+When the output is free text and can vary widely, then you may need to bring in an LLM-as-a-judge to evaluate. You must give it a clear rubric for what is pass vs. fail, and force it to provide a reasoning for its decision.
 
 ```bash
 uv run examples/evals_llm_judge.py
 ```
 
-Uses a direct LLM call with a groundedness prompt to evaluate the RAG outputs from all models. The judge (gpt-5.5) checks whether each model's response is grounded in the provided sources, returning a binary pass/fail verdict with reasoning. Models that hallucinate facts not in the sources will fail.
+This script uses a direct LLM call with a groundedness prompt to evaluate the RAG outputs from all models. The judge LLM checks whether each model's response is grounded in the provided sources, returning a binary pass/fail verdict with reasoning. Models that hallucinate facts not in the sources will fail.
+
+
+### 7b: Scenario-grounded evaluation with ASSERT
+
+In Part 6 you *watched* the models plan trips differently — gpt-5.5 batched its tool calls, others explored more combos, some skipped the budget check. Now **quantify** it: did each model actually stay on budget, respect the constraints, and ground its recommendations in tool results — on *your* travel-planner scenario?
+
+A generic benchmark won't answer that. This is where [ASSERT](https://github.com/responsibleai/ASSERT) comes in: you write a behavior spec (what a good trip plan looks like), and ASSERT generates scenario-specific test cases, runs them against your agent, and an LLM judge scores each run on dimensions *you* define — budget adherence, constraint satisfaction, tool routing, grounding.
+The eval lives under [`assert_eval/`](assert_eval/): a behavior spec, a thin pydantic-ai target that reuses the **Part 6 tools + system prompt**, and scenario-specific judge dimensions. Full setup and speaker notes are in [`assert_eval/README.md`](assert_eval/README.md).
+
+1. Install ASSERT and point its pipeline (generation + judge) at your Foundry account:
+
+    ```bash
+    uv add assert-ai
+    export AZURE_API_BASE="$FOUNDRY_MODELS_ENDPOINT"
+    export AZURE_AI_API_KEY="$FOUNDRY_API_KEY"
+    ```
+
+2. Hold the eval fixed; swap only the **target** model — exactly like Part 6, but now scored on the same generated suite with trace capture enabled:
+
+    ```bash
+    WORKSHOP_TARGET_MODEL="gpt-5.5" WORKSHOP_TRACE=1 uv run assert-ai run --config assert_eval/travel_planner_eval.yaml --override run=gpt-5-5
+    WORKSHOP_TARGET_MODEL="Kimi-K2.6" WORKSHOP_TRACE=1 uv run assert-ai run --config assert_eval/travel_planner_eval.yaml --override run=kimi-k2-6
+    WORKSHOP_TARGET_MODEL="DeepSeek-V4-Flash" WORKSHOP_TRACE=1 uv run assert-ai run --config assert_eval/travel_planner_eval.yaml --override run=deepseek-v4-flash
+    ```
+
+3. **Short on time?** The results are already saved — see [`assert_eval/sample_results/`](assert_eval/sample_results/) for the committed traced `pamela-travel-planner-model-swap-n100` comparison you can browse in the local viewer without re-running. Copy-to-viewer instructions are in [`sample_results/RESULTS.md`](assert_eval/sample_results/RESULTS.md).
+
+#### What to observe
+
+Same fixed scenario, swap the model, compare per dimension on the 55 traced cases common to all three models (fail %, lower = better):
+
+| Dimension | gpt-5.5 | Kimi-K2.6 | DeepSeek-V4-Flash |
+|-----------|--------:|----------:|-------------------:|
+| budget_adherence | 2% | 13% | 13% |
+| constraint_satisfaction | 5% | 13% | 27% |
+| tool_routing_correctness | 7% | 35% | 33% |
+| grounded_recommendations | 35% | 62% | 64% |
+| overrefusal | 7% | 15% | 18% |
+
+On *this* travel-planner scenario, gpt-5.5 is best on every dimension. Because `WORKSHOP_TRACE=1` captures the agent's spans, `tool_routing_correctness` and `grounded_recommendations` are now real signal instead of invalid trace gaps. Kimi-K2.6 and DeepSeek-V4-Flash are roughly comparable, with DeepSeek weaker on constraint satisfaction. Treat this as directional: one run per model and a single gpt-5.5 judge pass, so self-grading bias is possible.
+
+> Single-metric judges still have their place, like the groundedness evaluator that scores one isolated signal each. ASSERT scores the whole travel-planning behavior on generated scenarios — the eval you'd actually gate a model swap on.
 
 ---
 
@@ -351,6 +396,10 @@ You've been manually tweaking prompts all workshop. [DSPy](https://dspy.ai/) aut
 * **GEPA's generated prompts**: The optimizer discovers a structured procedure — draft each line, enumerate words to verify count, rewrite if wrong, do a final pass. This is exactly what a human prompt engineer would discover through trial and error.
 * **Try a different student model**: Change `STUDENT_MODEL` to `Kimi-K2.6` and re-run. The optimizer will generate different instructions tuned to that model's quirks.
 
+### Close the loop with ASSERT
+
+DSPy optimizes against a *metric*. Point that metric at the **ASSERT scenario scores** from Part 7 instead of a toy proxy, and you're optimizing the prompt against the same travel-planner evaluation you used to compare models — measure → optimize → re-measure, all scenario-grounded. The closed-loop sketch (with the train/held-out split that keeps it honest) is in [`assert_eval/README.md`](assert_eval/README.md).
+
 ### Discussion
 
 * How does automated prompt optimization compare to manual tweaking?
@@ -361,14 +410,15 @@ You've been manually tweaking prompts all workshop. [DSPy](https://dspy.ai/) aut
 
 ## Recap
 
-| What we tested | What helps weaker models |
-| -------------- | ------------------------ |
-| Raw reasoning (counting, spatial) | Chain-of-thought prompts, code tools |
-| Grounding / hallucination | Stronger system prompt instructions |
-| Tool arg normalization | Tighter parameter descriptions, examples |
-| Tool loop efficiency | Fewer calls = lower cost/latency |
+| What we tested | Winner(s) | What helps weaker models |
+|----------------|-----------|--------------------------|
+| Raw reasoning (counting, spatial) | gpt-5.5, Kimi | Chain-of-thought prompts, code tools |
+| Grounding / hallucination | gpt-5.5, Kimi, DeepSeek | Stronger system prompt instructions |
+| Tool arg normalization | gpt-5.5, Kimi | Tighter parameter descriptions, examples |
+| Tool loop efficiency | gpt-5.5, DeepSeek | Fewer calls = lower cost/latency |
+| Travel-planner scenario (budget, constraints) — ASSERT | gpt-5.5 over Kimi-K2.6 and DeepSeek-V4-Flash | A scenario-grounded eval that scores *your* workflow, not a generic benchmark |
 
-**Key takeaway**: "Just swap the model" is never just swapping the model. Prompts, tool definitions, and output strategies all need tuning per model. Evals let you quantify instead of guessing. For a more rigorous approach, prompt optimization (like DSPy's GEPA) can automate the search for better prompts instead of relying on manual trial and error.
+**Key takeaway**: "Just swap the model" is never just swapping the model. Prompts, tool definitions, and output strategies all need tuning per model. Scenario-grounded evals (ASSERT) let you quantify the tradeoffs on *your* workflow instead of guessing — and gate the swap on them. Prompt optimization (like DSPy's GEPA) can automate the search for better prompts instead of relying on manual trial and error.
 
 ---
 

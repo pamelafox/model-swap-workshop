@@ -1,0 +1,55 @@
+{
+  "schema_version": 4,
+  "generator_version": "viewer-read-model-v3",
+  "suite_id": "pamela-travel-planner-model-swap-n100",
+  "run_id": "deepseek-v4-flash",
+  "source_files": {
+    "inference_set.jsonl": {
+      "path": "inference_set.jsonl",
+      "size_bytes": 8441254,
+      "mtime_ms": 1782565421139
+    },
+    "scores.jsonl": {
+      "path": "scores.jsonl",
+      "size_bytes": 607395,
+      "mtime_ms": 1782566373700
+    },
+    "test_set.jsonl": {
+      "path": "..\\artifacts\\test_set\\v0003\\test_set.jsonl",
+      "size_bytes": 96052,
+      "mtime_ms": 1782560747139
+    },
+    "manifest.json": {
+      "path": "manifest.json",
+      "size_bytes": 1900,
+      "mtime_ms": 1782566354481
+    },
+    "config.yaml": {
+      "path": "config.yaml",
+      "size_bytes": 6046,
+      "mtime_ms": 1782518407354
+    }
+  },
+  "derived_files": {
+    "viewer_prompt_rows.json": {
+      "path": ".viewer\\viewer_prompt_rows.json",
+      "size_bytes": 22377,
+      "mtime_ms": 1782566373897
+    },
+    "viewer_audit_rows.json": {
+      "path": ".viewer\\viewer_audit_rows.json",
+      "size_bytes": 94853,
+      "mtime_ms": 1782566373907
+    },
+    "viewer_transcript_index.json": {
+      "path": ".viewer\\viewer_transcript_index.json",
+      "size_bytes": 8968,
+      "mtime_ms": 1782566373828
+    },
+    "viewer_score_index.json": {
+      "path": ".viewer\\viewer_score_index.json",
+      "size_bytes": 8864,
+      "mtime_ms": 1782566373907
+    }
+  }
+}
