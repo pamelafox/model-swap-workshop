@@ -1,0 +1,45 @@
+Model: gpt-5.5
+User: I need to fly from SF to NYC next month for 3 nights. My total budget is 
+$600 for flights and hotel combined. I prefer direct flights if possible. Also 
+suggest an activity I can do with whatever budget is left over.
+
+  Turn 1 (parallel)
+    search_flights(origin='SF', destination='NYC')
+    search_hotels(city='NYC', nights=3)
+  Turn 2 (single)
+    check_budget(flight_cost=280, hotel_cost=285, budget=600)
+  Turn 3 (single)
+    search_activities(city='NYC', max_price=35)
+
+Here’s a NYC trip option that fits your $600 flight + hotel budget:             
+
+Recommended flight:                                                             
+
+ • United — SF to NYC                                                           
+ • Direct flight                                                                
+ • $280                                                                         
+ • Duration: 5h 30m                                                             
+
+I chose this over the cheaper Delta flight because you prefer direct flights,   
+and the price difference is only $85, which is under $100.                      
+
+Recommended hotel for 3 nights:                                                 
+
+ • The Pod Hotel — Midtown                                                      
+ • $95/night x 3 nights = $285                                                  
+ • Rating: 4.2                                                                  
+
+Budget check:                                                                   
+
+ • Flight: $280                                                                 
+ • Hotel: $285                                                                  
+ • Total: $565                                                                  
+ • Remaining budget: $35                                                        
+
+Activity options within your remaining $35:                                     
+
+ • Statue of Liberty Tour — $25                                                 
+ • Museum of Modern Art — $30                                                   
+
+Best overall pick: United direct flight + The Pod Hotel, leaving you enough for 
+MoMA or a Statue of Liberty tour.                                               

@@ -1,0 +1,12 @@
+Question: what are the key differences between how honey bees and carpenter bees build their nests?
+Retrieved 88 matching documents, only sending the first 5.
+
+Response from gpt-5.5: 
+
+Based on the provided sources, the key difference is:
+
+- **Carpenter bees** build nests by **carving into wood or hollow plant stems**. They use their **sharp mandibles** and vibrate their bodies to dig tunnels, but **they do not eat the wood**. They may tunnel into live or dead wood or hollow Yucca/Agave stems, then branch left and right to form a **T-shaped nest**. [California_carpenter_bee.pdf-4]
+
+- **Honey bees** are described only as living in **hives/colonies** and producing honey; the sources do **not** explain how honey bees build their nests. [California_carpenter_bee.pdf-4]  
+
+So, from the available sources: **carpenter bees excavate nests in wood or stems, while honey bees are associated with hives/colonies, but their nest-building method is not described in the provided material.**

@@ -1,0 +1,7 @@
+Model: Kimi-K2.6
+Prompt: List exactly 3 benefits of exercise. Each benefit must be stated in exactly 6 words. The first letter of each benefit must spell out the word 'FIT' (F, I, T). Output only the 3 benefits as a numbered list, nothing else.
+
+Response:
+
+
+--- Validation ---

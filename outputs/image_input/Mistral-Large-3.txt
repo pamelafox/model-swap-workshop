@@ -1,0 +1,17 @@
+=== Is this a unicorn? (examples/image_aurochs.jpg) ===
+No, this is not a unicorn. Unicorns are mythical creatures often depicted with a single large, pointed, spiraling horn projecting from their forehead. The animal in the image is a type of cattle known as a yak, which is characterized by its long, dense fur and large, curved horns. Yaks are native to the Himalayan region of south-central Asia, the Tibetan Plateau, and as far north as Mongolia and Russia. They are well adapted to living in high altitudes and cold climates.
+
+=== Are these alligators or crocodiles? (examples/image_crocodile.png) ===
+Based on the image provided, it is difficult to definitively distinguish between alligators and crocodiles without a clearer view of certain key features. However, there are some general characteristics that can help differentiate the two:
+
+1. **Snout Shape**: Alligators typically have a broader, U-shaped snout, while crocodiles have a more pointed, V-shaped snout.
+2. **Teeth Visibility**: When the mouth is closed, crocodiles often show their fourth tooth on the lower jaw, which fits into a notch in the upper jaw and is visible. In alligators, this tooth is usually hidden when the mouth is closed.
+3. **Color**: Alligators are usually darker, often blackish, while crocodiles tend to be lighter, often olive or tan.
+
+In this image, the snouts appear relatively broad, which might suggest they are alligators. However, without a clearer view of the teeth and other distinguishing features, it is not possible to make a definitive identification. Given the context and the appearance, they are more likely to be alligators.
+
+=== What's the cheapest plant? (examples/image_plantpage.png) ===
+The table lists the prices of various plants. The lowest price is $1.63 for Tarweed (Madia elegans).
+
+As a result, the answer is: $1.63.
+

@@ -19,10 +19,10 @@ load_dotenv()
 MODEL = "gpt-5.5"
 # MODEL = "Kimi-K2.6"
 # MODEL = "DeepSeek-V4-Flash"
-MODEL = "Mistral-Large-3"
+# MODEL = "Mistral-Large-3"
 deployment_name = os.environ.get("FOUNDRY_OPENAI_DEPLOYMENT", MODEL)
 
-endpoint = os.environ["FOUNDRY_MODELS_ENDPOINT"] + "/openai/v1"
+endpoint = os.environ["FOUNDRY_MODELS_ENDPOINT"]
 api_key = os.environ["FOUNDRY_API_KEY"]
 
 client = OpenAI(

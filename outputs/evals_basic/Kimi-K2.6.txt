@@ -1,0 +1,9 @@
+Evaluating tool calling: Kimi-K2.6
+============================================================
+  ✅ PASS  attendee_normalization   
+  ✅ PASS  date_math_next_week      
+  ✅ PASS  ambiguous_duration       
+  ✅ PASS  spanish_request          
+  ✅ PASS  formal_from_informal     
+
+  Result: 5/5 passed

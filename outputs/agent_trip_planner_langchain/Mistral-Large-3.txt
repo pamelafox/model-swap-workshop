@@ -1,0 +1,52 @@
+Model: Mistral-Large-3
+User: I need to fly from SF to NYC next month for 3 nights. My total budget is 
+$600 for flights and hotel combined. I prefer direct flights if possible. Also 
+suggest an activity I can do with whatever budget is left over.
+
+  Turn 1 (single)
+    search_flights(origin='SFO', destination='JFK')
+  Turn 2 (single)
+    search_hotels(city='New York', nights=3)
+
+Here are the best flight + hotel options within your $600 budget for SF → NYC (3
+nights):                                                                        
+
+--------------------------------------------------------------------------------
+
+Option 1: Direct Flight + Budget Hotel                                          
+
+ • Flight: United (Direct, 5h30m) – $280                                        
+ • Hotel: The Pod Hotel (Midtown, 4.2★) – $285                                  
+ • Total: $565 (Under budget!)                                                  
+ • Why? Direct flight, solid budget hotel in a central location.                
+
+--------------------------------------------------------------------------------
+
+Option 2: Cheaper Flight (1 Stop) + Nicer Hotel                                 
+
+ • Flight: Delta (1 stop, 8h15m) – $195                                         
+ • Hotel: The Jane (West Village, 4.0★) – $405                                  
+ • Total: $600 (Exact budget!)                                                  
+ • Why? More unique hotel in a trendy area, but longer flight.                  
+
+--------------------------------------------------------------------------------
+
+Option 3: Direct Flight + Mid-Range Hotel                                       
+
+ • Flight: JetBlue (Direct, 5h20m) – $320                                       
+ • Hotel: The Jane (West Village, 4.0★) – $405                                  
+ • Total: $725 (Over budget—skip this one.)                                     
+
+--------------------------------------------------------------------------------
+
+Best Pick?                                                                      
+
+Option 1 ($565 total) is the sweet spot: ✅ Direct flight ✅ Central location ✅
+$35 left for an activity!                                                       
+
+--------------------------------------------------------------------------------
+
+Activity Suggestion (With $35 Left)                                             
+
+I’ll check for fun things to do in NYC under $35 after confirming your choice.  
+Want me to proceed with Option 1? Or would you prefer Option 2?                 

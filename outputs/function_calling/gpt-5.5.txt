@@ -1,0 +1,15 @@
+Response from gpt-5.5:
+
+                        Tool call: create_calendar_event                        
+┏━━━━┳━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃    ┃ Field            ┃ Expected                 ┃ Actual                    ┃
+┡━━━━╇━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│ ✅ │ title            │ Platform Team Sync       │ Platform Team Sync        │
+│ ✅ │ start_time       │ 2026-06-30T13:30:00-07:… │ 2026-06-30T13:30:00-07:00 │
+│ ✅ │ end_time         │ 2026-06-30T14:00:00-07:… │ 2026-06-30T14:00:00-07:00 │
+│ ✅ │ timezone         │ America/Los_Angeles      │ America/Los_Angeles       │
+│ ❌ │ attendees        │ ['Sarah', 'Marcus',      │ ['Me', 'Sarah', 'Marcus', │
+│    │                  │ 'Priya']                 │ 'Priya']                  │
+│ ✅ │ location         │ Virtual                  │ Virtual                   │
+│ ✅ │ duration_minutes │ 30                       │ 30                        │
+└────┴──────────────────┴──────────────────────────┴───────────────────────────┘

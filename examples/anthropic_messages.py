@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-endpoint = os.environ["FOUNDRY_ANTHROPIC_MODELS_ENDPOINT"] + "/anthropic"
+endpoint = os.environ["FOUNDRY_ANTHROPIC_MODELS_ENDPOINT"]
 
 # === Choose a model (comment/uncomment) ===
 # MODEL = "claude-opus-4-5"

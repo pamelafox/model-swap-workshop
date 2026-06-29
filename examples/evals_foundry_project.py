@@ -16,6 +16,10 @@ Usage:
     uv run examples/evals_openai.py
 """
 
+# /// script
+# dependencies = ["azure-ai-projects>=1.0.0", "azure-identity"]
+# ///
+
 import json
 import os
 import time

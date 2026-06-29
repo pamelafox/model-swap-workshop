@@ -1,5 +1,6 @@
 import json
 import os
+from pathlib import Path
 
 from anthropic import Anthropic
 from dotenv import load_dotenv
@@ -7,7 +8,7 @@ from lunr import lunr
 
 load_dotenv()
 
-endpoint = os.environ["FOUNDRY_ANTHROPIC_MODELS_ENDPOINT"] + "/anthropic"
+endpoint = os.environ["FOUNDRY_ANTHROPIC_MODELS_ENDPOINT"]
 api_key = os.environ["FOUNDRY_ANTHROPIC_API_KEY"]
 
 # === Choose a model (comment/uncomment) ===
@@ -24,7 +25,7 @@ client = Anthropic(
 )
 
 # Index the data from the JSON - each object has id, text, and embedding
-with open("rag_ingested_chunks.json") as file:
+with open(Path(__file__).parent / "rag_ingested_chunks.json") as file:
     documents = json.load(file)
     documents_by_id = {doc["id"]: doc for doc in documents}
 index = lunr(ref="id", fields=["text"], documents=documents)

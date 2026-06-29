@@ -36,13 +36,12 @@ The workshop finishes by running a small eval suite so you can quantify tradeoff
   * [`image_input.py`](examples/image_input.py) — vision capabilities across models
 * Agent loops: How do models handle repeated tool calls over time?
   * [`agent_trip_planner_pydanticai.py`](examples/agent_trip_planner_pydanticai.py) — PydanticAI trip planner with budget constraints
-  * [`function_calling_loop.py`](examples/function_calling_loop.py) — multi-turn agent conversation
-  * [`pydanticai_agent.py`](examples/pydanticai_agent.py) — PydanticAI agent with typed tools
-  * [`langchain_agent.py`](examples/langchain_agent.py) — LangChain agent with OpenAI/Anthropic
-  * [`agentframework_agent.py`](examples/agentframework_agent.py) — Microsoft Agent Framework
+  * [`agent_trip_planner_langchain.py`](examples/agent_trip_planner_langchain.py) — LangChain trip planner
+  * [`agent_trip_planner_maf.py`](examples/agent_trip_planner_maf.py) — Microsoft Agent Framework trip planner
 * Evaluations: Quantify tradeoffs instead of vibes
-  * [`evals_basic.py`](examples/evals_basic.py) — programmatic checks (exact match, schema validation)
-  * [`evals_foundry_judge.py`](examples/evals_foundry_judge.py) — LLM judge with azure-ai-evaluation (GroundednessEvaluator)
+  * [`evals_basic.py`](examples/evals_basic.py) — programmatic checks on tool calling (5 edge cases including Spanish)
+  * [`evals_llm_judge.py`](examples/evals_llm_judge.py) — LLM-as-judge for RAG groundedness (direct LLM call, binary pass/fail)
+  * [`evals_foundry_judge.py`](examples/evals_foundry_judge.py) — same evaluation using azure-ai-evaluation SDK (GroundednessEvaluator)
   * [`evals_agent.py`](examples/evals_agent.py) — agent eval with ToolCallAccuracyEvaluator
   * [`evals_foundry_project.py`](examples/evals_foundry_project.py) — openai.evals.create via Foundry project (optional, requires project)
 
@@ -58,10 +57,15 @@ All examples authenticate to Foundry using an API key and reference environment 
 Key SDKs/frameworks used:
 - **OpenAI Python SDK** (`openai`): For calling Foundry-hosted OpenAI models via the Responses API.
 - **Anthropic Python SDK** (`anthropic`): For calling Foundry-hosted Claude models via the Messages API.
-- **LiteLLM** (`litellm`): A unified interface that abstracts provider differences.
 - **PydanticAI** (`pydantic-ai`): Agent framework with typed tool support, works with OpenAI or Anthropic providers.
-- **LangChain** (`langchain`, `langchain-anthropic`, `langchain-azure-ai`): Agent framework using `ChatAnthropic` for Claude via Messages API and `AzureAIOpenAIApiChatModel` for OpenAI via Responses API.
+- **LangChain** (`langchain`, `langchain-azure-ai`): Agent framework using `AzureAIOpenAIApiChatModel` for OpenAI via Responses API.
 - **Microsoft Agent Framework** (`agent-framework-*`): Microsoft's agent framework, supporting OpenAI and Anthropic clients.
+- **DSPy** (`dspy`): Automated prompt optimization framework.
+
+Some files not in the main workshop flow use additional packages via PEP 723 inline script metadata:
+- `azure-ai-evaluation` (in `evals_foundry_judge.py`, `evals_agent.py`)
+- `azure-ai-projects`, `azure-identity` (in `evals_foundry_project.py`)
+- `pydantic-monty` (in `tool_loop_code.py`)
 
 The Microsoft Agent Framework (MAF) GitHub repo is here:
 https://github.com/microsoft/agent-framework
@@ -99,6 +103,7 @@ MAF documentation: https://learn.microsoft.com/agent-framework/
     All four models handle multilingual well — no meaningful correctness variance found.
 - [x] Try code execution (with monty, maybe with tool calling)
 - [x] Add evals
+- [ ] Add ASSERT- https://github.com/responsibleai/ASSERT - on an agent
 
 ## Package management
 

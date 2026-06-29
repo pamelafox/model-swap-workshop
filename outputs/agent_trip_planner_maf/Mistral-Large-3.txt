@@ -1,0 +1,55 @@
+Model: Mistral-Large-3
+User: I need to fly from SF to NYC next month for 3 nights. My total budget is 
+$600 for flights and hotel combined. I prefer direct flights if possible. Also 
+suggest an activity I can do with whatever budget is left over.
+
+  Turn 1 (single)
+    search_flights(origin='SF', destination='NYC')
+  Turn 2 (single)
+    search_hotels(city='NYC', nights=3)
+  Turn 3 (single)
+    check_budget(flight_cost=280.0, hotel_cost=285.0, budget=600.0)
+  Turn 4 (single)
+    search_activities(city='NYC', max_price=35.0)
+
+Here’s what I found for your trip from San Francisco (SF) to New York City      
+(NYC):                                                                          
+
+Flight Option (Direct)                                                          
+
+ • Airline: United                                                              
+ • Price: $280                                                                  
+ • Duration: 5h 30m (direct)                                                    
+
+Hotel Option (3 Nights)                                                         
+
+ • Name: The Pod Hotel                                                          
+ • Price per Night: $95                                                         
+ • Total Cost: $285 (3 nights)                                                  
+ • Rating: 4.2/5                                                                
+ • Neighborhood: Midtown                                                        
+
+Total Cost: $565                                                                
+
+ • Remaining Budget: $35                                                        
+
+--------------------------------------------------------------------------------
+
+Suggested Activity (Within Remaining Budget)                                    
+
+With $35 left, here’s a fun activity you can do in NYC:Here are two great       
+activities you can do with your remaining $35:                                  
+
+ 1 Statue of Liberty Tour – $25                                                 
+    • A classic NYC experience with great photo opportunities.                  
+ 2 Museum of Modern Art (MoMA) – $30                                            
+    • Perfect for art lovers, featuring works by Van Gogh, Warhol, and Picasso. 
+
+--------------------------------------------------------------------------------
+
+Final Recommendation                                                            
+
+✅ Flight: United ($280) ✅ Hotel: The Pod Hotel ($285) ✅ Total: $565 (within  
+your $600 budget) ✅ Activity: Statue of Liberty Tour or MoMA                   
+
+Would you like to book this, or should I look for other options?                

@@ -1,0 +1,6 @@
+Model: Kimi-K2.6
+Prompt: I am standing in the center of a room facing north. I turn right 90 degrees. I turn right 90 degrees again. I turn left 45 degrees. What compass direction am I now facing? Answer with just the direction and a one-sentence explanation.
+
+Response: Southeast. After two 90-degree right turns from north you face south, and turning left 45 degrees from south points you halfway toward east.
+
+(Correct answer: Southeast)

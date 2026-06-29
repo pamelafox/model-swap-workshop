@@ -1,0 +1,40 @@
+Evaluating tool calling across models
+============================================================
+
+  gpt-5.5:
+    ✅ PASS  attendee_normalization   
+    ✅ PASS  date_math_next_week      
+    ✅ PASS  ambiguous_duration       
+    ✅ PASS  spanish_request          
+    ✅ PASS  formal_from_informal     
+
+  Kimi-K2.6:
+    ✅ PASS  attendee_normalization   
+    ✅ PASS  date_math_next_week      
+    ✅ PASS  ambiguous_duration       
+    ✅ PASS  spanish_request          
+    ✅ PASS  formal_from_informal     
+
+  Mistral-Large-3:
+    ✅ PASS  attendee_normalization   
+    ✅ PASS  date_math_next_week      
+    ✅ PASS  ambiguous_duration       
+    ✅ PASS  spanish_request          
+    ✅ PASS  formal_from_informal     
+
+  DeepSeek-V4-Flash:
+    ✅ PASS  attendee_normalization   
+    ✅ PASS  date_math_next_week      
+    ✅ PASS  ambiguous_duration       
+    ✅ PASS  spanish_request          
+    ✅ PASS  formal_from_informal     
+
+============================================================
+  SUMMARY
+============================================================
+  Model                Passed   Failed   Score
+  -------------------- -------- -------- --------
+  gpt-5.5              5        0        5/5
+  Kimi-K2.6            5        0        5/5
+  Mistral-Large-3      5        0        5/5
+  DeepSeek-V4-Flash    5        0        5/5

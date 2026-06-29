@@ -1,0 +1,8 @@
+Model: Mistral-Large-3
+Prompt: I am standing in the center of a room facing north. I turn right 90 degrees. I turn right 90 degrees again. I turn left 45 degrees. What compass direction am I now facing? Answer with just the direction and a one-sentence explanation.
+
+Response: Southeast.
+
+You end up facing southeast after starting north, turning to east (first right), then south (second right), and finally southeast (left 45 degrees).
+
+(Correct answer: Southeast)

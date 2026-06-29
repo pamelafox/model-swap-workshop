@@ -1,0 +1,10 @@
+Question: what are the key differences between how honey bees and carpenter bees build their nests?
+Retrieved 88 matching documents, only sending the first 5.
+
+Response from claude-sonnet-4-5: 
+
+Based on the provided documents, I can only provide information about how carpenter bees build their nests, as there is no information about honey bee nest construction in these documents.
+
+Xylocopa californica carpenter bees carve their nests in wood by digging into it using their sharp mandibles while vibrating their body - they do not eat the wood. They dig a tunnel in substrates such as live or dead wood and hollow stems of Yucca and Agave plants, then dig to the right and left, creating a T-shape nest. [California_carpenter_bee.pdf-4]
+
+Unfortunately, the documents do not contain any information about how honey bees construct their nests, so I cannot make a comparison between the two species' nesting behaviors.

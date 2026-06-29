@@ -1,10 +1,12 @@
 # Model Swap Workshop
 
+[![Open in GitHub Codespaces](https://img.shields.io/static/v1?style=for-the-badge&label=GitHub+Codespaces&message=Open&color=brightgreen&logo=github)](https://codespaces.new/pamelafox/model-swap-workshop)
+
 Welcome! In this workshop you'll run the same scenarios across multiple frontier LLMs, observe where they differ, then tweak prompts and tool definitions to improve results. At the end, you'll quantify the tradeoffs with an eval suite.
 
-### Table of contents
+## Table of contents
 
-1. [Install the prerequisites](#install-the-prerequisites)
+1. [Getting started](#getting-started)
 2. [Setup the environment](#setup-the-environment)
 3. [Part 1: Single LLM calls](#part-1-single-llm-calls)
 4. [Part 2: RAG](#part-2-rag)
@@ -15,36 +17,51 @@ Welcome! In this workshop you'll run the same scenarios across multiple frontier
 9. [Part 7: Evaluations](#part-7-evaluations)
 10. [Part 8: Prompt optimization](#part-8-prompt-optimization)
 11. [Recap](#recap)
+12. [Resources](#resources)
 
-## Install the prerequisites
+## Getting started
 
-1. **Python 3.10+**: Check with `python --version`. Install from [python.org](https://www.python.org/downloads/) if needed.
+The quickest way to get started is GitHub Codespaces, since it will setup everything for you.
 
-2. **uv** (Python package manager): Install with:
+### GitHub Codespaces
 
-   ```bash
-   curl -LsSf https://astral.sh/uv/install.sh | sh
-   ```
+1. Open the repository (this may take several minutes):
 
-   Or on macOS: `brew install uv`
+    [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/pamelafox/model-swap-workshop)
 
-3. **Install dependencies**: From the repo root, run:
+2. Open a terminal window
+3. Continue with the [Setup the environment](#setup-the-environment) steps
 
-   ```bash
-   uv sync
-   ```
+### Local environment
 
-   This creates a `.venv` and installs all packages from `pyproject.toml`.
+1. Make sure the following tools are installed:
+
+    * [Python 3.10+](https://www.python.org/downloads/)
+    * [uv](https://docs.astral.sh/uv/getting-started/installation/)
+    * Git
+
+2. Clone the repository:
+
+    ```shell
+    git clone https://github.com/pamelafox/model-swap-workshop
+    cd model-swap-workshop
+    ```
+
+3. Install the dependencies:
+
+    ```shell
+    uv sync
+    ```
 
 ## Setup the environment
 
 Make sure you have a `.env` file with Foundry credentials (see `.env.sample`). Since some Azure accounts aren't able to access Anthropic models, there are separate environment variables to configure the Foundry project for use with those models.
 
 ```shell
-FOUNDRY_MODELS_ENDPOINT=https://YOUR-ACCOUNT.services.ai.azure.com
+FOUNDRY_MODELS_ENDPOINT=https://YOUR-ACCOUNT.services.ai.azure.com/openai/v1
 FOUNDRY_API_KEY=YOUR-FOUNDRY-API-KEY
 
-FOUNDRY_ANTHROPIC_MODELS_ENDPOINT=https://YOUR-ACCOUNT.services.ai.azure.com
+FOUNDRY_ANTHROPIC_MODELS_ENDPOINT=https://YOUR-ACCOUNT.services.ai.azure.com/anthropic
 FOUNDRY_ANTHROPIC_API_KEY=YOUR-FOUNDRY-ANTHROPIC-API-KEY
 ```
 
@@ -78,25 +95,28 @@ These examples test raw LLM capabilities with a single prompt — no tools, no c
     uv run examples/single_llm_letter_counting.py
     ```
 
-3. Change model to one of the other models by un-commenting a `MODEL =` line at the top, and re-run the file. In our trials, only some models got the answer correctly (13), while other models returned the wrong answer.
+3. The script asks the LLM to count the number of instances of a letter in a sentence. The correct answer is 13.
+
+4. Change model to one of the other models by un-commenting a `MODEL =` line at the top, and re-run the file. Observe which models get the answer correctly.
 
 ### Exercise: Improve the output
 
-Open [examples/single_llm_letter_counting.py](examples/single_llm_letter_counting.py) and find the `PROMPT` variable. Can you modify it so that **Kimi** or **DeepSeek** gets the correct answer?
+Open [examples/single_llm_letter_counting.py](examples/single_llm_letter_counting.py) and find the `PROMPT` variable. Can you modify it so that all models get the correct answer?
 
-Ideas to try:
-- Ask the model to list each occurrence of "e" before counting
-- Break the sentence into individual words and ask it to count per-word
-- Add "Think step by step" or chain-of-thought instructions
-- Tell it to double-check its answer
-- Tweak `temperature` (supported on DeepSeek and Kimi — but NOT gpt-5.5)
+You could try asking the model to...
 
+* List each occurrence of "e" before counting
+* Break the sentence into individual words and ask it to count per-word
+* Think step by step (force it to show a chain-of-thought)
+* Double-check its answer
+
+For some models, you can also adjust the `temperature` parameter (supported on Mistral, DeepSeek, Kimi — but NOT gpt-5.5).
 
 ### Try other examples
 
-We've included other examples of single LLM calls where the output varies based on the model used. 
+We've included other examples of single LLM calls where the output varies based on the model used.
 
-* [examples/single_llm_spatial_reasoning.py](examples/single_llm_spatial_reasoning.py): We check the LLM's spatial reasoning ability by describing a series of turns, and then asking "Which direction am I facing after these turns?". 
+* [examples/single_llm_spatial_reasoning.py](examples/single_llm_spatial_reasoning.py): We check the LLM's spatial reasoning ability by describing a series of turns, and then asking "Which direction am I facing after these turns?".
 * [examples/single_llm_multi_constraint.py](examples/single_llm_multi_constraint.py): We ask the LLM to write a poem that satisfies multiple rules about start letters and number of words.
 * [examples/single_llm_self_calibration.py](examples/single_llm_self_calibration.py): We ask the LLM a question that should not be directly answerable from the weights, and then ask it, "How confident are you in your answer?". Generally, the best models report low confidence.
 
@@ -115,7 +135,9 @@ When you find an example that fails for a particular model, try rewriting the pr
     uv run examples/rag_responses.py
     ```
 
-3. Change model to one of the other models by un-commenting a `MODEL =` line at the top, and re-run the file. The question asks about honey bees AND carpenter bees, but the sources only contain carpenter bee info. Observe which models still respond with information about honey bees, despite the prompt insisting that answers be grounded in sources.
+3. The script asks the LLM to answer a question about honey bees AND carpenter bees, but the sources only contain detailed carpenter bee info. The correct answer will acknowledge the lack of honey bee details.
+
+4. Change model to one of the other models by un-commenting a `MODEL =` line at the top, and re-run the file.  Observe which models still respond with detailed information about honey bees, despite the prompt insisting that answers be grounded in sources.
 
 #### Exercise: Improve the grounding
 
@@ -124,10 +146,11 @@ Set your `MODEL` to a deployment that responded with an ungrounded answer.
 Open [examples/rag_responses.py](examples/rag_responses.py) and find the `SYSTEM_MESSAGE`. Can you strengthen the grounding instructions so that the model sticks to the sources?
 
 Ideas to try:
-- Add explicit instructions like "If information is not in the sources, say so clearly"
-- Add "NEVER make up information that isn't in the provided sources"
-- Use a structured format: "For each claim, cite the source ID or state 'not in sources'"
-- Add a negative example: "Do NOT mention facts about honey bees unless they appear in the sources"
+
+* Add explicit instructions like "If information is not in the sources, say so clearly"
+* Add "NEVER make up information that isn't in the provided sources"
+* Use a structured format: "For each claim, cite the source ID or state 'not in sources'"
+* Add a negative example: "Do NOT mention facts about honey bees unless they appear in the sources"
 
 ### Run the RAG example with Anthropic models
 
@@ -139,6 +162,7 @@ When working with the Anthropic models, we must use the Anthropic messages API, 
     ```bash
     uv run examples/rag_messages.py
     ```
+
 3. Change model to one of the other models by un-commenting a `MODEL =` line at the top, and re-run the file. Opus is the largest in the family, then Sonnet, then Haiku. Observe any differences in the output quality across the models. In our experiments, all three generated fully grounded answers. If you see otherwise, try modifying the prompt or other parameters to improve the output.
 
 ---
@@ -154,22 +178,20 @@ When working with the Anthropic models, we must use the Anthropic messages API, 
     uv run examples/image_input.py
     ```
 
-3. The script sends 3 different images (aurochs painting, crocodile photo, plant price list) with questions that require visual understanding. Observe the accuracy and detail of each response.
+3. The script sends 3 different images with questions that require visual understanding. The correct answers are:
+    * Is this a unicorn? No, it's an aurochs.
+    * Alligators or crocodiles? Crocodiles.
+    * Cheapest plant? Thingress, $0.58
 
-4. Change model to one of the other models by un-commenting a `MODEL =` line at the top, and re-run.
-
-### What to observe
-
-- **Species identification**: Does the model correctly identify the aurochs (not a unicorn) and the crocodiles (not alligators)?
-- **Data extraction**: Does the model find the actual cheapest plant in the table, or pick the wrong one?
-- **Detail level**: Does the model give a one-word answer or explain its reasoning? How confident vs. hedging is it?
+4. Change model to one of the other models by un-commenting a `MODEL =` line at the top, and re-run. Observe which models get the answers wrong, and if they provide reasoning explaining their wrong choice.
 
 ### Exercise: Know your model's limits
 
 Unlike prompt or tool description issues, vision failures are fundamental capability gaps — you can't prompt your way to better eyesight. Try adding your own images to the `EXAMPLES` list and see which models handle them:
-- A diagram or chart with small text
-- An image with handwritten content
-- A screenshot of code
+
+* A diagram or chart with small text
+* An image with handwritten content
+* A screenshot of code
 
 Which models would you trust for a production vision task? Which would you rule out?
 
@@ -188,16 +210,17 @@ Which models would you trust for a production vision task? Which would you rule 
 
 3. Observe how the model normalizes the user's message into structured tool arguments. The display at the bottom compares the expected tool call output to the model's actual output.
 
-3. Change model to one of the other models by un-commenting a `MODEL =` line at the top, and re-run the file. Observe whether the output matches the expected tool call arguments.
+4. Change model to one of the other models by un-commenting a `MODEL =` line at the top, and re-run the file. Observe whether the output matches the expected tool call arguments.
 
 ### Exercise: Improve tool argument quality
 
 In our experiments, several models added "me" or "you" to attendees list, or appended "Teams" to the location. Can you get ALL models to match the expected output?
 
 Ideas to try:
-- Tighten the attendees description: `"List of attendee names only (first name or full name). Do not include the organizer."`
-- Make the location description more explicit: `"Room name, or exactly 'Virtual' for online meetings. Do not include the platform name."`
-- Add an example in the tool description: `"e.g. ['Sarah', 'Marcus', 'Priya']"`
+
+* Tighten the attendees description: `"List of attendee names only (first name or full name). Do not include the organizer."`
+* Make the location description more explicit: `"Room name, or exactly 'Virtual' for online meetings. Do not include the platform name."`
+* Add an example in the tool description: `"e.g. ['Sarah', 'Marcus', 'Priya']"`
 
 Which description changes fix which models?
 
@@ -220,19 +243,15 @@ In this example, we give the model a `calculate` tool and ask a multi-step word 
 
 4. Change model to one of the other models by un-commenting a `MODEL =` line at the top, and re-run the file. Compare the number of tool calls and the decomposition strategy.
 
-### What to observe
-
-- **gpt-5.5, DeepSeek, Kimi**: 4–5 calls — combine discount + subtraction into one step (e.g. `45 * 0.70`)
-- **Less efficient models**: may decompose every operation separately (e.g. `45 * 0.30` then `45 - 13.5`)
-
 ### Exercise: Reduce tool calls
 
 Choose the model that used the highest number of tool calls. Can you get it to use fewer?
 
 Ideas to try:
-- Change the system prompt to say "Combine operations where possible"
-- Make the tool description say "You can use compound expressions like `(45 * 0.70) * 0.90`"
-- Add an example expression in the `code` parameter description
+
+* Change the system prompt to say "Combine operations where possible"
+* Make the tool description say "You can use compound expressions like `(45 * 0.70) * 0.90`"
+* Add an example expression in the `code` parameter description
 
 ### Discussion
 
@@ -247,7 +266,7 @@ Is fewer tool calls always better? What are the cost/latency tradeoffs of more g
 1. Pick your framework and open the corresponding file:
 
     | Framework | File |
-    |-----------|------|
+    | --------- | ---- |
     | PydanticAI | [examples/agent_trip_planner_pydanticai.py](examples/agent_trip_planner_pydanticai.py) |
     | LangChain | [examples/agent_trip_planner_langchain.py](examples/agent_trip_planner_langchain.py) |
     | Microsoft Agent Framework | [examples/agent_trip_planner_maf.py](examples/agent_trip_planner_maf.py) |
@@ -268,37 +287,52 @@ Is fewer tool calls always better? What are the cost/latency tradeoffs of more g
 
 ### What to observe
 
-- **Parallel vs serial**: gpt-5.5 batches `search_flights` + `search_hotels` in one parallel turn; other models may call them one at a time
-- **Budget checks**: gpt-5.5/DeepSeek verify once; Kimi may explore multiple flight+hotel combos
-- **Dependency awareness**: `search_activities` needs the remaining budget from `check_budget`. Does the model wait for the result, or guess the value and call them in parallel?
+* **Parallel vs serial**: Some models call `search_flights` + `search_hotels` in one parallel turn; other models may call them one at a time
+* **Budget checks**: Some models verify only the best combo; other models check the budget for multiple flight+hotel combos
+* **Dependency awareness**: `search_activities` needs the remaining budget from `check_budget`. Does the model wait for the result, or guess the value and call them in parallel?
 
 ### Exercise: Control agent thoroughness
 
 Can you get the "thorough" models to be more concise, or the "concise" models to explore more options?
 
 Ideas to try:
-- Add "Present only the single best option" to the system prompt
-- Add "Always check at least 3 combinations before recommending" to the system prompt
-- Change the budget to $400 (tighter constraint) — does behavior change?
+
+* Add "Present only the single best option" to the system prompt
+* Add "Always check at least 3 combinations before recommending" to the system prompt
+* Change the budget to $400 (tighter constraint) — does behavior change?
 
 ---
 
 ## Part 7: Evaluations
 
-In Part 6 you *watched* the models plan trips differently — gpt-5.5 batched its tool calls, others explored more combos, some skipped the budget check. Now **quantify** it: did each model actually stay on budget, respect the constraints, and ground its recommendations in tool results — on *your* travel-planner scenario?
-
-A generic benchmark won't answer that. This is where [ASSERT](https://github.com/responsibleai/ASSERT) comes in: you write a behavior spec (what a good trip plan looks like), and ASSERT generates scenario-specific test cases, runs them against your agent, and an LLM judge scores each run on dimensions *you* define — budget adherence, constraint satisfaction, tool routing, grounding.
+With evaluations, you can quantify what you observed.
 
 ### 7a: Basic programmatic evals
+
+If you know exactly what the model should output for an input, then it's easy to evaluate using string comparison.
 
 ```bash
 uv run examples/evals_basic.py
 ```
 
-This runs test cases (letter counting, spatial reasoning, tool calling) across all models and checks against ground truth. No LLM judge needed — just exact match and schema validation. Useful capability probes, but they don't tell you whether the *travel planner* is any good.
+This script runs 5 tool-calling edge cases across all models and checks the tool call arguments programmatically. Cases include attendee normalization, date math, ambiguous duration, a request in Spanish, and informal-to-formal extraction. No LLM judge needed — just programmatic checks.
+
+### 7b: LLM-as-judge (groundedness)
+
+When the output is free text and can vary widely, then you may need to bring in an LLM-as-a-judge to evaluate. You must give it a clear rubric for what is pass vs. fail, and force it to provide a reasoning for its decision.
+
+```bash
+uv run examples/evals_llm_judge.py
+```
+
+This script uses a direct LLM call with a groundedness prompt to evaluate the RAG outputs from all models. The judge LLM checks whether each model's response is grounded in the provided sources, returning a binary pass/fail verdict with reasoning. Models that hallucinate facts not in the sources will fail.
+
 
 ### 7b: Scenario-grounded evaluation with ASSERT
 
+In Part 6 you *watched* the models plan trips differently — gpt-5.5 batched its tool calls, others explored more combos, some skipped the budget check. Now **quantify** it: did each model actually stay on budget, respect the constraints, and ground its recommendations in tool results — on *your* travel-planner scenario?
+
+A generic benchmark won't answer that. This is where [ASSERT](https://github.com/responsibleai/ASSERT) comes in: you write a behavior spec (what a good trip plan looks like), and ASSERT generates scenario-specific test cases, runs them against your agent, and an LLM judge scores each run on dimensions *you* define — budget adherence, constraint satisfaction, tool routing, grounding.
 The eval lives under [`assert_eval/`](assert_eval/): a behavior spec, a thin pydantic-ai target that reuses the **Part 6 tools + system prompt**, and scenario-specific judge dimensions. Full setup and speaker notes are in [`assert_eval/README.md`](assert_eval/README.md).
 
 1. Install ASSERT and point its pipeline (generation + judge) at your Foundry account:
@@ -333,7 +367,7 @@ Same fixed scenario, swap the model, compare per dimension on the 55 traced case
 
 On *this* travel-planner scenario, gpt-5.5 is best on every dimension. Because `WORKSHOP_TRACE=1` captures the agent's spans, `tool_routing_correctness` and `grounded_recommendations` are now real signal instead of invalid trace gaps. Kimi-K2.6 and DeepSeek-V4-Flash are roughly comparable, with DeepSeek weaker on constraint satisfaction. Treat this as directional: one run per model and a single gpt-5.5 judge pass, so self-grading bias is possible.
 
-> Single-metric judges still have their place: `GroundednessEvaluator` ([examples/evals_foundry_judge.py](examples/evals_foundry_judge.py)) and `ToolCallAccuracyEvaluator` ([examples/evals_agent.py](examples/evals_agent.py)) score one isolated signal each. ASSERT scores the whole travel-planning behavior on generated scenarios — the eval you'd actually gate a model swap on.
+> Single-metric judges still have their place, like the groundedness evaluator that scores one isolated signal each. ASSERT scores the whole travel-planning behavior on generated scenarios — the eval you'd actually gate a model swap on.
 
 ---
 
@@ -354,13 +388,13 @@ You've been manually tweaking prompts all workshop. [DSPy](https://dspy.ai/) aut
 
 3. Watch the terminal output as GEPA proposes prompts. It discovers strategies like explicit word-counting procedures, verify-then-rewrite loops, and final verification passes — the same techniques a prompt engineer would find manually, but discovered automatically.
 
-4. After optimization, the script prints the winning instructions and saves the optimized program to `dspy_multi_constraint_optimized.json`.
+4. After optimization, the script prints the winning instructions and saves the optimized program to `examples/dspy_multi_constraint_optimized.json`.
 
 ### What to observe
 
-- **Real improvement**: A baseline student model can score 0% on the multi-constraint task (wrong word count). After optimization, it can score 100%. GEPA found instructions that teach the model to count words explicitly before outputting.
-- **GEPA's generated prompts**: The optimizer discovers a structured procedure — draft each line, enumerate words to verify count, rewrite if wrong, do a final pass. This is exactly what a human prompt engineer would discover through trial and error.
-- **Try a different student model**: Change `STUDENT_MODEL` to `Kimi-K2.6` and re-run. The optimizer will generate different instructions tuned to that model's quirks.
+* **Real improvement**: Mistral baseline scores 0% on the multi-constraint task (wrong word count). After optimization, it scores 100%. GEPA found instructions that teach the model to count words explicitly before outputting.
+* **GEPA's generated prompts**: The optimizer discovers a structured procedure — draft each line, enumerate words to verify count, rewrite if wrong, do a final pass. This is exactly what a human prompt engineer would discover through trial and error.
+* **Try a different student model**: Change `STUDENT_MODEL` to `Kimi-K2.6` and re-run. The optimizer will generate different instructions tuned to that model's quirks.
 
 ### Close the loop with ASSERT
 
@@ -368,9 +402,9 @@ DSPy optimizes against a *metric*. Point that metric at the **ASSERT scenario sc
 
 ### Discussion
 
-- How does automated prompt optimization compare to manual tweaking?
-- When would you use DSPy in production vs. hand-tuning?
-- What tasks benefit most from prompt optimization vs. needing a better model?
+* How does automated prompt optimization compare to manual tweaking?
+* When would you use DSPy in production vs. hand-tuning?
+* What tasks benefit most from prompt optimization vs. needing a better model?
 
 ---
 
@@ -384,4 +418,17 @@ DSPy optimizes against a *metric*. Point that metric at the **ASSERT scenario sc
 | Tool loop efficiency | gpt-5.5, DeepSeek | Fewer calls = lower cost/latency |
 | Travel-planner scenario (budget, constraints) — ASSERT | gpt-5.5 over Kimi-K2.6 and DeepSeek-V4-Flash | A scenario-grounded eval that scores *your* workflow, not a generic benchmark |
 
-**Key takeaway**: "Just swap the model" is never just swapping the model. Prompts, tool definitions, and output strategies all need tuning per model. Scenario-grounded evals (ASSERT) let you quantify the tradeoffs on *your* workflow instead of guessing — and gate the swap on them.
+**Key takeaway**: "Just swap the model" is never just swapping the model. Prompts, tool definitions, and output strategies all need tuning per model. Scenario-grounded evals (ASSERT) let you quantify the tradeoffs on *your* workflow instead of guessing — and gate the swap on them. Prompt optimization (like DSPy's GEPA) can automate the search for better prompts instead of relying on manual trial and error.
+
+---
+
+## Resources
+
+* [Microsoft Foundry Documentation](https://learn.microsoft.com/azure/ai-foundry/)
+* [Agent Framework Documentation](https://learn.microsoft.com/agent-framework/)
+* [OpenAI Python SDK](https://github.com/openai/openai-python)
+* [Anthropic Python SDK](https://github.com/anthropics/anthropic-sdk-python)
+* [LiteLLM](https://github.com/BerriAI/litellm)
+* [PydanticAI](https://ai.pydantic.dev/)
+* [LangChain](https://python.langchain.com/)
+* [langchain-azure-ai](https://github.com/langchain-ai/langchain-azure)

@@ -19,6 +19,7 @@ Usage:
 import logging
 import os
 import re
+from pathlib import Path
 
 import dspy
 from dotenv import load_dotenv
@@ -29,7 +30,7 @@ load_dotenv()
 logging.basicConfig(level=logging.WARNING)
 dspy.disable_litellm_logging()
 
-endpoint = os.environ["FOUNDRY_MODELS_ENDPOINT"] + "/openai/v1"
+endpoint = os.environ["FOUNDRY_MODELS_ENDPOINT"]
 api_key = os.environ["FOUNDRY_API_KEY"]
 
 # === Choose a student model (the one we want to optimize) ===
@@ -227,6 +228,7 @@ for name, module in optimized_generator.named_predictors():
         print()
 
 # Save the optimized program
-optimized_generator.save("dspy_multi_constraint_optimized.json")
-print("Saved optimized program to dspy_multi_constraint_optimized.json")
-print("You can load it later with: dspy.load('dspy_multi_constraint_optimized.json')")
+save_path = str(Path(__file__).parent / "dspy_multi_constraint_optimized.json")
+optimized_generator.save(save_path)
+print(f"Saved optimized program to {save_path}")
+print(f"You can load it later with: dspy.load('{save_path}')")

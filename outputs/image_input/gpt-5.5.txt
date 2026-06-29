@@ -1,0 +1,11 @@
+=== Is this a unicorn? (examples/image_aurochs.jpg) ===
+No. It has two curved horns, so it isn’t a unicorn. It looks more like a bovine—possibly an ox, bull, or an aurochs-style illustration.
+
+=== Are these alligators or crocodiles? (examples/image_crocodile.png) ===
+They look **more like alligators** than crocodiles.
+
+The main clues are their **broader, more U-shaped snouts** and generally darker, bulkier appearance. Crocodiles usually have **narrower, V-shaped snouts** and often show more prominent teeth from the side. From this overhead view I can’t be 100% certain, but these appear to be **young alligators**.
+
+=== What's the cheapest plant? (examples/image_plantpage.png) ===
+The cheapest plant listed is **Agrostis pallens** — **Thingrass**, priced at **$0.58**.
+
